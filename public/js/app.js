@@ -2135,6 +2135,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _admin_ProfileComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./admin/ProfileComponent */ "./resources/js/components/admin/ProfileComponent.vue");
 //
 //
 //
@@ -2266,7 +2267,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    ProfileComponent: _admin_ProfileComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   name: "AgentProfileComponent",
   beforeCreate: function beforeCreate() {
     this.$loading(true);
@@ -6681,6 +6686,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProfileComponent",
   props: {
@@ -6690,7 +6708,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      token: ''
+      token: '',
+      showUploadBtn: false
     };
   },
   mounted: function mounted() {
@@ -6722,6 +6741,9 @@ __webpack_require__.r(__webpack_exports__);
 
         alert(resp.msg);
       });
+    },
+    toggleBtn: function toggleBtn() {
+      this.showUploadBtn ? this.showUploadBtn = false : this.showUploadBtn = true;
     }
   },
   computed: {
@@ -44567,12 +44589,8 @@ var render = function() {
             _c(
               "div",
               { staticClass: "card", staticStyle: { width: "18rem" } },
-              [
-                _c("img", {
-                  staticClass: "card-img-top",
-                  attrs: { src: "storage/" + _vm.agent.picture_url, alt: "..." }
-                })
-              ]
+              [_c("profile-component", { attrs: { curAgent: _vm.agent } })],
+              1
             )
           ]),
           _vm._v(" "),
@@ -51605,22 +51623,37 @@ var render = function() {
             staticClass: "card-img-top",
             attrs: { src: _vm.img_src, alt: "Profile Pic" }
           })
-        : _c("div", [_vm._v("No image available")])
-    ]),
-    _vm._v(" "),
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "row p-3" }, [
+        : _c("div", [_vm._v("No image available")]),
+      _vm._v(" "),
       _c(
         "button",
         {
-          staticClass: "btn btn-sm btn-success",
-          attrs: { type: "button", id: "uploadbtn" },
-          on: { click: _vm.uploadFile }
+          staticClass: "btn btn-primary",
+          staticStyle: { "border-radius": "0" },
+          attrs: { type: "button" },
+          on: { click: _vm.toggleBtn }
         },
-        [_vm._v("Upload")]
+        [_vm._v("\n            Change photo\n        ")]
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _vm.showUploadBtn
+      ? _c("div", { attrs: { id: "simpleCollapse" } }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "row p-3" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-sm btn-success",
+                attrs: { type: "button", id: "uploadbtn" },
+                on: { click: _vm.uploadFile }
+              },
+              [_vm._v("Upload")]
+            )
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [

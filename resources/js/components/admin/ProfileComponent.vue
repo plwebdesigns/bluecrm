@@ -1,16 +1,29 @@
 <template>
-    <div>
-        <div class="card" style="width: 18rem;">
-            <img class="card-img-top" :src="img_src" v-if="img_src !== 'null'" alt="Profile Pic">
-            <div v-else>No image available</div>
-        </div>
+<div>
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" :src="img_src" v-if="img_src !== 'null'" alt="Profile Pic">
+        <div v-else>No image available</div>
+        <button  
+        style="border-radius: 0" 
+        class="btn btn-primary" 
+        type="button"
+        @click="toggleBtn">
+            Change photo
+        </button>
+    </div>
+    <div v-if="showUploadBtn" id="simpleCollapse">
         <div class="row p-3">
             <input type="file" id="fileUpload">
         </div>
         <div class="row p-3">
-            <button type="button" id="uploadbtn" class="btn btn-sm btn-success" @click="uploadFile">Upload</button>
-        </div>
+        <button 
+        type="button" 
+        id="uploadbtn" 
+        class="btn btn-sm btn-success" 
+        @click="uploadFile">Upload</button>
     </div>
+    </div>
+</div>
 </template>
 
 <script>
@@ -23,7 +36,8 @@
         },
         data(){
             return {
-                token: ''
+                token: '',
+                showUploadBtn: false,
             }
         },
         mounted() {
@@ -51,6 +65,9 @@
                     this.$emit('uploadComplete');
                     alert(resp.msg);
                 });
+            },
+            toggleBtn(){
+                this.showUploadBtn ? this.showUploadBtn = false : this.showUploadBtn = true;
             }
         },
         computed: {
