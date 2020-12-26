@@ -221,9 +221,11 @@ class AdminController extends Controller {
 			->join('sale_user', 'sales.id', '=', 'sale_user.sale_id')
 			->where('sale_user.user_id', $user_id)
 			->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"])
-			->select(['sales.id', 'type', 'client_name', 'address',
+			->select([
+				'sales.id', 'type', 'client_name', 'address',
 				'sale_price', 'total_commission', 'sale_user.commission',
-				'sale_user.split', 'sale_user.split_sale'])
+				'sale_user.split', 'sale_user.split_sale',
+			])
 			->get();
 
 		$totals = [
@@ -258,37 +260,52 @@ class AdminController extends Controller {
 		);
 	}
 
-	/**** Get all sales for admin user to see ****/
+    /**** Get all sales for admin user to see ***
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
 	public function getAllSales(Request $request) {
 		$user = $request->user();
+		$year = date('Y');
+		
+		$sales = Sale::all();
+		$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
 
-		if ($user->isAdmin) {
-			if (Gate::allows('create-sale', Sale::class)) {
-				$sales = Sale::all();
-				$sales = $sales->sortByDesc('closing_date');
-				return response()->json(['sales' => $sales, 'req' => $user]);
-			} else {
-				return response()->json(['error' => 'there is a problem with your authorization']);
-			}
-		}
-		return response()->json(['error' => 'You do not have access to this']);
+		return response()->json(['sales' => $sales, 'req' => $user]);
 	}
 
 	/****  Get sales by search term   ****/
 	public function searchSales(Request $request) {
+        $search_term = $request->input('search_term');
 
-		$search_term = $request->input('search_term');
+        $search_by = $request->input('search_by');
+        $x = count($search_by);
+        $sales = DB::table('sale_user')
+                    ->join('sales', 'sales.id', '=', 'sale_user.sale_id')
+                    ->select('sales.*', 'sale_user.*')
+                    ->get();
 		$user = $request->user();
-		$searchBy = 'agent_name';
 
-		$sales = DB::table('sales')
-			->where($searchBy, "LIKE", "%{$search_term}%")
-			->orWhere(
-				'client_name',
-				'LIKE',
-				"%{$search_term}%"
-			)
-			->get();
+        if ($search_term[0] !== null):
+            $agent = User::where('agent_name', $search_term[0])->first('id')->id;
+            $sales = $sales->where('user_id', '=', $agent);
+        endif;
+
+		for ($i = 1; $i < $x; $i++):
+            if ($search_term[$i] !== null):
+                // Get sales by search term
+                $sales = $sales->where($search_by[$i], $search_term[$i]);
+            endif;
+        endfor;
+
+        // CHeck to see if there is a date range
+        $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : '2019-01-01';
+        $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : \date('Y-m-d');
+
+        $sales = $sales->whereBetween('closing_date', [$bdate, $edate]);
+
+        // Get totals for filtered sales
+
 
 		return response()->json(['sales' => $sales, 'req' => $user]);
 	}
@@ -478,7 +495,7 @@ class AdminController extends Controller {
 			}
 
 			Sale::find($sale['id'])->users()->updateExistingPivot($agent['id'], $agent_sale);
-//            $sale_validated->users()->updateExistingPivot($agent['id'], $agent_sale);
+			//            $sale_validated->users()->updateExistingPivot($agent['id'], $agent_sale);
 		}
 
 		return response()->json(['success' => "Success"], 201);
@@ -572,8 +589,9 @@ class AdminController extends Controller {
 		$agents->each(function ($item) {
 			$item->current_split = floatval($item->current_split) * 100;
 			$item->membership_fee = number_format(
-				floatval($item->membership_fee), 2);
-
+				floatval($item->membership_fee),
+				2
+			);
 		});
 		$agents = $agents->whereNotIn('agent_name', $ignored_agents->toArray());
 
@@ -607,9 +625,11 @@ class AdminController extends Controller {
 			$data['email'] = $agent['email'];
 			$rules['email'] = 'string|email|max:255|unique:users';
 		endif;
-		if ($agent['phone'] !== '5555555555' and
+		if (
+			$agent['phone'] !== '5555555555' and
 			$agent['phone'] !== '' and
-			$agent['phone'] !== $orig_agent->phone):
+			$agent['phone'] !== $orig_agent->phone
+		):
 
 			if (strlen($agent['phone']) > 10):
 				$data['phone'] = str_replace('-', '', $agent['phone']);
@@ -674,19 +694,19 @@ class AdminController extends Controller {
 		$details = DB::table('membership_dues')
 			->get();
 
-       $details->each(function ($item){
-           	$tmp = 0;
+		$details->each(function ($item) {
+			$tmp = 0;
 			$num = date('m');
-			$arr = (array)$item;
+			$arr = (array) $item;
 			$month = array_splice($arr, 1, $num);
 			foreach ($month as $key => $value) {
 				$tmp = ($value !== 1) ? $tmp + 1 : $tmp + 0;
 			}
 			$fee = DB::table('users')
-					->where('agent_name', $item->agent_name)
-					->first('membership_fee');
+				->where('agent_name', $item->agent_name)
+				->first('membership_fee');
 
-             $item->bal = number_format(floatval($fee->membership_fee * $tmp), 2);
+			$item->bal = number_format(floatval($fee->membership_fee * $tmp), 2);
 		});
 
 		return response()->json(['agents' => $details]);

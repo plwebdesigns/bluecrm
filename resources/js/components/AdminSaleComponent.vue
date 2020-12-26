@@ -10,39 +10,61 @@
     >
       <div class="container bg-blue-realty p-3 text-white">
         <form id="detailForm">
-          <h1 class="display-6 text-center text-white font-fugaz">{{sale.client_name}}</h1>
+          <h1 class="display-6 text-center text-white font-fugaz">
+            {{ sale.client_name }}
+          </h1>
           <hr class="my-4" />
           <h4 class="font-fredricka">Client Info</h4>
           <div class="row pb-2">
             <div class="col">
               <label>Deal #</label>
-              <input type="text" class="form-control-sm form-control" v-model="sale.id" />
+              <input
+                type="text"
+                class="form-control-sm form-control"
+                v-model="sale.id"
+              />
             </div>
             <div class="col">
               <label>Type</label>
-              <input type="text" class="form-control-sm form-control" v-model="sale.type" />
+              <input
+                type="text"
+                class="form-control-sm form-control"
+                v-model="sale.type"
+              />
             </div>
             <div class="col">
               <label>Closing Date</label>
               <input
                 type="text"
                 class="form-control-sm form-control"
-                v-model="new Date(sale.closing_date).toLocaleDateString()"
+                v-model="sale.closing_date"
               />
             </div>
           </div>
           <div class="row pb-2">
             <div class="col">
               <label>Client Name</label>
-              <input type="text" class="form-control-sm form-control" v-model="sale.client_name" />
+              <input
+                type="text"
+                class="form-control-sm form-control"
+                v-model="sale.client_name"
+              />
             </div>
             <div class="col">
               <label>Address</label>
-              <input type="text" class="form-control-sm form-control" v-model="sale.address" />
+              <input
+                type="text"
+                class="form-control-sm form-control"
+                v-model="sale.address"
+              />
             </div>
             <div class="col">
               <label>City</label>
-              <input type="text" class="form-control-sm form-control" v-model="sale.city" />
+              <input
+                type="text"
+                class="form-control-sm form-control"
+                v-model="sale.city"
+              />
             </div>
           </div>
           <hr class="my-4" />
@@ -54,7 +76,7 @@
                 <input
                   type="text"
                   class="form-control form-control-sm"
-                  v-model="Number(sale.sale_price).toLocaleString('en-US', numberFormat)"
+                  v-model="sale.sale_price"
                 />
               </div>
             </div>
@@ -64,7 +86,7 @@
                 <input
                   type="text"
                   class="form-control form-control-sm"
-                  v-model="Number(sale.total_commission).toLocaleString('en-US', numberFormat)"
+                  v-model="sale.total_commission"
                 />
               </div>
             </div>
@@ -74,7 +96,7 @@
                 <input
                   type="text"
                   class="form-control form-control-sm"
-                  v-model="Number(sale.blue_profit).toLocaleString('en-US', numberFormat)"
+                  v-model="sale.blue_profit"
                 />
               </div>
             </div>
@@ -86,13 +108,17 @@
                 <input
                   type="text"
                   class="form-control form-control-sm"
-                  v-model="sale.transaction_fee.toLocaleString('en-US', numberFormat)"
+                  v-model="sale.transaction_fee"
                 />
               </div>
             </div>
             <div class="col">
               <label>Title Choice:</label>
-              <input type="text" class="form-control-sm form-control" v-model="sale.title_choice" />
+              <input
+                type="text"
+                class="form-control-sm form-control"
+                v-model="sale.title_choice"
+              />
             </div>
             <div class="col">
               <label>Lender:</label>
@@ -115,16 +141,28 @@
             </thead>
             <tbody class="text-dark">
               <tr v-for="(c, index) in commission" :key="index">
-                <td>{{c.name}}</td>
-                <td>{{Number(c.commission).toLocaleString('en-US', numberFormat)}}</td>
-                <td>{{Number(c.split)*100}}%</td>
+                <td>{{ c.name }}</td>
+                <td>
+                  {{
+                    Number(c.commission).toLocaleString("en-US", numberFormat)
+                  }}
+                </td>
+                <td>{{ Number(c.split) * 100 }}%</td>
               </tr>
             </tbody>
           </table>
           <div class="row pt-4 pb-4">
             <div class="col">
-              <button type="button" class="btn btn-sm btn-light" @click="hide">Close</button>
-              <button type="button" class="btn btn-sm btn-success" @click="printSale()">Print</button>
+              <button type="button" class="btn btn-sm btn-light" @click="hide">
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-success"
+                @click="printSale()"
+              >
+                Print
+              </button>
             </div>
           </div>
         </form>
@@ -151,19 +189,19 @@ export default {
         blue_profit: 0,
         total_commission: 0,
         title_choice: "",
-        mortgage_choice: ""
+        mortgage_choice: "",
       },
       commission: {
         name: "",
         commission: 0,
-        split: 0
+        split: 0,
       },
       numberFormat: {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
         style: "currency",
-        currency: "USD"
-      }
+        currency: "USD",
+      },
     };
   },
   methods: {
@@ -176,16 +214,16 @@ export default {
       let token = this.getCookie("token");
       let req = {
         method: "post",
-        url: "https://thebluecrm.com/api/commission",
+        url: "/api/commission",
         headers: {
           Accept: "application/json",
-          Authorization: "Bearer " + token
+          Authorization: "Bearer " + token,
         },
         data: {
-          id: this.sale.id
-        }
+          id: this.sale.id,
+        },
       };
-      axios(req).then(resp => {
+      axios(req).then((resp) => {
         this.commission = resp.data.commission;
       });
     },
@@ -206,7 +244,8 @@ export default {
     },
     printSale() {
       window.open("/detail_pdf/" + this.sale.id, "_blank");
-    }
-  }
+    },
+  },
+  computed: {},
 };
 </script>

@@ -3,10 +3,56 @@
     <h4 class="font-fredricka text-center">All Sales</h4>
     <div class="container justify-content-center">
       <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
-          <search-component class="mb-5 mt-3" v-if="user.isAdmin" v-on:search="getSales($event)"></search-component>
+        <div class="col-2">
+          <select
+          id="agent_name"
+          class="custom-select mb-5 mt-3"
+          v-on:input="searchSales($event)"
+          >
+            <option value="">Select Agent</option>
+            <option
+                v-for="(item, index) in this.all_agents"
+                :key="index"
+                :value="item"
+              >{{item}}</option>
+          </select>
+
         </div>
+        <div class="col-3">
+          <select
+          id="mortgage_choice"
+          class="custom-select mb-5 mt-3"
+          v-on:input="searchSales($event)"
+          >
+            <option value="">Select Lender</option>
+            <option
+                v-for="(item, index) in this.all_mortgages"
+                :key="index"
+                :value="item.mortgage_names"
+              >{{item.mortgage_names}}</option>
+          </select>
+        </div>
+        <div class="col-3">
+            <select
+            id="title_choice"
+          class="custom-select mb-5 mt-3"
+          v-on:input="searchSales($event)"
+          >
+            <option value="">Select Title Company</option>
+            <option
+                v-for="(item, index) in all_titles"
+                :key="index"
+                :value="item.title_names"
+              >{{item.title_names}}</option>
+          </select>
+          </div>
+          <div class="col-4">
+              <div class="input-group mb-5 mt-3">
+                  <input class="form-control mr-1" type="date" id="beginDate">
+                  <span class="align-bottom"> -- </span>
+                  <input class="form-control ml-1" type="date" id="endDate">
+              </div>
+          </div>
       </div>
     </div>
     <div class="container justify-content-center">
@@ -29,13 +75,15 @@
                 <div style="font-size: 18px" v-if="sales.length < 1">
                     No results found.
                 </div>
-              <tr v-for="sale in sales" :key="sale.id" v-on:click="show(sale)">
+              <tr v-for="sale in formattedSales" :key="sale.id" v-on:click="show(sale)">
                 <td>{{sale.closing_date}}</td>
                 <td>{{sale.agent_name}}</td>
                 <td>{{sale.client_name}}</td>
-                <td>{{Number(sale.sale_price).toLocaleString('en-us', numberFormat)}}</td>
+                <td>{{sale.sale_price}}</td>
                 <td>{{sale.type}}</td>
-                <td>{{Number(sale.total_commission).toLocaleString('en-us', numberFormat)}}</td>
+                <td>{{sale.total_commission}}</td>
+                <td>{{sale.mortgage_choice}}</td>
+                <td>{{sale.title_choice}}</td>
               </tr>
             </tbody>
           </table>
@@ -52,6 +100,7 @@ import SearchComponent from "./SearchComponent";
 export default {
   mounted() {
     this.getSales(null);
+    this.getAllDropdowns();
   },
   beforeCreate() {
     this.$loading(true);
@@ -78,7 +127,15 @@ export default {
         minimumFractionDigits: 2,
         style: "currency",
         currency: "USD"
-      }
+      },
+      search_terms:[],
+        search_bys: [],
+        dates: [],
+      all_agents: [],
+      all_cities: [],
+      all_types: [],
+      all_mortgages: [],
+      all_titles: [],
     };
   },
   methods: {
@@ -95,7 +152,8 @@ export default {
             Authorization: "Bearer " + token
           }
         };
-      } else {
+      }
+      else {
           this.$loading(true);
         req = {
           method: "post",
@@ -105,7 +163,7 @@ export default {
             Authorization: "Bearer " + token
           },
           data: {
-            by: myArg.by,
+            by: this.search_by,
             search_term: myArg.term
           }
         };
@@ -116,6 +174,40 @@ export default {
         this.user.isAdmin = resp.data.req.isAdmin;
         this.$loading(false);
       });
+    },
+    searchSales(e){
+      this.$loading(true);
+        let bdate = $('#beginDate').val();
+        let edate = $('#endDate').val();
+        let search = [];
+        let by = [];
+        let elems = document.getElementsByClassName('custom-select');
+        Array.from(elems).forEach(function (element){
+            search.push(element.value);
+            by.push(element.id);
+        });
+
+      let token = this.getCookie("token");
+      let req = {
+        method: "post",
+          url: "/api/sales",
+          headers: {
+            Accept: "application/json",
+            Authorization: "Bearer " + token
+          },
+          data: {
+            search_by: by,
+            search_term: search,
+              beginDate: bdate,
+              endDate: edate
+          }
+      };
+      axios(req).then(resp => {
+        this.sales = resp.data.sales;
+        this.user.isAdmin = resp.data.req.isAdmin;
+        this.$loading(false);
+      });
+
     },
     getCookie(cname) {
       var name = cname + "=";
@@ -136,8 +228,44 @@ export default {
       this.$modal.show("detailSale", {
         data: sale
       });
+    },
+    getAllDropdowns() {
+      $.ajax({
+        type: "GET",
+        url: "/api/allDropdowns"
+      }).done((resp, status) => {
+        this.all_types = resp.type_of_sales;
+        this.all_agents = resp.agents;
+        this.all_cities = resp.cities;
+        this.all_mortgages = resp.mortgage_names;
+        this.all_titles = resp.title_names;
+      });
     }
   },
-  computed: {}
+  computed: {
+	formattedSales: function () {
+	      let sales = [];
+	      for (const salesKey in this.sales) {
+		let sale = this.sales[salesKey];
+		sale.closing_date = new Date(sale.closing_date).toLocaleDateString();
+		sale.sale_price = Number(sale.sale_price).toLocaleString(
+		  "en-US",
+		  this.numberFormat
+		);
+		sale.total_commission = Number(sale.total_commission).toLocaleString(
+		  "en-US",
+		  this.numberFormat
+		);
+		sales.push(sale);
+	      }
+	      sales.sort(function (a, b) {
+		return new Date(a.closing_date) - new Date(b.closing_date);
+	      });
+
+	      return sales;
+   	 },
+ 
+
+ },
 };
 </script>

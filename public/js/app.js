@@ -2043,6 +2043,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
   data: function data() {
@@ -2086,7 +2124,7 @@ __webpack_require__.r(__webpack_exports__);
       var token = this.getCookie("token");
       var req = {
         method: "post",
-        url: "https://thebluecrm.com/api/commission",
+        url: "/api/commission",
         headers: {
           Accept: "application/json",
           Authorization: "Bearer " + token
@@ -2121,7 +2159,8 @@ __webpack_require__.r(__webpack_exports__);
     printSale: function printSale() {
       window.open("/detail_pdf/" + this.sale.id, "_blank");
     }
-  }
+  },
+  computed: {}
 });
 
 /***/ }),
@@ -2450,10 +2489,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getSales(null);
+    this.getAllDropdowns();
   },
   beforeCreate: function beforeCreate() {
     this.$loading(true);
@@ -2478,7 +2566,15 @@ __webpack_require__.r(__webpack_exports__);
         minimumFractionDigits: 2,
         style: "currency",
         currency: "USD"
-      }
+      },
+      search_terms: [],
+      search_bys: [],
+      dates: [],
+      all_agents: [],
+      all_cities: [],
+      all_types: [],
+      all_mortgages: [],
+      all_titles: []
     };
   },
   methods: {
@@ -2507,7 +2603,7 @@ __webpack_require__.r(__webpack_exports__);
             Authorization: "Bearer " + token
           },
           data: {
-            by: myArg.by,
+            by: this.search_by,
             search_term: myArg.term
           }
         };
@@ -2518,6 +2614,41 @@ __webpack_require__.r(__webpack_exports__);
         _this.user.isAdmin = resp.data.req.isAdmin;
 
         _this.$loading(false);
+      });
+    },
+    searchSales: function searchSales(e) {
+      var _this2 = this;
+
+      this.$loading(true);
+      var bdate = $('#beginDate').val();
+      var edate = $('#endDate').val();
+      var search = [];
+      var by = [];
+      var elems = document.getElementsByClassName('custom-select');
+      Array.from(elems).forEach(function (element) {
+        search.push(element.value);
+        by.push(element.id);
+      });
+      var token = this.getCookie("token");
+      var req = {
+        method: "post",
+        url: "/api/sales",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + token
+        },
+        data: {
+          search_by: by,
+          search_term: search,
+          beginDate: bdate,
+          endDate: edate
+        }
+      };
+      axios(req).then(function (resp) {
+        _this2.sales = resp.data.sales;
+        _this2.user.isAdmin = resp.data.req.isAdmin;
+
+        _this2.$loading(false);
       });
     },
     getCookie: function getCookie(cname) {
@@ -2543,9 +2674,40 @@ __webpack_require__.r(__webpack_exports__);
       this.$modal.show("detailSale", {
         data: sale
       });
+    },
+    getAllDropdowns: function getAllDropdowns() {
+      var _this3 = this;
+
+      $.ajax({
+        type: "GET",
+        url: "/api/allDropdowns"
+      }).done(function (resp, status) {
+        _this3.all_types = resp.type_of_sales;
+        _this3.all_agents = resp.agents;
+        _this3.all_cities = resp.cities;
+        _this3.all_mortgages = resp.mortgage_names;
+        _this3.all_titles = resp.title_names;
+      });
     }
   },
-  computed: {}
+  computed: {
+    formattedSales: function formattedSales() {
+      var sales = [];
+
+      for (var salesKey in this.sales) {
+        var sale = this.sales[salesKey];
+        sale.closing_date = new Date(sale.closing_date).toLocaleDateString();
+        sale.sale_price = Number(sale.sale_price).toLocaleString("en-US", this.numberFormat);
+        sale.total_commission = Number(sale.total_commission).toLocaleString("en-US", this.numberFormat);
+        sales.push(sale);
+      }
+
+      sales.sort(function (a, b) {
+        return new Date(a.closing_date) - new Date(b.closing_date);
+      });
+      return sales;
+    }
+  }
 });
 
 /***/ }),
@@ -3534,7 +3696,8 @@ __webpack_require__.r(__webpack_exports__);
     beforeOpen: function beforeOpen(event) {
       var _this = this;
 
-      this.sale = event.params.data;
+      // this.sale = event.params.data;
+      var id = event.params.data.sale_id ? event.params.data.sale_id : event.params.data.id;
       var token = this.getCookie("token");
       var req = {
         method: "post",
@@ -3544,7 +3707,7 @@ __webpack_require__.r(__webpack_exports__);
           Authorization: "Bearer " + token
         },
         data: {
-          id: this.sale.id
+          id: id
         }
       };
       axios(req).then(function (resp) {
@@ -44066,7 +44229,13 @@ var render = function() {
                   {
                     staticClass: "display-6 text-center text-white font-fugaz"
                   },
-                  [_vm._v(_vm._s(_vm.sale.client_name))]
+                  [
+                    _vm._v(
+                      "\n          " +
+                        _vm._s(_vm.sale.client_name) +
+                        "\n        "
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c("hr", { staticClass: "my-4" }),
@@ -44136,28 +44305,21 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: new Date(
-                            _vm.sale.closing_date
-                          ).toLocaleDateString(),
-                          expression:
-                            "new Date(sale.closing_date).toLocaleDateString()"
+                          value: _vm.sale.closing_date,
+                          expression: "sale.closing_date"
                         }
                       ],
                       staticClass: "form-control-sm form-control",
                       attrs: { type: "text" },
-                      domProps: {
-                        value: new Date(
-                          _vm.sale.closing_date
-                        ).toLocaleDateString()
-                      },
+                      domProps: { value: _vm.sale.closing_date },
                       on: {
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
                           _vm.$set(
-                            new Date(_vm.sale.closing_date),
-                            "toLocaleDateString()",
+                            _vm.sale,
+                            "closing_date",
                             $event.target.value
                           )
                         }
@@ -44262,30 +44424,21 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: Number(_vm.sale.sale_price).toLocaleString(
-                              "en-US",
-                              _vm.numberFormat
-                            ),
-                            expression:
-                              "Number(sale.sale_price).toLocaleString('en-US', numberFormat)"
+                            value: _vm.sale.sale_price,
+                            expression: "sale.sale_price"
                           }
                         ],
                         staticClass: "form-control form-control-sm",
                         attrs: { type: "text" },
-                        domProps: {
-                          value: Number(_vm.sale.sale_price).toLocaleString(
-                            "en-US",
-                            _vm.numberFormat
-                          )
-                        },
+                        domProps: { value: _vm.sale.sale_price },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              Number(_vm.sale.sale_price),
-                              "toLocaleString('en-US', numberFormat)",
+                              _vm.sale,
+                              "sale_price",
                               $event.target.value
                             )
                           }
@@ -44303,28 +44456,21 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: Number(
-                              _vm.sale.total_commission
-                            ).toLocaleString("en-US", _vm.numberFormat),
-                            expression:
-                              "Number(sale.total_commission).toLocaleString('en-US', numberFormat)"
+                            value: _vm.sale.total_commission,
+                            expression: "sale.total_commission"
                           }
                         ],
                         staticClass: "form-control form-control-sm",
                         attrs: { type: "text" },
-                        domProps: {
-                          value: Number(
-                            _vm.sale.total_commission
-                          ).toLocaleString("en-US", _vm.numberFormat)
-                        },
+                        domProps: { value: _vm.sale.total_commission },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              Number(_vm.sale.total_commission),
-                              "toLocaleString('en-US', numberFormat)",
+                              _vm.sale,
+                              "total_commission",
                               $event.target.value
                             )
                           }
@@ -44342,30 +44488,21 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: Number(_vm.sale.blue_profit).toLocaleString(
-                              "en-US",
-                              _vm.numberFormat
-                            ),
-                            expression:
-                              "Number(sale.blue_profit).toLocaleString('en-US', numberFormat)"
+                            value: _vm.sale.blue_profit,
+                            expression: "sale.blue_profit"
                           }
                         ],
                         staticClass: "form-control form-control-sm",
                         attrs: { type: "text" },
-                        domProps: {
-                          value: Number(_vm.sale.blue_profit).toLocaleString(
-                            "en-US",
-                            _vm.numberFormat
-                          )
-                        },
+                        domProps: { value: _vm.sale.blue_profit },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              Number(_vm.sale.blue_profit),
-                              "toLocaleString('en-US', numberFormat)",
+                              _vm.sale,
+                              "blue_profit",
                               $event.target.value
                             )
                           }
@@ -44385,30 +44522,21 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.sale.transaction_fee.toLocaleString(
-                              "en-US",
-                              _vm.numberFormat
-                            ),
-                            expression:
-                              "sale.transaction_fee.toLocaleString('en-US', numberFormat)"
+                            value: _vm.sale.transaction_fee,
+                            expression: "sale.transaction_fee"
                           }
                         ],
                         staticClass: "form-control form-control-sm",
                         attrs: { type: "text" },
-                        domProps: {
-                          value: _vm.sale.transaction_fee.toLocaleString(
-                            "en-US",
-                            _vm.numberFormat
-                          )
-                        },
+                        domProps: { value: _vm.sale.transaction_fee },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
                             _vm.$set(
-                              _vm.sale.transaction_fee,
-                              "toLocaleString('en-US', numberFormat)",
+                              _vm.sale,
+                              "transaction_fee",
                               $event.target.value
                             )
                           }
@@ -44504,12 +44632,14 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [
                           _vm._v(
-                            _vm._s(
-                              Number(c.commission).toLocaleString(
-                                "en-US",
-                                _vm.numberFormat
-                              )
-                            )
+                            "\n                " +
+                              _vm._s(
+                                Number(c.commission).toLocaleString(
+                                  "en-US",
+                                  _vm.numberFormat
+                                )
+                              ) +
+                              "\n              "
                           )
                         ]),
                         _vm._v(" "),
@@ -44529,7 +44659,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: { click: _vm.hide }
                       },
-                      [_vm._v("Close")]
+                      [_vm._v("\n              Close\n            ")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -44543,7 +44673,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Print")]
+                      [_vm._v("\n              Print\n            ")]
                     )
                   ])
                 ])
@@ -44883,25 +45013,94 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container justify-content-center" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-3" }),
+          _c("div", { staticClass: "col-2" }, [
+            _c(
+              "select",
+              {
+                staticClass: "custom-select mb-5 mt-3",
+                attrs: { id: "agent_name" },
+                on: {
+                  input: function($event) {
+                    return _vm.searchSales($event)
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Agent")
+                ]),
+                _vm._v(" "),
+                _vm._l(this.all_agents, function(item, index) {
+                  return _c(
+                    "option",
+                    { key: index, domProps: { value: item } },
+                    [_vm._v(_vm._s(item))]
+                  )
+                })
+              ],
+              2
+            )
+          ]),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-6" },
-            [
-              _vm.user.isAdmin
-                ? _c("search-component", {
-                    staticClass: "mb-5 mt-3",
-                    on: {
-                      search: function($event) {
-                        return _vm.getSales($event)
-                      }
-                    }
-                  })
-                : _vm._e()
-            ],
-            1
-          )
+          _c("div", { staticClass: "col-3" }, [
+            _c(
+              "select",
+              {
+                staticClass: "custom-select mb-5 mt-3",
+                attrs: { id: "mortgage_choice" },
+                on: {
+                  input: function($event) {
+                    return _vm.searchSales($event)
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Lender")
+                ]),
+                _vm._v(" "),
+                _vm._l(this.all_mortgages, function(item, index) {
+                  return _c(
+                    "option",
+                    { key: index, domProps: { value: item.mortgage_names } },
+                    [_vm._v(_vm._s(item.mortgage_names))]
+                  )
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-3" }, [
+            _c(
+              "select",
+              {
+                staticClass: "custom-select mb-5 mt-3",
+                attrs: { id: "title_choice" },
+                on: {
+                  input: function($event) {
+                    return _vm.searchSales($event)
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Title Company")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.all_titles, function(item, index) {
+                  return _c(
+                    "option",
+                    { key: index, domProps: { value: item.title_names } },
+                    [_vm._v(_vm._s(item.title_names))]
+                  )
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
         ])
       ]),
       _vm._v(" "),
@@ -44909,7 +45108,7 @@ var render = function() {
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col" }, [
             _c("table", { staticClass: "table table-sm table-hover" }, [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -44922,7 +45121,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm._l(_vm.sales, function(sale) {
+                  _vm._l(_vm.formattedSales, function(sale) {
                     return _c(
                       "tr",
                       {
@@ -44940,29 +45139,15 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(sale.client_name))]),
                         _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(
-                              Number(sale.sale_price).toLocaleString(
-                                "en-us",
-                                _vm.numberFormat
-                              )
-                            )
-                          )
-                        ]),
+                        _c("td", [_vm._v(_vm._s(sale.sale_price))]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(sale.type))]),
                         _vm._v(" "),
-                        _c("td", [
-                          _vm._v(
-                            _vm._s(
-                              Number(sale.total_commission).toLocaleString(
-                                "en-us",
-                                _vm.numberFormat
-                              )
-                            )
-                          )
-                        ])
+                        _c("td", [_vm._v(_vm._s(sale.total_commission))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.mortgage_choice))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.title_choice))])
                       ]
                     )
                   })
@@ -44980,6 +45165,26 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-4" }, [
+      _c("div", { staticClass: "input-group mb-5 mt-3" }, [
+        _c("input", {
+          staticClass: "form-control mr-1",
+          attrs: { type: "date", id: "beginDate" }
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "align-bottom" }, [_vm._v(" -- ")]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control ml-1",
+          attrs: { type: "date", id: "endDate" }
+        })
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

@@ -416,8 +416,8 @@ export default {
       this.isAddingRow = false;
     },
     beforeOpen(event) {
-      this.sale = event.params.data;
-
+      // this.sale = event.params.data;
+        let id = (event.params.data.sale_id) ? event.params.data.sale_id : event.params.data.id;
       let token = this.getCookie("token");
       let req = {
         method: "post",
@@ -427,7 +427,7 @@ export default {
           Authorization: "Bearer " + token
         },
         data: {
-          id: this.sale.id
+          id: id
         }
       };
       axios(req).then(resp => {
