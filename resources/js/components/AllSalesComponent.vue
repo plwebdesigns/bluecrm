@@ -18,7 +18,7 @@
           </select>
 
         </div>
-        <div class="col-3">
+        <div class="col-2">
           <select
           id="mortgage_choice"
           class="custom-select mb-5 mt-3"
@@ -32,7 +32,7 @@
               >{{item.mortgage_names}}</option>
           </select>
         </div>
-        <div class="col-3">
+        <div class="col-2">
             <select
             id="title_choice"
           class="custom-select mb-5 mt-3"
@@ -46,11 +46,12 @@
               >{{item.title_names}}</option>
           </select>
           </div>
-          <div class="col-4">
+          <div class="col-6">
               <div class="input-group mb-5 mt-3">
                   <input class="form-control mr-1" type="date" id="beginDate">
                   <span class="align-bottom"> -- </span>
                   <input class="form-control ml-1" type="date" id="endDate">
+		              <button id="search" class="btn btn-outline-dark ml-1" v-on:click="searchSales($event)">Search</button>
               </div>
           </div>
       </div>
@@ -176,20 +177,34 @@ export default {
       });
     },
     searchSales(e){
-      this.$loading(true);
+      	this.$loading(true);
         let bdate = $('#beginDate').val();
         let edate = $('#endDate').val();
         let search = [];
         let by = [];
         let elems = document.getElementsByClassName('custom-select');
         Array.from(elems).forEach(function (element){
-            search.push(element.value);
-            by.push(element.id);
+            if (element.value !== '') {
+              search.push(element.value);
+              by.push(element.id);
+            }
+            
         });
+        
+      	if(
+      		bdate === '' &&
+      		edate === '' &&
+      		search.length === 0 &&
+      		by.length === 0
+      	){
+      		alert("Nothing selected to search");
+          this.$loading(false);
+      		return false;
+      	}
 
-      let token = this.getCookie("token");
-      let req = {
-        method: "post",
+      	let token = this.getCookie("token");
+        let req = {
+          method: "post",
           url: "/api/sales",
           headers: {
             Accept: "application/json",
@@ -202,11 +217,11 @@ export default {
               endDate: edate
           }
       };
-      axios(req).then(resp => {
-        this.sales = resp.data.sales;
-        this.user.isAdmin = resp.data.req.isAdmin;
-        this.$loading(false);
-      });
+        axios(req).then(resp => {
+          this.sales = resp.data.sales;
+          this.user.isAdmin = resp.data.req.isAdmin;
+          this.$loading(false);
+        });
 
     },
     getCookie(cname) {

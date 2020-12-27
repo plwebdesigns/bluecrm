@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/', 'SaleController@dash');
 Route::middleware('auth:api')->get('sales/{id}', 'SaleController@SaleDetail');
 Route::middleware('auth:api')->get('sales', 'SaleController@getSales');
 Route::middleware('auth:api')->get('quarter-breakdown', 'SaleController@quarterBreakdown');
-Route::middleware('auth:api')->post('sales', 'SaleController@searchSales');
+Route::middleware('auth:api')->post('sales', 'AdminController@searchSales');
 Route::middleware('auth:api')->post('search_production', 'SaleController@searchProduction');
 
 
