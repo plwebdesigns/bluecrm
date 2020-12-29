@@ -177,25 +177,23 @@ export default {
       });
     },
     searchSales(e){
-      	this.$loading(true);
+      	// this.$loading(true);
         let bdate = $('#beginDate').val();
         let edate = $('#endDate').val();
         let search = [];
         let by = [];
         let elems = document.getElementsByClassName('custom-select');
         Array.from(elems).forEach(function (element){
-            if (element.value !== '') {
-              search.push(element.value);
-              by.push(element.id);
-            }
-            
+            search.push(element.value);
+            by.push(element.id);            
         });
         
       	if(
       		bdate === '' &&
       		edate === '' &&
-      		search.length === 0 &&
-      		by.length === 0
+      		search[0] === '' &&
+          search[1] === '' &&
+          search[2] === ''
       	){
       		alert("Nothing selected to search");
           this.$loading(false);

@@ -286,11 +286,14 @@ class AdminController extends Controller {
                     ->get();
 		$user = $request->user();
 
+		//Remove duplicates
+		$sales = $sales->unique('sale_id');
+
         if ($search_term[0] !== null):
             $agent = User::where('agent_name', $search_term[0])->first('id')->id;
             $sales = $sales->where('user_id', '=', $agent);
         endif;
-
+        dd($search_term[2]);
 		for ($i = 1; $i < $x; $i++):
             if ($search_term[$i] !== null):
                 // Get sales by search term
@@ -298,10 +301,11 @@ class AdminController extends Controller {
             endif;
         endfor;
 
+        //Get current year
+        $year = date('Y');
         // CHeck to see if there is a date range
-        $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : '2019-01-01';
-        $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : \date('Y-m-d');
-
+        $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : "{$year}-01-01";
+        $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : \date('Y-m-d');        
         $sales = $sales->whereBetween('closing_date', [$bdate, $edate]);
 
         // Get totals for filtered sales
