@@ -293,7 +293,7 @@ class AdminController extends Controller {
             $agent = User::where('agent_name', $search_term[0])->first('id')->id;
             $sales = $sales->where('user_id', '=', $agent);
         endif;
-        dd($search_term[2]);
+        
 		for ($i = 1; $i < $x; $i++):
             if ($search_term[$i] !== null):
                 // Get sales by search term
