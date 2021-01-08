@@ -2537,6 +2537,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2619,7 +2620,7 @@ __webpack_require__.r(__webpack_exports__);
     searchSales: function searchSales(e) {
       var _this2 = this;
 
-      this.$loading(true);
+      // this.$loading(true);
       var bdate = $('#beginDate').val();
       var edate = $('#endDate').val();
       var search = [];
@@ -2629,6 +2630,13 @@ __webpack_require__.r(__webpack_exports__);
         search.push(element.value);
         by.push(element.id);
       });
+
+      if (bdate === '' && edate === '' && search[0] === '' && search[1] === '' && search[2] === '') {
+        alert("Nothing selected to search");
+        this.$loading(false);
+        return false;
+      }
+
       var token = this.getCookie("token");
       var req = {
         method: "post",
@@ -4568,10 +4576,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      production_year: "2020",
+      production_year: "2021",
       current_year: new Date().getFullYear()
     };
   }
@@ -45042,7 +45051,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-3" }, [
+          _c("div", { staticClass: "col-2" }, [
             _c(
               "select",
               {
@@ -45071,7 +45080,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-3" }, [
+          _c("div", { staticClass: "col-2" }, [
             _c(
               "select",
               {
@@ -45100,7 +45109,35 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _vm._m(0)
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "input-group mb-5 mt-3" }, [
+              _c("input", {
+                staticClass: "form-control mr-1",
+                attrs: { type: "date", id: "beginDate" }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "align-bottom" }, [_vm._v(" -- ")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control ml-1",
+                attrs: { type: "date", id: "endDate" }
+              }),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-dark ml-1",
+                  attrs: { id: "search" },
+                  on: {
+                    click: function($event) {
+                      return _vm.searchSales($event)
+                    }
+                  }
+                },
+                [_vm._v("Search")]
+              )
+            ])
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -45108,7 +45145,7 @@ var render = function() {
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col" }, [
             _c("table", { staticClass: "table table-sm table-hover" }, [
-              _vm._m(1),
+              _vm._m(0),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -45116,7 +45153,7 @@ var render = function() {
                   _vm.sales.length < 1
                     ? _c("div", { staticStyle: { "font-size": "18px" } }, [
                         _vm._v(
-                          "\n                  No results found.\n              "
+                          "\n                    No results found.\n                "
                         )
                       ])
                     : _vm._e(),
@@ -45165,26 +45202,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-4" }, [
-      _c("div", { staticClass: "input-group mb-5 mt-3" }, [
-        _c("input", {
-          staticClass: "form-control mr-1",
-          attrs: { type: "date", id: "beginDate" }
-        }),
-        _vm._v(" "),
-        _c("span", { staticClass: "align-bottom" }, [_vm._v(" -- ")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control ml-1",
-          attrs: { type: "date", id: "endDate" }
-        })
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -47753,7 +47770,7 @@ var render = function() {
         }
       },
       [
-        _c("option", { attrs: { value: "2019" } }, [_vm._v("2019")]),
+        _c("option", { attrs: { value: "2020" } }, [_vm._v("2020")]),
         _vm._v(" "),
         _c(
           "option",
@@ -49654,7 +49671,7 @@ var render = function() {
     _c("div", { staticClass: "row pb-4" }, [
       _c(
         "div",
-        { staticClass: "col-2" },
+        { staticClass: "col-3" },
         [
           _c("SelectYearComponent", {
             on: {
