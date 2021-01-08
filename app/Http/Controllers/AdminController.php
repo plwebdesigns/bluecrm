@@ -267,9 +267,9 @@ class AdminController extends Controller {
 	public function getAllSales(Request $request) {
 		$user = $request->user();
 		$year = date('Y');
-		
+
 		$sales = Sale::all();
-		$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
+		$sales = $sales->whereBetween('closing_date', ["2020-01-01", "2020-12-31"]);
 
 		return response()->json(['sales' => $sales, 'req' => $user]);
 	}
@@ -277,41 +277,51 @@ class AdminController extends Controller {
 	/****  Get sales by search term   ****/
 	public function searchSales(Request $request) {
         $search_term = $request->input('search_term');
-
+        $user = $request->user();
         $search_by = $request->input('search_by');
-        $x = count($search_by);
-        $sales = DB::table('sale_user')
-                    ->join('sales', 'sales.id', '=', 'sale_user.sale_id')
-                    ->select('sales.*', 'sale_user.*')
-                    ->get();
-		$user = $request->user();
 
-		//Remove duplicates
-		$sales = $sales->unique('sale_id');
+        if (!isset($search_by)):
+            $sales = DB::table('sale_user')
+                ->join('sales', 'sales.id', '=', 'sale_user.sale_id')
+                ->select('sales.*', 'sale_user.*')
+                ->where('sales.client_name', 'LIKE', "%{$search_term}%")
+                ->get();
 
-        if ($search_term[0] !== null):
-            $agent = User::where('agent_name', $search_term[0])->first('id')->id;
-            $sales = $sales->where('user_id', '=', $agent);
-        endif;
-        dd($search_term[2]);
-		for ($i = 1; $i < $x; $i++):
-            if ($search_term[$i] !== null):
-                // Get sales by search term
-                $sales = $sales->where($search_by[$i], $search_term[$i]);
+            return response()->json(['sales' => $sales, 'req' => $user]);
+        else:
+            $x = count($search_by);
+            $sales = DB::table('sale_user')
+                ->join('sales', 'sales.id', '=', 'sale_user.sale_id')
+                ->select('sales.*', 'sale_user.*')
+                ->get();
+
+            //Remove duplicates
+            $sales = $sales->unique('sale_id');
+
+            if ($search_term[0] !== null):
+                $agent = User::where('agent_name', $search_term[0])->first('id')->id;
+                $sales = $sales->where('user_id', '=', $agent);
             endif;
-        endfor;
 
-        //Get current year
-        $year = date('Y');
-        // CHeck to see if there is a date range
-        $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : "{$year}-01-01";
-        $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : \date('Y-m-d');        
-        $sales = $sales->whereBetween('closing_date', [$bdate, $edate]);
+            for ($i = 1; $i < $x; $i++):
+                if ($search_term[$i] !== null):
+                    // Get sales by search term
+                    $sales = $sales->where($search_by[$i], $search_term[$i]);
+                endif;
+            endfor;
 
-        // Get totals for filtered sales
+            //Get current year
+            $year = date('Y');
+            // CHeck to see if there is a date range
+            $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : "2020-01-01";
+            $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : "2020-12-31";
+            $sales = $sales->whereBetween('closing_date', [$bdate, $edate]);
+
+            // Get totals for filtered sales
 
 
-		return response()->json(['sales' => $sales, 'req' => $user]);
+            return response()->json(['sales' => $sales, 'req' => $user]);
+        endif;
 	}
 
 	/**** GET SPECIFIC SALE FOR ADMIN ****/
