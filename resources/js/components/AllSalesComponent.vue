@@ -2,59 +2,66 @@
   <div class="pt-3">
     <h4 class="font-fredricka text-center">All Sales</h4>
     <div class="container justify-content-center">
-      <div class="row">
-        <div class="col-2">
-          <select
-          id="agent_name"
-          class="custom-select mb-5 mt-3"
-          v-on:input="searchSales($event)"
-          >
-            <option value="">Select Agent</option>
-            <option
-                v-for="(item, index) in this.all_agents"
-                :key="index"
-                :value="item"
-              >{{item}}</option>
-          </select>
+<!--      <div class="row">-->
+<!--        <div class="col-2">-->
+<!--          <select-->
+<!--          id="agent_name"-->
+<!--          class="custom-select mb-5 mt-3"-->
+<!--          v-on:input="searchSales($event)"-->
+<!--          >-->
+<!--            <option value="">Select Agent</option>-->
+<!--            <option-->
+<!--                v-for="(item, index) in this.all_agents"-->
+<!--                :key="index"-->
+<!--                :value="item"-->
+<!--              >{{item}}</option>-->
+<!--          </select>-->
 
+<!--        </div>-->
+<!--        <div class="col-2">-->
+<!--          <select-->
+<!--          id="mortgage_choice"-->
+<!--          class="custom-select mb-5 mt-3"-->
+<!--          v-on:input="searchSales($event)"-->
+<!--          >-->
+<!--            <option value="">Select Lender</option>-->
+<!--            <option-->
+<!--                v-for="(item, index) in this.all_mortgages"-->
+<!--                :key="index"-->
+<!--                :value="item.mortgage_names"-->
+<!--              >{{item.mortgage_names}}</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--        <div class="col-2">-->
+<!--            <select-->
+<!--            id="title_choice"-->
+<!--          class="custom-select mb-5 mt-3"-->
+<!--          v-on:input="searchSales($event)"-->
+<!--          >-->
+<!--            <option value="">Select Title Company</option>-->
+<!--            <option-->
+<!--                v-for="(item, index) in all_titles"-->
+<!--                :key="index"-->
+<!--                :value="item.title_names"-->
+<!--              >{{item.title_names}}</option>-->
+<!--          </select>-->
+<!--          </div>-->
+<!--          <div class="col-6">-->
+<!--              <div class="input-group mb-5 mt-3">-->
+<!--                  <input class="form-control mr-1" type="date" id="beginDate">-->
+<!--                  <span class="align-bottom"> &#45;&#45; </span>-->
+<!--                  <input class="form-control ml-1" type="date" id="endDate">-->
+<!--		              <button id="search" class="btn btn-outline-dark ml-1" v-on:click="searchSales($event)">Search</button>-->
+<!--              </div>-->
+<!--          </div>-->
+<!--      </div>-->
+    <div class="row mb-3">
+        <div class="col-3"></div>
+        <div class="col">
+            <search-component v-on:search="getSales($event)"></search-component>
         </div>
-        <div class="col-2">
-          <select
-          id="mortgage_choice"
-          class="custom-select mb-5 mt-3"
-          v-on:input="searchSales($event)"
-          >
-            <option value="">Select Lender</option>
-            <option
-                v-for="(item, index) in this.all_mortgages"
-                :key="index"
-                :value="item.mortgage_names"
-              >{{item.mortgage_names}}</option>
-          </select>
-        </div>
-        <div class="col-2">
-            <select
-            id="title_choice"
-          class="custom-select mb-5 mt-3"
-          v-on:input="searchSales($event)"
-          >
-            <option value="">Select Title Company</option>
-            <option
-                v-for="(item, index) in all_titles"
-                :key="index"
-                :value="item.title_names"
-              >{{item.title_names}}</option>
-          </select>
-          </div>
-          <div class="col-6">
-              <div class="input-group mb-5 mt-3">
-                  <input class="form-control mr-1" type="date" id="beginDate">
-                  <span class="align-bottom"> -- </span>
-                  <input class="form-control ml-1" type="date" id="endDate">
-		              <button id="search" class="btn btn-outline-dark ml-1" v-on:click="searchSales($event)">Search</button>
-              </div>
-          </div>
-      </div>
+        <div class="col-3"></div>
+    </div>
     </div>
     <div class="container justify-content-center">
       <div class="row">
@@ -185,9 +192,9 @@ export default {
         let elems = document.getElementsByClassName('custom-select');
         Array.from(elems).forEach(function (element){
             search.push(element.value);
-            by.push(element.id);            
+            by.push(element.id);
         });
-        
+
       	if(
       		bdate === '' &&
       		edate === '' &&
@@ -277,7 +284,7 @@ export default {
 
 	      return sales;
    	 },
- 
+
 
  },
 };
