@@ -374,10 +374,10 @@ class AdminController extends Controller {
 				Rule::in($cities_arr),
 			],
 			'closing_date' => 'required|date',
-			'sale_price' => 'required|numeric|min:1',
-			'total_commission' => 'required|numeric|min:1',
-			'transaction_fee' => 'required|numeric|min:1',
-			'blue_profit' => 'required|numeric|min:1',
+			'sale_price' => 'required|numeric',
+			'total_commission' => 'required|numeric',
+			'transaction_fee' => 'required|numeric',
+			'blue_profit' => 'required|numeric',
 			'mortgage_choice' => 'required',
 			'title_choice' => 'required',
 		]);
@@ -411,7 +411,7 @@ class AdminController extends Controller {
 
 			$validator_agent = Validator::make($agent, [
 				'name' => 'required',
-				'commission' => 'required|numeric|min:1',
+				'commission' => 'required|numeric',
 				'split' => 'required',
 				'percent_of_sale' => 'required',
 				'split_sale' => 'required',

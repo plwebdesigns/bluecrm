@@ -68,7 +68,7 @@
             <div class="input-group-prepend">
               <label for="city" class="input-group-text">City</label>
             </div>
-            <select class="custom-select" v-model="sale.city">
+            <select id="city" class="custom-select" v-model="sale.city">
               <option value>--Select One--</option>
               <option v-for="(city,index) in all_cities" :key="index">{{city.place_name}}</option>
             </select>
