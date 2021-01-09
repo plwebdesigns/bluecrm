@@ -93,10 +93,20 @@
                       <td>{{sale.type}}</td>
                       <td>{{sale.client_name}}</td>
                       <td>{{sale.address}}</td>
-                      <td>{{sale.sale_price}}</td>
-                      <td>{{sale.total_commission}}</td>
-                      <td>{{sale.commission}}</td>
-                      <td>{{sale.split}}%</td>
+                      <td>{{sale.sale_price.toLocaleString('en-US', numberFormat)}}</td>
+                      <td>{{sale.total_commission.toLocaleString('en-US', numberFormat)}}</td>
+                      <td>{{sale.commission.toLocaleString('en-US', numberFormat)}}</td>
+                      <td>{{Number(sale.split) * 100}}%</td>
+                  </tr>
+                  <tr style="border-top: 2px solid black; font-weight: bolder">
+                      <td>TOTALS</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{total_team_sales.total_sales.toLocaleString('en-US', numberFormat)}}</td>
+                      <td>{{total_team_sales.total_commission.toLocaleString('en-US', numberFormat)}}</td>
+                      <td>{{total_team_sales.total_agent_commission.toLocaleString('en-US', numberFormat)}}</td>
+                      <td></td>
                   </tr>
                   </tbody>
               </table>
@@ -146,6 +156,11 @@ export default {
         total_commission: 0,
         total_sales: 0
       },
+        total_team_sales: {
+            total_agent_commission: 0,
+            total_commission: 0,
+            total_sales: 0
+        },
       options: {
         agent_name: ""
       },
@@ -208,6 +223,7 @@ export default {
         this.split_sales = resp.split_sales;
         this.totals = resp.totals;
         this.agent = resp.agent;
+        this.total_team_sales = resp.total_team_sales;
       });
 
       this.$emit("agentChanged");
