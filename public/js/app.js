@@ -7393,6 +7393,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7422,6 +7432,11 @@ __webpack_require__.r(__webpack_exports__);
       },
       split_sales: {},
       totals: {
+        total_agent_commission: 0,
+        total_commission: 0,
+        total_sales: 0
+      },
+      total_team_sales: {
         total_agent_commission: 0,
         total_commission: 0,
         total_sales: 0
@@ -7494,6 +7509,7 @@ __webpack_require__.r(__webpack_exports__);
         _this2.split_sales = resp.split_sales;
         _this2.totals = resp.totals;
         _this2.agent = resp.agent;
+        _this2.total_team_sales = resp.total_team_sales;
       });
       this.$emit("agentChanged");
       $("#pdfbtn").attr("hidden", false);
@@ -52393,37 +52409,122 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.split_sales, function(sale, index) {
-                        return _c(
+                      [
+                        _vm._l(_vm.split_sales, function(sale, index) {
+                          return _c(
+                            "tr",
+                            {
+                              key: index,
+                              on: {
+                                click: function($event) {
+                                  return _vm.show(sale)
+                                }
+                              }
+                            },
+                            [
+                              _c("td", [_vm._v(_vm._s(index + 1))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(sale.type))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(sale.client_name))]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(sale.address))]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    sale.sale_price.toLocaleString(
+                                      "en-US",
+                                      _vm.numberFormat
+                                    )
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    sale.total_commission.toLocaleString(
+                                      "en-US",
+                                      _vm.numberFormat
+                                    )
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(
+                                  _vm._s(
+                                    sale.commission.toLocaleString(
+                                      "en-US",
+                                      _vm.numberFormat
+                                    )
+                                  )
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
+                                _vm._v(_vm._s(Number(sale.split) * 100) + "%")
+                              ])
+                            ]
+                          )
+                        }),
+                        _vm._v(" "),
+                        _c(
                           "tr",
                           {
-                            key: index,
-                            on: {
-                              click: function($event) {
-                                return _vm.show(sale)
-                              }
+                            staticStyle: {
+                              "border-top": "2px solid black",
+                              "font-weight": "bolder"
                             }
                           },
                           [
-                            _c("td", [_vm._v(_vm._s(index + 1))]),
+                            _c("td", [_vm._v("TOTALS")]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.type))]),
+                            _c("td"),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.client_name))]),
+                            _c("td"),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.address))]),
+                            _c("td"),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.sale_price))]),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.total_team_sales.total_sales.toLocaleString(
+                                    "en-US",
+                                    _vm.numberFormat
+                                  )
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.total_commission))]),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.total_team_sales.total_commission.toLocaleString(
+                                    "en-US",
+                                    _vm.numberFormat
+                                  )
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.commission))]),
+                            _c("td", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.total_team_sales.total_agent_commission.toLocaleString(
+                                    "en-US",
+                                    _vm.numberFormat
+                                  )
+                                )
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(sale.split) + "%")])
+                            _c("td")
                           ]
                         )
-                      }),
-                      0
+                      ],
+                      2
                     )
                   ]
                 )

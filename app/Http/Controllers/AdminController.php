@@ -212,7 +212,8 @@ class AdminController extends Controller {
 	}
 
 	// REPORT FOR A SPECIFIC USER
-	public function getReport(Request $request) {
+	public function getReport(Request $request): \Illuminate\Http\JsonResponse
+    {
 		$options = $request->input('options');
 		$year = $request->input('production_year');
 		$agent = DB::table('users')->where('agent_name', $options['agent_name'])->first();
@@ -225,16 +226,26 @@ class AdminController extends Controller {
 			->select([
 				'sales.id', 'type', 'client_name', 'address',
 				'sale_price', 'total_commission', 'sale_user.commission',
-				'sale_user.split', 'sale_user.split_sale',
+				'sale_user.split', 'sale_user.split_sale', 'sale_user.percent_of_sale'
 			])
 			->get();
+        $team_sales = $sales->where('percent_of_sale', '<', 1);
+        $sales = $sales->where('percent_of_sale', '=', 1); //Remove team sales
 
-		$totals = [
-			'total_agent_commission' => $sales->sum('commission'),
-			'total_commission' => $sales->sum('total_commission'),
-			'total_sales' => $sales->sum('sale_price'),
-		];
+        //Calculate totals for currency fields
+        $totals = [
+            'total_agent_commission' => $sales->sum('commission'),
+            'total_commission' => $sales->sum('total_commission'),
+            'total_sales' => $sales->sum('sale_price'),
+        ];
 
+        $totals_team_sales = [
+            'total_agent_commission' => $team_sales->sum('commission'),
+            'total_commission' => $team_sales->sum('total_commission'),
+            'total_sales' => $team_sales->sum('sale_price')
+        ];
+
+		//Format currency fields
 		$sales->transform(function ($obj) {
 			return collect($obj)
 				->transform(function ($item, $key) {
@@ -248,8 +259,6 @@ class AdminController extends Controller {
 					endif;
 				});
 		});
-		$team_sales = $sales->where('split_sale', 'Yes');
-		$sales = $sales->where('split_sale', 'No');
 
 		return response()->json(
 			[
@@ -257,6 +266,7 @@ class AdminController extends Controller {
 				'totals' => $totals,
 				'agent' => $agent,
 				'split_sales' => $team_sales,
+                'total_team_sales' => $totals_team_sales
 			]
 		);
 	}

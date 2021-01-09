@@ -112,10 +112,10 @@ class SaleController extends Controller
         $sales = $user->sales;
         $year = $request->input('production_year');
 
-        $split_sales = $sales->where('pivot.split_sale', 'Yes')
+        $split_sales = $sales
             ->where('pivot.percent_of_sale', '<', 1)
             ->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
-        $sales = $sales->where('pivot.split_sale', 'No')
+        $sales = $sales
             ->where('pivot.percent_of_sale', '=', 1)
             ->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
 
