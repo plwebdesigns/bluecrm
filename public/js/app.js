@@ -48388,6 +48388,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "custom-select",
+                  attrs: { id: "city" },
                   on: {
                     change: function($event) {
                       var $$selectedVal = Array.prototype.filter
