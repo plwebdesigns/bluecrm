@@ -280,6 +280,7 @@ class AdminController extends Controller {
         $user = $request->user();
         $search_by = $request->input('search_by');
 
+
         if (!isset($search_by)):
             $sales = DB::table('sale_user')
                 ->join('sales', 'sales.id', '=', 'sale_user.sale_id')
@@ -301,6 +302,7 @@ class AdminController extends Controller {
             if ($search_term[0] !== null):
                 $agent = User::where('agent_name', $search_term[0])->first('id')->id;
                 $sales = $sales->where('user_id', '=', $agent);
+
             endif;
 
             for ($i = 1; $i < $x; $i++):

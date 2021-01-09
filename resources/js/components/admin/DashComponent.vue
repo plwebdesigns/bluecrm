@@ -1,7 +1,7 @@
 <template>
   <div class="pt-3">
     <div class="row pb-4">
-      <div class="col-2">
+      <div class="col-3">
         <SelectYearComponent v-on:production_year="getBreakdowns($event)"></SelectYearComponent>
       </div>
     </div>
