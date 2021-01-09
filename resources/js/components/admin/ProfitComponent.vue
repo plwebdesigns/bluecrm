@@ -150,7 +150,7 @@ export default {
         t_blue: 0,
         t_trans: 0
       },
-      production_year: "2020"
+      production_year: new Date().getFullYear()
     };
   },
   methods: {

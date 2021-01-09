@@ -14,12 +14,8 @@
             <div class="col-5">
               <search-component v-on:search="searchProduction($event)"></search-component>
             </div>
-            <div class="col-2 justify-content-end">
-              <select class="custom-select" id="production_year" v-on:change="changeYear()">
-                <option value="null">--Select Year--</option>
-                <option v-bind:value="new Date().getFullYear()">{{ new Date().getFullYear() }}</option>
-                <option v-bind:value="new Date().getFullYear() - 1">{{new Date().getFullYear() - 1}}</option>
-              </select>
+            <div class="col-3 justify-content-end">
+                <SelectYearComponent v-on:production_year="changeYear($event)"></SelectYearComponent>
             </div>
           </div>
           <table class="table table-sm table-hover">
@@ -103,11 +99,13 @@
 <script>
 import ChangePass from "./ChangePassComponent";
 import quarterBreakdown from "./QuarterBreakdown";
+import SelectYearComponent from "./SelectYearComponent";
 
 export default {
   components: {
     changePassComponent: ChangePass,
     quarterBreakdown: quarterBreakdown,
+      SelectYearComponent: SelectYearComponent
   },
   mounted() {
     this.getSales();
@@ -211,8 +209,8 @@ export default {
         data: sale,
       });
     },
-    changeYear() {
-      this.production_year = document.getElementById("production_year").value;
+    changeYear(year) {
+      // this.production_year = document.getElementById("production_year").value;
       let token = this.getCookie("token");
 
       let request = {
@@ -223,7 +221,7 @@ export default {
           Authorization: "Bearer " + token,
         },
         params: {
-          production_year: this.production_year,
+          production_year: year
         },
       };
 

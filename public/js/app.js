@@ -2538,6 +2538,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -4206,6 +4213,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ChangePassComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChangePassComponent */ "./resources/js/components/ChangePassComponent.vue");
 /* harmony import */ var _QuarterBreakdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./QuarterBreakdown */ "./resources/js/components/QuarterBreakdown.vue");
+/* harmony import */ var _SelectYearComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SelectYearComponent */ "./resources/js/components/SelectYearComponent.vue");
 //
 //
 //
@@ -4304,16 +4312,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     changePassComponent: _ChangePassComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
-    quarterBreakdown: _QuarterBreakdown__WEBPACK_IMPORTED_MODULE_1__["default"]
+    quarterBreakdown: _QuarterBreakdown__WEBPACK_IMPORTED_MODULE_1__["default"],
+    SelectYearComponent: _SelectYearComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   mounted: function mounted() {
     this.getSales();
@@ -4418,10 +4424,10 @@ __webpack_require__.r(__webpack_exports__);
         data: sale
       });
     },
-    changeYear: function changeYear() {
+    changeYear: function changeYear(year) {
       var _this2 = this;
 
-      this.production_year = document.getElementById("production_year").value;
+      // this.production_year = document.getElementById("production_year").value;
       var token = this.getCookie("token");
       var request = {
         method: "GET",
@@ -4431,7 +4437,7 @@ __webpack_require__.r(__webpack_exports__);
           Authorization: "Bearer " + token
         },
         params: {
-          production_year: this.production_year
+          production_year: year
         }
       };
       axios(request).then(function (resp) {
@@ -4575,14 +4581,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    this.calcNumberYears();
+  },
   data: function data() {
     return {
       production_year: "2021",
-      current_year: new Date().getFullYear()
+      current_year: new Date().getFullYear(),
+      all_dates: []
     };
+  },
+  methods: {
+    calcNumberYears: function calcNumberYears() {
+      var arr = [];
+      var d = new Date().getFullYear();
+      var d_count = 2019; //First year of CRM being utilized
+
+      var n = d - d_count;
+
+      for (var i = 0; i <= n; i++) {
+        arr.push(d_count + i);
+      }
+
+      this.all_dates = arr;
+    }
   }
 });
 
@@ -6050,7 +6073,7 @@ __webpack_require__.r(__webpack_exports__);
       style: {
         background_color: "yellow"
       },
-      production_year: 2020
+      production_year: new Date().getFullYear()
     };
   },
   methods: {
@@ -7088,7 +7111,7 @@ __webpack_require__.r(__webpack_exports__);
         t_blue: 0,
         t_trans: 0
       },
-      production_year: "2020"
+      production_year: new Date().getFullYear()
     };
   },
   methods: {
@@ -7396,7 +7419,7 @@ __webpack_require__.r(__webpack_exports__);
         style: "currency",
         currency: "USD"
       },
-      production_year: "2020"
+      production_year: new Date().getFullYear()
     };
   },
   methods: {
@@ -45021,123 +45044,25 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "container justify-content-center" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-2" }, [
-            _c(
-              "select",
-              {
-                staticClass: "custom-select mb-5 mt-3",
-                attrs: { id: "agent_name" },
+        _c("div", { staticClass: "row mb-3" }, [
+          _c("div", { staticClass: "col-3" }),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col" },
+            [
+              _c("search-component", {
                 on: {
-                  input: function($event) {
-                    return _vm.searchSales($event)
+                  search: function($event) {
+                    return _vm.getSales($event)
                   }
                 }
-              },
-              [
-                _c("option", { attrs: { value: "" } }, [
-                  _vm._v("Select Agent")
-                ]),
-                _vm._v(" "),
-                _vm._l(this.all_agents, function(item, index) {
-                  return _c(
-                    "option",
-                    { key: index, domProps: { value: item } },
-                    [_vm._v(_vm._s(item))]
-                  )
-                })
-              ],
-              2
-            )
-          ]),
+              })
+            ],
+            1
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "col-2" }, [
-            _c(
-              "select",
-              {
-                staticClass: "custom-select mb-5 mt-3",
-                attrs: { id: "mortgage_choice" },
-                on: {
-                  input: function($event) {
-                    return _vm.searchSales($event)
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { value: "" } }, [
-                  _vm._v("Select Lender")
-                ]),
-                _vm._v(" "),
-                _vm._l(this.all_mortgages, function(item, index) {
-                  return _c(
-                    "option",
-                    { key: index, domProps: { value: item.mortgage_names } },
-                    [_vm._v(_vm._s(item.mortgage_names))]
-                  )
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-2" }, [
-            _c(
-              "select",
-              {
-                staticClass: "custom-select mb-5 mt-3",
-                attrs: { id: "title_choice" },
-                on: {
-                  input: function($event) {
-                    return _vm.searchSales($event)
-                  }
-                }
-              },
-              [
-                _c("option", { attrs: { value: "" } }, [
-                  _vm._v("Select Title Company")
-                ]),
-                _vm._v(" "),
-                _vm._l(_vm.all_titles, function(item, index) {
-                  return _c(
-                    "option",
-                    { key: index, domProps: { value: item.title_names } },
-                    [_vm._v(_vm._s(item.title_names))]
-                  )
-                })
-              ],
-              2
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-6" }, [
-            _c("div", { staticClass: "input-group mb-5 mt-3" }, [
-              _c("input", {
-                staticClass: "form-control mr-1",
-                attrs: { type: "date", id: "beginDate" }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "align-bottom" }, [_vm._v(" -- ")]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control ml-1",
-                attrs: { type: "date", id: "endDate" }
-              }),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-outline-dark ml-1",
-                  attrs: { id: "search" },
-                  on: {
-                    click: function($event) {
-                      return _vm.searchSales($event)
-                    }
-                  }
-                },
-                [_vm._v("Search")]
-              )
-            ])
-          ])
+          _c("div", { staticClass: "col-3" })
         ])
       ]),
       _vm._v(" "),
@@ -47377,37 +47302,20 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-2 justify-content-end" }, [
-                    _c(
-                      "select",
-                      {
-                        staticClass: "custom-select",
-                        attrs: { id: "production_year" },
+                  _c(
+                    "div",
+                    { staticClass: "col-3 justify-content-end" },
+                    [
+                      _c("SelectYearComponent", {
                         on: {
-                          change: function($event) {
-                            return _vm.changeYear()
+                          production_year: function($event) {
+                            return _vm.changeYear($event)
                           }
                         }
-                      },
-                      [
-                        _c("option", { attrs: { value: "null" } }, [
-                          _vm._v("--Select Year--")
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "option",
-                          { domProps: { value: new Date().getFullYear() } },
-                          [_vm._v(_vm._s(new Date().getFullYear()))]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "option",
-                          { domProps: { value: new Date().getFullYear() - 1 } },
-                          [_vm._v(_vm._s(new Date().getFullYear() - 1))]
-                        )
-                      ]
-                    )
-                  ])
+                      })
+                    ],
+                    1
+                  )
                 ]),
                 _vm._v(" "),
                 _c("table", { staticClass: "table table-sm table-hover" }, [
@@ -47769,15 +47677,12 @@ var render = function() {
           ]
         }
       },
-      [
-        _c("option", { attrs: { value: "2020" } }, [_vm._v("2020")]),
-        _vm._v(" "),
-        _c(
-          "option",
-          { attrs: { selected: "" }, domProps: { value: _vm.current_year } },
-          [_vm._v(_vm._s(_vm.current_year))]
-        )
-      ]
+      _vm._l(_vm.all_dates, function(date) {
+        return _c("option", { domProps: { value: date } }, [
+          _vm._v(_vm._s(date))
+        ])
+      }),
+      0
     )
   ])
 }
@@ -52255,7 +52160,7 @@ var render = function() {
                     )
                   },
                   function($event) {
-                    _vm.getReport("2020")
+                    _vm.getReport(_vm.production_year)
                     _vm.backToDefault()
                   }
                 ]
@@ -70352,8 +70257,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/bluecrm/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/paul/Blue/projects/dev/bluecrm-prod/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/paul/Blue/projects/dev/bluecrm-prod/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

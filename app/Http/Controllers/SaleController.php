@@ -30,6 +30,7 @@ class SaleController extends Controller
         $quarter2Ten = [];
         $quarter3Ten = [];
         $quarter4Ten = [];
+        $ytd_sales = [];
         $year = date('Y');
 
         // Get ignored agents from DB
@@ -37,7 +38,7 @@ class SaleController extends Controller
 
         //Get quarter 1
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ['2020-01-01', '2020-03-31']);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]);
             if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
                 $quarter1Ten[] = [
                     'agent' => $user->agent_name,
@@ -47,7 +48,7 @@ class SaleController extends Controller
         endforeach;
         //Get quarter 2
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ['2020-04-01', '2020-06-31']);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]);
             if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
                 $quarter2Ten[] = [
                     'agent' => $user->agent_name,
@@ -58,7 +59,7 @@ class SaleController extends Controller
 
         //Get quarter 3
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ['2020-07-01', '2020-09-31']);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"]);
             if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
                 $quarter3Ten[] = [
                     'agent' => $user->agent_name,
@@ -69,7 +70,7 @@ class SaleController extends Controller
 
         //Get quarter 4
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ['2020-10-01', '2020-12-31']);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"]);
             if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
                 $quarter4Ten[] = [
                     'agent' => $user->agent_name,
