@@ -70,6 +70,12 @@
               v-on:click="getProfits('total', production_year)"
             >TOTAL INCOME</button>
           </th>
+            <th>
+                <button
+                    class="btn btn-link text-white p-0"
+                    v-on:click="getProfits('sales', production_year)"
+                >TOTAL SALES</button>
+            </th>
         </tr>
       </thead>
       <tbody>
@@ -85,6 +91,7 @@
           <td>{{p.blue_income}}</td>
           <td>{{p.transaction_fees}}</td>
           <td>{{p.total_income}}</td>
+            <td>{{p.total_sales}}</td>
         </tr>
         <tr style="font-weight: bolder; border-top: 2px solid black">
           <td>TOTALS:</td>
@@ -98,6 +105,7 @@
           <td>{{Number(totals.t_blue).toLocaleString('en-us', numberFormat)}}</td>
           <td>{{Number(totals.t_trans).toLocaleString('en-us', numberFormat)}}</td>
           <td>{{Number(totals.t_total_income).toLocaleString('en-us', numberFormat)}}</td>
+            <td>{{Number(totals.t_sales).toLocaleString('en-us', numberFormat)}}</td>
         </tr>
       </tbody>
     </table>
@@ -129,7 +137,8 @@ export default {
         total_income: 0,
         agent_income: 0,
         blue_income: 0,
-        transaction_fees: 0
+        transaction_fees: 0,
+          total_sales: 0,
       },
       user: {
         isAdmin: false
@@ -148,7 +157,8 @@ export default {
         t_total_income: 0,
         t_agent_income: 0,
         t_blue: 0,
-        t_trans: 0
+        t_trans: 0,
+          t_sales: 0
       },
       production_year: new Date().getFullYear()
     };
@@ -230,7 +240,12 @@ export default {
         profits.sort(function(a, b) {
           return b.transaction_fees - a.transaction_fees;
         });
-      } else {
+      } else if (sortBy === "sales"){
+          profits.sort(function(a, b) {
+              return b.total_sales - a.total_sales;
+          });
+      }
+      else {
         profits.sort(function(a, b) {
           return b.total_income - a.total_income;
         });
@@ -248,7 +263,8 @@ export default {
         t_total_income: 0,
         t_agent_income: 0,
         t_blue: 0,
-        t_trans: 0
+        t_trans: 0,
+          t_sales: 0
       };
       for (const n in this.profits) {
         const e = this.profits[n];
@@ -261,6 +277,7 @@ export default {
         obj.t_agent_income += e.agent_income;
         obj.t_blue += e.blue_income;
         obj.t_trans += e.transaction_fees;
+        obj.t_sales += e.total_sales;
       }
 
       this.totals = obj;
@@ -277,7 +294,8 @@ export default {
             i === "agent_income" ||
             i === "blue_income" ||
             i === "total_income" ||
-            i === "transaction_fees"
+            i === "transaction_fees" ||
+              i === "total_sales"
           ) {
             p[key][i] = p[key][i].toLocaleString("en-US", this.numberFormat);
           }

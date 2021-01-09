@@ -7066,6 +7066,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -7090,7 +7098,8 @@ __webpack_require__.r(__webpack_exports__);
         total_income: 0,
         agent_income: 0,
         blue_income: 0,
-        transaction_fees: 0
+        transaction_fees: 0,
+        total_sales: 0
       },
       user: {
         isAdmin: false
@@ -7109,7 +7118,8 @@ __webpack_require__.r(__webpack_exports__);
         t_total_income: 0,
         t_agent_income: 0,
         t_blue: 0,
-        t_trans: 0
+        t_trans: 0,
+        t_sales: 0
       },
       production_year: new Date().getFullYear()
     };
@@ -7201,6 +7211,10 @@ __webpack_require__.r(__webpack_exports__);
         profits.sort(function (a, b) {
           return b.transaction_fees - a.transaction_fees;
         });
+      } else if (sortBy === "sales") {
+        profits.sort(function (a, b) {
+          return b.total_sales - a.total_sales;
+        });
       } else {
         profits.sort(function (a, b) {
           return b.total_income - a.total_income;
@@ -7219,7 +7233,8 @@ __webpack_require__.r(__webpack_exports__);
         t_total_income: 0,
         t_agent_income: 0,
         t_blue: 0,
-        t_trans: 0
+        t_trans: 0,
+        t_sales: 0
       };
 
       for (var n in this.profits) {
@@ -7233,6 +7248,7 @@ __webpack_require__.r(__webpack_exports__);
         obj.t_agent_income += e.agent_income;
         obj.t_blue += e.blue_income;
         obj.t_trans += e.transaction_fees;
+        obj.t_sales += e.total_sales;
       }
 
       this.totals = obj;
@@ -7244,7 +7260,7 @@ __webpack_require__.r(__webpack_exports__);
 
       for (var key in p) {
         for (var i in p[key]) {
-          if (i === "agent_income" || i === "blue_income" || i === "total_income" || i === "transaction_fees") {
+          if (i === "agent_income" || i === "blue_income" || i === "total_income" || i === "transaction_fees" || i === "total_sales") {
             p[key][i] = p[key][i].toLocaleString("en-US", this.numberFormat);
           }
         }
@@ -51974,6 +51990,21 @@ var render = function() {
               },
               [_vm._v("TOTAL INCOME")]
             )
+          ]),
+          _vm._v(" "),
+          _c("th", [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-link text-white p-0",
+                on: {
+                  click: function($event) {
+                    return _vm.getProfits("sales", _vm.production_year)
+                  }
+                }
+              },
+              [_vm._v("TOTAL SALES")]
+            )
           ])
         ])
       ]),
@@ -52003,7 +52034,9 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(p.transaction_fees))]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(p.total_income))])
+              _c("td", [_vm._v(_vm._s(p.total_income))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(p.total_sales))])
             ])
           }),
           _vm._v(" "),
@@ -52067,6 +52100,17 @@ var render = function() {
                 _vm._v(
                   _vm._s(
                     Number(_vm.totals.t_total_income).toLocaleString(
+                      "en-us",
+                      _vm.numberFormat
+                    )
+                  )
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(
+                  _vm._s(
+                    Number(_vm.totals.t_sales).toLocaleString(
                       "en-us",
                       _vm.numberFormat
                     )
