@@ -226,7 +226,7 @@
           </div>
         </div>
         <div class="col-2">
-          <label>Split Sale</label>
+          <label>Team Sale</label>
           <i
             class="far fa-question-circle"
             data-toggle="tooltip"
