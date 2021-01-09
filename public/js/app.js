@@ -48889,7 +48889,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-2" }, [
-              _c("label", [_vm._v("Split Sale")]),
+              _c("label", [_vm._v("Team Sale")]),
               _vm._v(" "),
               _c("i", {
                 staticClass: "far fa-question-circle",
