@@ -589,6 +589,7 @@ class AdminController extends Controller {
 				'transaction_fees' => $sales->sum('pivot.transaction_credit'),
 				'agent_income' => $sales->sum('pivot.commission'),
 				'total_income' => $sales->sum('pivot.blue_credit') + $sales->sum('pivot.transaction_credit'),
+                'total_sales' => $sales->sum('pivot.sale_credit')
 
 			];
 		}
