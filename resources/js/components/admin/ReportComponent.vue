@@ -8,7 +8,7 @@
         <form>
           <select
             class="custom-select"
-            v-on:change="getReport('2020'); backToDefault()"
+            v-on:change="getReport(production_year); backToDefault()"
             v-model="options.agent_name"
           >
             <option>--Select One--</option>
@@ -155,7 +155,7 @@ export default {
         style: "currency",
         currency: "USD"
       },
-      production_year: "2020"
+      production_year: new Date().getFullYear()
     };
   },
   methods: {

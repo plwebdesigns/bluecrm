@@ -9,21 +9,37 @@
       v-model="production_year"
       v-on:change="$emit('production_year', production_year)"
     >
-
-      <option value="2020">2020</option>
-      <option selected :value="current_year">{{current_year}}</option>
+        <option v-for="date in all_dates" :value="date">{{date}}</option>
     </select>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+    mounted() {
+        this.calcNumberYears();
+    },
+    data() {
     return {
       production_year: "2021",
-      current_year: new Date().getFullYear()
+      current_year: new Date().getFullYear(),
+        all_dates: []
     };
-  }
+  },
+    methods:{
+      calcNumberYears(){
+          let arr = [];
+          let d = new Date().getFullYear();
+          let d_count = 2019; //First year of CRM being utilized
+          let n = d - d_count;
+
+          for (let i = 0; i <= n; i++){
+              arr.push(d_count + i);
+          }
+
+          this.all_dates = arr;
+      }
+    }
 };
 </script>
 

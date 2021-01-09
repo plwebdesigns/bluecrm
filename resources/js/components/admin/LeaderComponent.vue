@@ -171,7 +171,7 @@ export default {
       style: {
         background_color: "yellow"
       },
-      production_year: 2020
+      production_year: new Date().getFullYear()
     };
   },
   methods: {

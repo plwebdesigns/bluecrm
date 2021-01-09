@@ -136,6 +136,7 @@ class AdminController extends Controller {
 		$quarter2Ten = [];
 		$quarter3Ten = [];
 		$quarter4Ten = [];
+		$ytd_sales = [];
 
 		$ignored_agents = DB::table('ignored_agents')->get('agent_name');
 		$ignored_agents->transform(function ($item) {
