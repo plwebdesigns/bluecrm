@@ -300,6 +300,13 @@ class AdminController extends Controller {
                 ->get();
 
             return response()->json(['sales' => $sales, 'req' => $user]);
+        elseif ($search_by === 'address'):
+            $sales = DB::table('sale_user')
+                ->join('sales', 'sales.id', '=', 'sale_user.sale_id')
+                ->select('sales.*', 'sale_user.*')
+                ->where('sales.address', 'LIKE', "%{$search_term}%")
+                ->get();
+            return response()->json(['sales' => $sales, 'req' => $user]);
         else:
             $x = count($search_by);
             $sales = DB::table('sale_user')
