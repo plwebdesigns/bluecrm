@@ -4,11 +4,11 @@
           <input
             class="form-control"
             type="text"
-            name="search-term"
+            name="search-term2"
             v-model="search.term"
             @keyup="update"
             @keypress.enter.prevent="update"
-            placeholder="Search Clients"
+            placeholder="Search Adresses"
           />
     </form>
   </div>
@@ -20,13 +20,13 @@ export default {
     return {
       search: {
         term: "",
-        by: ""
+        search_by: "address"
       }
     };
   },
   methods: {
     update: _.debounce(function(e) {
-      this.$emit("search", this.search);
+      this.$emit("search_clients", this.search);
     }, 500)
   }
 };
