@@ -280,7 +280,7 @@ class AdminController extends Controller {
 		$year = date('Y');
 
 		$sales = Sale::all();
-		$sales = $sales->whereBetween('closing_date', ["2020-01-01", "2020-12-31"]);
+		$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
 
 		return response()->json(['sales' => $sales, 'req' => $user]);
 	}
