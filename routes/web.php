@@ -25,3 +25,8 @@ Route::get('generate_pdf/{agent_name}/{production_year}', 'PDFController@generat
 Route::get('detail_pdf/{id}', 'PDFController@generateSingleSalePDF');
 Route::get('/', 'SaleController@index');
 
+Route::get('add_sale', 'AddSaleController@create')->name('add_sale');
+Route::post('add_sale/new', 'AddSaleController@store');
+Route::get('success_add_sale', function () {
+    return view('admin.success', ['sale' => $sale]);
+})->name('success_add_sale');

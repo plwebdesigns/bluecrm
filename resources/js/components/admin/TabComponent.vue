@@ -9,6 +9,9 @@
           :class="{ active: currentTab === tab }"
         >{{(tab !== 'Agent Production') ? tab : 'Profit Per Agent'}}</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/add_sale">New Add Sale</a>
+      </li>
     </ul>
     <component v-bind:is="currentTabComponent"></component>
   </div>

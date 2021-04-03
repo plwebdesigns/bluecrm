@@ -6,3 +6,18 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+form {
+    font-size: 12px;
+}
+
+.add_sale_main {
+    padding: 4rem !important;
+}
+#successHeader {
+    font-family: $roboto;
+}
+.navbar-brand {
+    font-family: $lobster;
+    color: $blueRealty;
+}
