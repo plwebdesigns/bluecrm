@@ -25,23 +25,23 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" style="color: #3f9ae5" href="#">Blue Realty</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img class="my-0 mr-md-auto" src="{{ asset('images/blue-logo.png') }}" height="95px" />
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('/') }}">Production</a>
+                <a class="nav-link text-white" href="{{ url('/') }}">Production</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url('/#/admin') }}">Admin</a>
+                <a class="nav-link text-white" href="{{ url('/#/admin') }}">Admin</a>
             </li>
         </ul>
     </div>
 </nav>
-<main class="container-fluid add_sale_main">
+<main class="container-fluid add_sale_main mt-4">
     @yield('content')
 </main>
 </body>

@@ -4,7 +4,7 @@
 @section('content')
     <form id="addSaleForm" method="POST" action="/add_sale/new">
         @csrf
-        <div class="row mt-5">
+        <div class="row mt-2">
             <div class="col-lg-4">
                 <h3>Sale Info</h3>
                 <table class="table table-sm table-borderless">

@@ -76,6 +76,18 @@
                                 </select>
                             </td>
                         </tr>
+                        <tr>
+                            <th>Membership Dues</th>
+                            <td>
+                                <input
+                                        name="segment[{{$no}}][membership_dues_paid]"
+                                        type="number"
+                                        class="form-control"
+                                        value="{{ old('segment.' . $no . '.membership_dues_paid') }}"
+                                        placeholder="50"
+                                />
+                            </td>
+                        </tr>
                     </table>
                 </div>
             @endif

@@ -1,9 +1,15 @@
 @extends('layouts.one')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
         <h1 id="successHeader">Successfully entered sale!</h1>
-        <p>Would you like to enter another sale?</p>
-        <a class="btn btn-success" href="{{ route('add_sale') }}">Add Sale</a>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url($prev_url)  }}">Add another Sale</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#/admin">Back to Admin</a>
+            </li>
+        </ul>
     </div>
 @endsection

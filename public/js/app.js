@@ -7139,6 +7139,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -7642,10 +7648,14 @@ Vue.use(vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
     TabAgentRoster: _AgentControlComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
     TabMembershipDues: _MembershipComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
+  mounted: function mounted() {
+    this.token = this.getCookie('token');
+  },
   data: function data() {
     return {
       currentTab: "Quarterly",
-      tabs: ["Quarterly", "Agent Production", "Add Sale", "Add Agent", "All Sales", "Leaderboard", "Reporting", "Agent Roster", "Options", "Membership Dues"]
+      tabs: ["Quarterly", "Agent Production", "Add Agent", "All Sales", "Leaderboard", "Reporting", "Agent Roster", "Options", "Membership Dues"],
+      token: ''
     };
   },
   computed: {
@@ -45626,7 +45636,7 @@ var render = function() {
         _vm._m(1),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col" }, [
+          _c("div", { staticClass: "col-sm" }, [
             _c("h3", { staticClass: "text-center font-fugaz" }, [
               _vm._v("Quarter 1")
             ]),
@@ -45674,7 +45684,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col" }, [
+          _c("div", { staticClass: "col-sm" }, [
             _c("h3", { staticClass: "text-center font-fugaz" }, [
               _vm._v("Quarter 2")
             ]),
@@ -45722,7 +45732,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col" }, [
+          _c("div", { staticClass: "col-sm" }, [
             _c("h3", { staticClass: "text-center font-fugaz" }, [
               _vm._v("Quarter 3")
             ]),
@@ -45783,7 +45793,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col" }, [
+          _c("div", { staticClass: "col-sm" }, [
             _c("h3", { staticClass: "text-center font-fugaz" }, [
               _vm._v("Quarter 4")
             ]),
@@ -45844,7 +45854,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col" }, [
+          _c("div", { staticClass: "col-sm" }, [
             _c("h3", { staticClass: "text-center font-fugaz" }, [
               _vm._v("YTD")
             ]),
@@ -52259,6 +52269,8 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
           _c("th", [
             _c(
               "button",
@@ -52315,6 +52327,8 @@ var render = function() {
               _c("td", [_vm._v(_vm._s(p.blue_income))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(p.transaction_fees))]),
+              _vm._v(" "),
+              _c("td"),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(p.total_income))]),
               _vm._v(" "),
@@ -52425,6 +52439,16 @@ var staticRenderFns = [
     return _c("th", [
       _c("button", { staticClass: "btn btn-link text-white p-0" }, [
         _vm._v("AGENT NAME")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("th", [
+      _c("button", { staticClass: "btn btn-link text-white p-0" }, [
+        _vm._v("MEMBERSHIP DUES")
       ])
     ])
   }
@@ -52923,7 +52947,16 @@ var render = function() {
             )
           }),
           _vm._v(" "),
-          _vm._m(0)
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "/add_sale?api_token=" + _vm.token }
+              },
+              [_vm._v("Add Sale")]
+            )
+          ])
         ],
         2
       ),
@@ -52933,18 +52966,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "nav-item" }, [
-      _c("a", { staticClass: "nav-link", attrs: { href: "/add_sale" } }, [
-        _vm._v("New Add Sale")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -53073,8 +53095,8 @@ function normalizeComponent (
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /*!
-  * vue-router v3.5.1
-  * (c) 2021 Evan You
+  * vue-router v3.4.9
+  * (c) 2020 Evan You
   * @license MIT
   */
 /*  */
@@ -53284,23 +53306,23 @@ function getFullPath (
   return (path || '/') + stringify(query) + hash
 }
 
-function isSameRoute (a, b, onlyPath) {
+function isSameRoute (a, b) {
   if (b === START) {
     return a === b
   } else if (!b) {
     return false
   } else if (a.path && b.path) {
-    return a.path.replace(trailingSlashRE, '') === b.path.replace(trailingSlashRE, '') && (onlyPath ||
+    return (
+      a.path.replace(trailingSlashRE, '') === b.path.replace(trailingSlashRE, '') &&
       a.hash === b.hash &&
-      isObjectEqual(a.query, b.query))
+      isObjectEqual(a.query, b.query)
+    )
   } else if (a.name && b.name) {
     return (
       a.name === b.name &&
-      (onlyPath || (
-        a.hash === b.hash &&
+      a.hash === b.hash &&
       isObjectEqual(a.query, b.query) &&
-      isObjectEqual(a.params, b.params))
-      )
+      isObjectEqual(a.params, b.params)
     )
   } else {
     return false
@@ -54132,10 +54154,6 @@ var eventTypes = [String, Array];
 
 var noop = function () {};
 
-var warnedCustomSlot;
-var warnedTagProp;
-var warnedEventProp;
-
 var Link = {
   name: 'RouterLink',
   props: {
@@ -54147,9 +54165,7 @@ var Link = {
       type: String,
       default: 'a'
     },
-    custom: Boolean,
     exact: Boolean,
-    exactPath: Boolean,
     append: Boolean,
     replace: Boolean,
     activeClass: String,
@@ -54198,8 +54214,8 @@ var Link = {
       ? createRoute(null, normalizeLocation(route.redirectedFrom), null, router)
       : route;
 
-    classes[exactActiveClass] = isSameRoute(current, compareTarget, this.exactPath);
-    classes[activeClass] = this.exact || this.exactPath
+    classes[exactActiveClass] = isSameRoute(current, compareTarget);
+    classes[activeClass] = this.exact
       ? classes[exactActiveClass]
       : isIncludedRoute(current, compareTarget);
 
@@ -54238,37 +54254,16 @@ var Link = {
       });
 
     if (scopedSlot) {
-      if ( true && !this.custom) {
-        !warnedCustomSlot && warn(false, 'In Vue Router 4, the v-slot API will by default wrap its content with an <a> element. Use the custom prop to remove this warning:\n<router-link v-slot="{ navigate, href }" custom></router-link>\n');
-        warnedCustomSlot = true;
-      }
       if (scopedSlot.length === 1) {
         return scopedSlot[0]
       } else if (scopedSlot.length > 1 || !scopedSlot.length) {
         if (true) {
           warn(
             false,
-            ("<router-link> with to=\"" + (this.to) + "\" is trying to use a scoped slot but it didn't provide exactly one child. Wrapping the content with a span element.")
+            ("RouterLink with to=\"" + (this.to) + "\" is trying to use a scoped slot but it didn't provide exactly one child. Wrapping the content with a span element.")
           );
         }
         return scopedSlot.length === 0 ? h() : h('span', {}, scopedSlot)
-      }
-    }
-
-    if (true) {
-      if ('tag' in this.$options.propsData && !warnedTagProp) {
-        warn(
-          false,
-          "<router-link>'s tag prop is deprecated and has been removed in Vue Router 4. Use the v-slot API to remove this warning: https://next.router.vuejs.org/guide/migration/#removal-of-event-and-tag-props-in-router-link."
-        );
-        warnedTagProp = true;
-      }
-      if ('event' in this.$options.propsData && !warnedEventProp) {
-        warn(
-          false,
-          "<router-link>'s event prop is deprecated and has been removed in Vue Router 4. Use the v-slot API to remove this warning: https://next.router.vuejs.org/guide/migration/#removal-of-event-and-tag-props-in-router-link."
-        );
-        warnedEventProp = true;
       }
     }
 
@@ -54407,8 +54402,7 @@ function createRouteMap (
   routes,
   oldPathList,
   oldPathMap,
-  oldNameMap,
-  parentRoute
+  oldNameMap
 ) {
   // the path list is used to control path matching priority
   var pathList = oldPathList || [];
@@ -54418,7 +54412,7 @@ function createRouteMap (
   var nameMap = oldNameMap || Object.create(null);
 
   routes.forEach(function (route) {
-    addRouteRecord(pathList, pathMap, nameMap, route, parentRoute);
+    addRouteRecord(pathList, pathMap, nameMap, route);
   });
 
   // ensure wildcard routes are always at the end
@@ -54489,11 +54483,6 @@ function addRouteRecord (
     path: normalizedPath,
     regex: compileRouteRegex(normalizedPath, pathToRegexpOptions),
     components: route.components || { default: route.component },
-    alias: route.alias
-      ? typeof route.alias === 'string'
-        ? [route.alias]
-        : route.alias
-      : [],
     instances: {},
     enteredCbs: {},
     name: name,
@@ -54628,28 +54617,6 @@ function createMatcher (
 
   function addRoutes (routes) {
     createRouteMap(routes, pathList, pathMap, nameMap);
-  }
-
-  function addRoute (parentOrRoute, route) {
-    var parent = (typeof parentOrRoute !== 'object') ? nameMap[parentOrRoute] : undefined;
-    // $flow-disable-line
-    createRouteMap([route || parentOrRoute], pathList, pathMap, nameMap, parent);
-
-    // add aliases of parent
-    if (parent) {
-      createRouteMap(
-        // $flow-disable-line route is defined if parent is
-        parent.alias.map(function (alias) { return ({ path: alias, children: [route] }); }),
-        pathList,
-        pathMap,
-        nameMap,
-        parent
-      );
-    }
-  }
-
-  function getRoutes () {
-    return pathList.map(function (path) { return pathMap[path]; })
   }
 
   function match (
@@ -54798,8 +54765,6 @@ function createMatcher (
 
   return {
     match: match,
-    addRoute: addRoute,
-    getRoutes: getRoutes,
     addRoutes: addRoutes
   }
 }
@@ -56163,21 +56128,7 @@ VueRouter.prototype.resolve = function resolve (
   }
 };
 
-VueRouter.prototype.getRoutes = function getRoutes () {
-  return this.matcher.getRoutes()
-};
-
-VueRouter.prototype.addRoute = function addRoute (parentOrRoute, route) {
-  this.matcher.addRoute(parentOrRoute, route);
-  if (this.history.current !== START) {
-    this.history.transitionTo(this.history.getCurrentLocation());
-  }
-};
-
 VueRouter.prototype.addRoutes = function addRoutes (routes) {
-  if (true) {
-    warn(false, 'router.addRoutes() is deprecated and has been removed in Vue Router 4. Use router.addRoute() instead.');
-  }
   this.matcher.addRoutes(routes);
   if (this.history.current !== START) {
     this.history.transitionTo(this.history.getCurrentLocation());
@@ -56200,10 +56151,9 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.5.1';
+VueRouter.version = '3.4.9';
 VueRouter.isNavigationFailure = isNavigationFailure;
 VueRouter.NavigationFailureType = NavigationFailureType;
-VueRouter.START_LOCATION = START;
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);

@@ -10,7 +10,7 @@
         >{{(tab !== 'Agent Production') ? tab : 'Profit Per Agent'}}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/add_sale">New Add Sale</a>
+        <a class="nav-link" :href="'/add_sale?api_token=' + token">Add Sale</a>
       </li>
     </ul>
     <component v-bind:is="currentTabComponent"></component>
@@ -32,13 +32,15 @@ export default {
       TabAgentRoster,
       TabMembershipDues
   },
+  mounted: function () {
+    this.token = this.getCookie('token');
+  },
   data() {
     return {
       currentTab: "Quarterly",
       tabs: [
         "Quarterly",
         "Agent Production",
-        "Add Sale",
         "Add Agent",
         "All Sales",
         "Leaderboard",
@@ -46,7 +48,8 @@ export default {
         "Agent Roster",
         "Options",
           "Membership Dues"
-      ]
+      ],
+      token: ''
     };
   },
   computed: {

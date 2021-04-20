@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Sale;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -31,17 +34,16 @@ class AddSaleController extends Controller
             ['name' => 'title_choice', 'type' => 'select', 'options' => $titles],
             ['name' => 'total_commission', 'type' => 'number', 'placeholder' => '5000'],
             ['name' => 'transaction_fee', 'type' => 'number', 'placeholder' => '500'],
-            ['name' => 'blue_profit', 'type' => 'number', 'placeholder' => '500'],
-            ['name' => 'membership_dues', 'type' => 'number', 'placeholder' => '50']
+            ['name' => 'blue_profit', 'type' => 'number', 'placeholder' => '500']
         ];
 
         $segment = [
-            ['agent' => '', 'split' => '', 'commission' => ''],
-            ['agent' => '', 'split' => '', 'commission' => ''],
-            ['agent' => '', 'split' => '', 'commission' => ''],
-            ['agent' => '', 'split' => '', 'commission' => ''],
-            ['agent' => '', 'split' => '', 'commission' => ''],
-            ['agent' => '', 'split' => '', 'commission' => '']
+            ['agent' => '', 'split' => '', 'commission' => '', 'membership_dues_paid' => ''],
+            ['agent' => '', 'split' => '', 'commission' => '', 'membership_dues_paid' => ''],
+            ['agent' => '', 'split' => '', 'commission' => '', 'membership_dues_paid' => ''],
+            ['agent' => '', 'split' => '', 'commission' => '', 'membership_dues_paid' => ''],
+            ['agent' => '', 'split' => '', 'commission' => '', 'membership_dues_paid' => ''],
+            ['agent' => '', 'split' => '', 'commission' => '', 'membership_dues_paid' => '']
         ];
 
         $form = [
@@ -55,11 +57,10 @@ class AddSaleController extends Controller
     }
 
     // Called when form submitted to create a new sale
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request)
     {
         $sale = $request->input();
 
-    //    dd($sale);
         $rules = [
             'type' => 'required',
             'client_name' => 'required|max:200',
@@ -72,16 +73,10 @@ class AddSaleController extends Controller
             'blue_profit' => 'required|numeric',
             'lender' => 'required',
             'title_choice' => 'required',
-            'segment.0.agent' => 'required',
-            'segment.*.split' => 'numeric|max:100|nullable'
         ];
-        $messages = [
-            'segment.0.agent.required' => 'At lease one agent should be selected',
-            'segment.*.split.max' => 'Split cannot be greater than 100%'
-        ];
-        $validator = Validator::make($sale, $rules, $messages);
+        // Validate sale and commission segments
+        $validator = Validator::make($sale, $rules);
         $validator->after(function ($validator) use ($sale){
-
             // Initialize variables
             $split_total = 0;
             $credit_total = 0;
@@ -109,13 +104,37 @@ class AddSaleController extends Controller
                 $validator->errors()->add('segment', 'Total commission is $' . $total_sale_commission . ' which is less than commission of both agents $' . $commissions);
             }
         });
-
         if ($validator->fails()){
-//            dd(back()->withErrors($validator->errors())->withInput());
              return back()->withErrors($validator->errors())->withInput();
+	    }
+        // Remove null commission segments
+        $commission_segments = array_filter($sale['segment'], function ($val){
+            return $val['agent'] !== null;
+        });
+        // Remove commission segments from sale, create sale then save sale to DB
+        unset($sale['segment']);
+        $new_sale = new Sale($sale);
+        $new_sale->save();
+        // Add each commission segment to the sale
+        foreach ($commission_segments as $segment) {
+            $user = DB::table('users')->where('agent_name', $segment['agent'])->first();
+            $segment['user_id'] = $user->id;
+            $user->membership_dues_paid += $segment['membership_dues_paid'];
+            $segment['percent_of_sale'] = $segment['percent_of_sale']/100;
+            $segment['sale_credit'] = $new_sale->sale_price * $segment['percent_of_sale'];
+            $segment['blue_credit'] = $new_sale->blue_profit * $segment['percent_of_sale'];
+            $segment['transaction_credit'] = $new_sale->transaction_fee * $segment['percent_of_sale'];
+            $segment['created_at'] = Date::now('EST');
+            $segment['updated_at'] = Date::now('EST');
+            if ($segment['split'] > 1) {
+                $segment['split'] = $segment['split']/100;
+            }
+            // Remove non sale_user fields after calculation
+            unset($segment['agent']);
+            unset($segment['membership_dues_paid']);
+            $new_sale->users()->attach($new_sale->id, $segment);
         }
-        return redirect()->route('success_add_sale', ['sale' => $sale]);
-        
-
+        $prev_url = $request->session()->get('_previous.url');
+        return view('admin.success', ['prev_url' => $prev_url]);
     }
-}
+} // End Class

@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col">
+        <div class="col-sm">
           <h3 class="text-center font-fugaz">Quarter 1</h3>
           <table class="table table-sm border-black table-striped">
             <thead>
@@ -36,7 +36,7 @@
             </tbody>
           </table>
         </div>
-        <div class="col">
+        <div class="col-sm">
           <h3 class="text-center font-fugaz">Quarter 2</h3>
           <table class="table table-sm border-black table-striped">
             <thead>
@@ -60,7 +60,7 @@
             </tbody>
           </table>
         </div>
-        <div class="col">
+        <div class="col-sm">
           <h3 class="text-center font-fugaz">Quarter 3</h3>
           <table class="table table-sm border-black table-striped">
             <thead>
@@ -84,7 +84,7 @@
             </tbody>
           </table>
         </div>
-        <div class="col">
+        <div class="col-sm">
           <h3 class="text-center font-fugaz">Quarter 4</h3>
           <table class="table table-sm border-black table-striped">
             <thead>
@@ -108,7 +108,7 @@
             </tbody>
           </table>
         </div>
-        <div class="col">
+        <div class="col-sm">
           <h3 class="text-center font-fugaz">YTD</h3>
           <table class="table table-sm border-black table-striped">
             <thead>

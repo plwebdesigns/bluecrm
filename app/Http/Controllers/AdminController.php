@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Sale;
 use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -212,7 +213,7 @@ class AdminController extends Controller {
 	}
 
 	// REPORT FOR A SPECIFIC USER
-	public function getReport(Request $request): \Illuminate\Http\JsonResponse
+	public function getReport(Request $request): JsonResponse
     {
 		$options = $request->input('options');
 		$year = $request->input('production_year');
@@ -273,7 +274,7 @@ class AdminController extends Controller {
 
     /**** Get all sales for admin user to see ***
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
 	public function getAllSales(Request $request) {
 		$user = $request->user();
@@ -453,8 +454,12 @@ class AdminController extends Controller {
 		return response()->json(['data' => 'success'], 201);
 	}
 
-	/**** Update sale on admin side ****/
-	public function updateRecord(Request $request) {
+    /**** Update sale on admin side ***
+     * @param Request $request
+     * @return JsonResponse
+     */
+	public function updateRecord(Request $request): JsonResponse
+    {
 		$sale = $request->input('sale');
 		$agents = $request->input('agent');
 		$types = DB::table('type_of_sale')->get('type');
@@ -576,7 +581,8 @@ class AdminController extends Controller {
 	}
 
 	// PROFIT PER AGENT
-	public function profit(Request $request) {
+	public function profit(Request $request): JsonResponse
+    {
 		$user = $request->user();
 		$year = $request->input('production_year');
 
@@ -604,6 +610,7 @@ class AdminController extends Controller {
 					->where('pivot.split', '>=', 0.5)->count(),
 				'blue_income' => $sales->sum('pivot.blue_credit'),
 				'transaction_fees' => $sales->sum('pivot.transaction_credit'),
+                'membership_dues' => $sales->sum('pivot.membership_dues_paid'),
 				'agent_income' => $sales->sum('pivot.commission'),
 				'total_income' => $sales->sum('pivot.blue_credit') + $sales->sum('pivot.transaction_credit'),
                 'total_sales' => $sales->sum('pivot.sale_credit')
@@ -635,7 +642,7 @@ class AdminController extends Controller {
 
 	/*** Update an agent's info on Agent Control Tab
 		     * @param Request $request
-		     * @return \Illuminate\Http\JsonResponse
+		     * @return JsonResponse
 	*/
 	public function updateAgent(Request $request) {
 		$agent = $request->input('agent');

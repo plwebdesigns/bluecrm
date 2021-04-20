@@ -67,6 +67,11 @@
           <th>
             <button
               class="btn btn-link text-white p-0"
+            >MEMBERSHIP DUES</button>
+          </th>
+          <th>
+            <button
+              class="btn btn-link text-white p-0"
               v-on:click="getProfits('total', production_year)"
             >TOTAL INCOME</button>
           </th>
@@ -90,6 +95,7 @@
           <td>{{p.agent_income}}</td>
           <td>{{p.blue_income}}</td>
           <td>{{p.transaction_fees}}</td>
+          <td></td>
           <td>{{p.total_income}}</td>
             <td>{{p.total_sales}}</td>
         </tr>

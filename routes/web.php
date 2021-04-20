@@ -12,7 +12,6 @@
  */
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth:api')->get('register');
 
@@ -20,13 +19,10 @@ Route::middleware('auth:api')->get('register');
 
 Route::get('login', function () {
     return view('auth.login');
-});
+})->name('login');
 Route::get('generate_pdf/{agent_name}/{production_year}', 'PDFController@generatePDF');
 Route::get('detail_pdf/{id}', 'PDFController@generateSingleSalePDF');
 Route::get('/', 'SaleController@index');
 
-Route::get('add_sale', 'AddSaleController@create')->name('add_sale');
+Route::get('add_sale', 'AddSaleController@create')->middleware('auth:api')->name('add_sale');
 Route::post('add_sale/new', 'AddSaleController@store');
-Route::get('success_add_sale', function () {
-    return view('admin.success', ['sale' => $sale]);
-})->name('success_add_sale');
