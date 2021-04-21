@@ -47,7 +47,7 @@ export default {
         "Reporting",
         "Agent Roster",
         "Options",
-          "Membership Dues"
+        "Membership Dues"
       ],
       token: ''
     };

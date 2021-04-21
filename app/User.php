@@ -24,7 +24,9 @@ class User extends Authenticatable
         'id',
         'added_by',
         'phone',
-        'title'
+        'title',
+        'membership_dues_paid',
+        'membership_dues_owed'
     ];
 
     /**

@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-3">
+  <div class="container-fluid pt-3">
     <div class="row">
       <div class="col-3">
         <SelectYearComponent v-on:production_year="getProfits(null, $event)"></SelectYearComponent>
@@ -67,6 +67,7 @@
           <th>
             <button
               class="btn btn-link text-white p-0"
+              v-on:click="getProfits('membership', production_year)"
             >MEMBERSHIP DUES</button>
           </th>
           <th>
@@ -95,9 +96,9 @@
           <td>{{p.agent_income}}</td>
           <td>{{p.blue_income}}</td>
           <td>{{p.transaction_fees}}</td>
-          <td></td>
+          <td>{{p.membership_dues}}</td>
           <td>{{p.total_income}}</td>
-            <td>{{p.total_sales}}</td>
+          <td>{{p.total_sales}}</td>
         </tr>
         <tr style="font-weight: bolder; border-top: 2px solid black">
           <td>TOTALS:</td>
@@ -110,8 +111,9 @@
           <td>{{Number(totals.t_agent_income).toLocaleString('en-us', numberFormat)}}</td>
           <td>{{Number(totals.t_blue).toLocaleString('en-us', numberFormat)}}</td>
           <td>{{Number(totals.t_trans).toLocaleString('en-us', numberFormat)}}</td>
+          <td>{{Number(totals.t_membership).toLocaleString('en-us', numberFormat)}}</td>
           <td>{{Number(totals.t_total_income).toLocaleString('en-us', numberFormat)}}</td>
-            <td>{{Number(totals.t_sales).toLocaleString('en-us', numberFormat)}}</td>
+          <td>{{Number(totals.t_sales).toLocaleString('en-us', numberFormat)}}</td>
         </tr>
       </tbody>
     </table>
@@ -144,7 +146,8 @@ export default {
         agent_income: 0,
         blue_income: 0,
         transaction_fees: 0,
-          total_sales: 0,
+        membership_dues: 0,
+        total_sales: 0,
       },
       user: {
         isAdmin: false
@@ -164,7 +167,8 @@ export default {
         t_agent_income: 0,
         t_blue: 0,
         t_trans: 0,
-          t_sales: 0
+        t_membership: 0,
+        t_sales: 0
       },
       production_year: new Date().getFullYear()
     };
@@ -250,6 +254,10 @@ export default {
           profits.sort(function(a, b) {
               return b.total_sales - a.total_sales;
           });
+      } else if (sortBy === "membership"){
+        profits.sort(function(a, b) {
+          return b.mebership_dues - a.membership_dues;
+        });
       }
       else {
         profits.sort(function(a, b) {
@@ -270,7 +278,8 @@ export default {
         t_agent_income: 0,
         t_blue: 0,
         t_trans: 0,
-          t_sales: 0
+        t_membership: 0,
+        t_sales: 0
       };
       for (const n in this.profits) {
         const e = this.profits[n];
@@ -283,6 +292,7 @@ export default {
         obj.t_agent_income += e.agent_income;
         obj.t_blue += e.blue_income;
         obj.t_trans += e.transaction_fees;
+        obj.t_membership += e.membership_dues;
         obj.t_sales += e.total_sales;
       }
 
