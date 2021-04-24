@@ -7145,6 +7145,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -7170,6 +7172,7 @@ __webpack_require__.r(__webpack_exports__);
         agent_income: 0,
         blue_income: 0,
         transaction_fees: 0,
+        membership_dues: 0,
         total_sales: 0
       },
       user: {
@@ -7190,6 +7193,7 @@ __webpack_require__.r(__webpack_exports__);
         t_agent_income: 0,
         t_blue: 0,
         t_trans: 0,
+        t_membership: 0,
         t_sales: 0
       },
       production_year: new Date().getFullYear()
@@ -7286,6 +7290,10 @@ __webpack_require__.r(__webpack_exports__);
         profits.sort(function (a, b) {
           return b.total_sales - a.total_sales;
         });
+      } else if (sortBy === "membership") {
+        profits.sort(function (a, b) {
+          return b.mebership_dues - a.membership_dues;
+        });
       } else {
         profits.sort(function (a, b) {
           return b.total_income - a.total_income;
@@ -7305,6 +7313,7 @@ __webpack_require__.r(__webpack_exports__);
         t_agent_income: 0,
         t_blue: 0,
         t_trans: 0,
+        t_membership: 0,
         t_sales: 0
       };
 
@@ -7319,6 +7328,7 @@ __webpack_require__.r(__webpack_exports__);
         obj.t_agent_income += e.agent_income;
         obj.t_blue += e.blue_income;
         obj.t_trans += e.transaction_fees;
+        obj.t_membership += e.membership_dues;
         obj.t_sales += e.total_sales;
       }
 
@@ -52122,7 +52132,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container pt-3" }, [
+  return _c("div", { staticClass: "container-fluid pt-3" }, [
     _c("div", { staticClass: "row" }, [
       _c(
         "div",
@@ -52269,7 +52279,20 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _vm._m(2),
+          _c("th", [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-link text-white p-0",
+                on: {
+                  click: function($event) {
+                    return _vm.getProfits("membership", _vm.production_year)
+                  }
+                }
+              },
+              [_vm._v("MEMBERSHIP DUES")]
+            )
+          ]),
           _vm._v(" "),
           _c("th", [
             _c(
@@ -52328,7 +52351,7 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(p.transaction_fees))]),
               _vm._v(" "),
-              _c("td"),
+              _c("td", [_vm._v(_vm._s(p.membership_dues))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(p.total_income))]),
               _vm._v(" "),
@@ -52395,6 +52418,17 @@ var render = function() {
               _c("td", [
                 _vm._v(
                   _vm._s(
+                    Number(_vm.totals.t_membership).toLocaleString(
+                      "en-us",
+                      _vm.numberFormat
+                    )
+                  )
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(
+                  _vm._s(
                     Number(_vm.totals.t_total_income).toLocaleString(
                       "en-us",
                       _vm.numberFormat
@@ -52439,16 +52473,6 @@ var staticRenderFns = [
     return _c("th", [
       _c("button", { staticClass: "btn btn-link text-white p-0" }, [
         _vm._v("AGENT NAME")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("th", [
-      _c("button", { staticClass: "btn btn-link text-white p-0" }, [
-        _vm._v("MEMBERSHIP DUES")
       ])
     ])
   }
@@ -70774,8 +70798,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/bluecrm/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/dev-bluecrm/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/dev-bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
