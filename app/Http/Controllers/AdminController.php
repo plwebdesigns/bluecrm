@@ -595,28 +595,49 @@ class AdminController extends Controller {
 		foreach ($users as $user) {
 			$sales = $user->sales;
 			$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
-			$profits[] = [
-				'agent_name' => $user->agent_name,
-				'buyers' => $sales
-					->where('type', 'Buyer')
-					->where('pivot.split', '>=', 0.5)->count(),
-				'sellers' => $sales->where('type', 'Seller')
-					->where('pivot.split', '>=', 0.5)->count(),
-				'rentals' => $sales->where('type', 'Rental')
-					->where('pivot.split', '>=', 0.5)->count(),
-				'referrals' => $sales->where('type', 'Referral')
-					->where('pivot.split', '>=', 0.5)->count(),
-				'units_sold' => $sales->whereIn('type', ['Seller', 'Buyer', 'Rental', 'Referral'])
-					->where('pivot.split', '>=', 0.5)->count(),
-				'blue_income' => $sales->sum('pivot.blue_credit'),
-				'transaction_fees' => $sales->sum('pivot.transaction_credit'),
-                'membership_dues' => $sales->sum('pivot.membership_dues_paid'),
-				'agent_income' => $sales->sum('pivot.commission'),
-				'total_income' => $sales->sum('pivot.blue_credit') + $sales->sum('pivot.transaction_credit'),
-                'total_sales' => $sales->sum('pivot.sale_credit')
+			
+			//Initialize Variables
+			$buyers = 0;
+			$sellers = 0;
+			$rentals = 0;
+			$referrals = 0;
+			//Get count of each type of sale using percent of sale
+			foreach ($sales as $sale) {
+				if ($sale['type'] === 'Buyer') {
+					$buyers += $sale['pivot']['percent_of_sale'];
+				}
+				elseif($sale['type'] === 'Seller') {
+					$sellers += $sale['pivot']['percent_of_sale'];
+				}
+				elseif($sale['type'] === 'Rental') {
+					$rentals += $sale['pivot']['percent_of_sale'];
+				}
+				else {
+					$referrals += $sale['pivot']['percent_of_sale'];
+				}
+			}
+			$units_sold = $buyers + $sellers + $rentals + $referrals;
+			$trans_credit = $sales->sum('pivot.transaction_credit');
+			$blue_credit = $sales->sum('pivot.blue_credit');
+			$membership_dues = $sales->sum('pivot.membership_dues_paid');
 
-			];
+			$profits[$user['agent_name']] = [
+			    'agent_name' => $user['agent_name'],
+                'buyers' => $buyers,
+                'sellers' => $sellers,
+                'rentals' => $rentals,
+                'referrals' => $referrals,
+                'units_sold' => $units_sold,
+                'transaction_fees' => $trans_credit,
+                'membership_dues' => $membership_dues,
+				'blue_income' => $blue_credit,
+                'agent_income' => $sales->sum('pivot.commission'),
+                'total_income' => $blue_credit + $trans_credit + $membership_dues,
+                'total_sales' => $sales->sum('pivot.sale_credit')
+            ];
+
 		}
+
 		return response()->json(['profits' => $profits, 'req' => $user]);
 	}
 

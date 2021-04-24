@@ -34,7 +34,8 @@ class AddSaleController extends Controller
             ['name' => 'title_choice', 'type' => 'select', 'options' => $titles],
             ['name' => 'total_commission', 'type' => 'number', 'placeholder' => '5000'],
             ['name' => 'transaction_fee', 'type' => 'number', 'placeholder' => '500'],
-            ['name' => 'blue_profit', 'type' => 'number', 'placeholder' => '500']
+            ['name' => 'blue_profit', 'type' => 'number', 'placeholder' => '500'],
+            ['name' => 'notes', 'type' => 'textarea', 'placeholder' => 'Enter notes here...']
         ];
 
         $segment = [

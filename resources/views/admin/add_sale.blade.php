@@ -31,6 +31,14 @@
                                 @elseif($field['type'] === 'date')
                                     <input name="{{$field['name']}}" class="form-control" type="date"
                                            value="{{ old($field['name']) }}"/>
+                                @elseif($field['type'] === 'textarea')
+                                    <textarea
+                                        name="{{$field['name']}}" 
+                                        class="form-control" 
+                                        rows="5" 
+                                        value="{{ old($field['name']) }}"
+                                        placeholder="Enter notes here....">
+                                    </textarea>
                                 @else
                                     <input name="{{$field['name']}}"
                                            class="form-control"
