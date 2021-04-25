@@ -33,6 +33,11 @@
                 <td class="border-black">{{employee.agent}}</td>
                 <td class="border-black">${{Number(employee.total).toLocaleString()}}</td>
               </tr>
+              <tr style="border-top: black solid 2px; font-weight: bolder">
+              <td></td>
+              <td></td>
+              <td>${{Number(q1_total).toLocaleString()}}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -57,6 +62,11 @@
                 <td class="border-black">{{employee.agent}}</td>
                 <td class="border-black">${{Number(employee.total).toLocaleString()}}</td>
               </tr>
+              <tr style="border-top: black solid 2px; font-weight: bolder">
+              <td></td>
+              <td></td>
+              <td>${{Number(q2_total).toLocaleString()}}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -81,6 +91,11 @@
                 <td class="border-black">{{employee.agent}}</td>
                 <td class="border-black">${{Number(employee.total).toLocaleString()}}</td>
               </tr>
+              <tr style="border-top: black solid 2px; font-weight: bolder">
+              <td></td>
+              <td></td>
+              <td>${{Number(q3_total).toLocaleString()}}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -105,6 +120,11 @@
                 <td class="border-black">{{employee.agent}}</td>
                 <td class="border-black">${{Number(employee.total).toLocaleString()}}</td>
               </tr>
+              <tr style="border-top: black solid 2px; font-weight: bolder">
+              <td></td>
+              <td></td>
+              <td>${{Number(q4_total).toLocaleString()}}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -129,6 +149,11 @@
                 <td class="border-black">{{employee.agent}}</td>
                 <td class="border-black">${{Number(employee.total).toLocaleString()}}</td>
               </tr>
+              <tr style="border-top: black solid 2px; font-weight: bolder">
+              <td></td>
+              <td></td>
+              <td>${{Number(ytd_total).toLocaleString()}}</td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -173,6 +198,11 @@ export default {
         agent: "",
         total: 0
       },
+      q1_total: 0,
+      q2_total: 0,
+      q3_total: 0,
+      q4_total: 0,
+      ytd_total: 0,
       user: {
         isAdmin: false
       },
@@ -198,6 +228,11 @@ export default {
           this.quarter3Ten = resp.data.quarter3Ten;
           this.quarter4Ten = resp.data.quarter4Ten;
           this.ytd_sales = resp.data.ytd_sales;
+          this.q1_total = resp.data.q1Total;
+          this.q2_total = resp.data.q2Total;
+          this.q3_total = resp.data.q3Total;
+          this.q4_total = resp.data.q4Total;
+          this.ytd_total = resp.data.ytdTotal;
           this.user.isAdmin = resp.data.req.isAdmin;
           this.$loading(false);
         })

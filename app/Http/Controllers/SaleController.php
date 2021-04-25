@@ -95,6 +95,13 @@ class SaleController extends Controller
         $quarter4Ten = collect($quarter4Ten)->sortByDesc('total');
         $ytd_sales = collect($ytd_sales)->sortByDesc('total');
 
+        // Calc totals
+		$q1Total = $quarter1Ten->sum('total');
+		$q2Total = $quarter2Ten->sum('total');
+		$q3Total = $quarter3Ten->sum('total');
+		$q4Total = $quarter4Ten->sum('total');
+		$ytdTotal = $ytd_sales->sum('total');
+
         return response()->json([
             'quarter1Ten' => $quarter1Ten,
             'quarter2Ten' => $quarter2Ten,
@@ -102,6 +109,11 @@ class SaleController extends Controller
             'quarter4Ten' => $quarter4Ten,
             'ytd_sales' => $ytd_sales,
             'req' => $request->user(),
+            'q1Total' => $q1Total,
+			'q2Total' => $q2Total,
+			'q3Total' => $q3Total,
+			'q4Total' => $q4Total,
+			'ytdTotal' => $ytdTotal
         ]);
     }
 

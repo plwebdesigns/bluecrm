@@ -3085,6 +3085,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   beforeCreate: function beforeCreate() {
     this.$loading(true);
@@ -3120,6 +3145,11 @@ __webpack_require__.r(__webpack_exports__);
         agent: "",
         total: 0
       },
+      q1_total: 0,
+      q2_total: 0,
+      q3_total: 0,
+      q4_total: 0,
+      ytd_total: 0,
       user: {
         isAdmin: false
       },
@@ -3146,6 +3176,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.quarter3Ten = resp.data.quarter3Ten;
         _this.quarter4Ten = resp.data.quarter4Ten;
         _this.ytd_sales = resp.data.ytd_sales;
+        _this.q1_total = resp.data.q1Total;
+        _this.q2_total = resp.data.q2Total;
+        _this.q3_total = resp.data.q3Total;
+        _this.q4_total = resp.data.q4Total;
+        _this.ytd_total = resp.data.ytdTotal;
         _this.user.isAdmin = resp.data.req.isAdmin;
 
         _this.$loading(false);
@@ -6127,6 +6162,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -6160,6 +6220,11 @@ __webpack_require__.r(__webpack_exports__);
         agent: "",
         total: 0
       },
+      q1_total: 0,
+      q2_total: 0,
+      q3_total: 0,
+      q4_total: 0,
+      ytd_total: 0,
       user: {
         isAdmin: false
       },
@@ -6190,6 +6255,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.quarter3Ten = resp.data.quarter3Ten;
         _this.quarter4Ten = resp.data.quarter4Ten;
         _this.ytd_sales = resp.data.ytd_sales;
+        _this.q1_total = resp.data.q1Total;
+        _this.q2_total = resp.data.q2Total;
+        _this.q3_total = resp.data.q3Total;
+        _this.q4_total = resp.data.q4Total;
+        _this.ytd_total = resp.data.ytdTotal;
         _this.user.isAdmin = resp.data.req.isAdmin;
 
         _this.$loading(false);
@@ -45723,36 +45793,59 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.sortedQ1, function(employee, index) {
-                    return _c(
+                  [
+                    _vm._l(_vm.sortedQ1, function(employee, index) {
+                      return _c(
+                        "tr",
+                        {
+                          key: index,
+                          staticClass: "border-black",
+                          class: [
+                            { "bg-belowten": index > 9 },
+                            { "bg-highlight": index <= 9 }
+                          ]
+                        },
+                        [
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(index + 1))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(employee.agent))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(
+                              "$" +
+                                _vm._s(Number(employee.total).toLocaleString())
+                            )
+                          ])
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c(
                       "tr",
                       {
-                        key: index,
-                        staticClass: "border-black",
-                        class: [
-                          { "bg-belowten": index > 9 },
-                          { "bg-highlight": index <= 9 }
-                        ]
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
                       },
                       [
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(index + 1))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(employee.agent))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
+                        _c("td", [
                           _vm._v(
-                            "$" +
-                              _vm._s(Number(employee.total).toLocaleString())
+                            "$" + _vm._s(Number(_vm.q1_total).toLocaleString())
                           )
                         ])
                       ]
                     )
-                  }),
-                  0
+                  ],
+                  2
                 )
               ]
             )
@@ -45771,36 +45864,59 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.sortedQ2, function(employee, index) {
-                    return _c(
+                  [
+                    _vm._l(_vm.sortedQ2, function(employee, index) {
+                      return _c(
+                        "tr",
+                        {
+                          key: index,
+                          staticClass: "border-black",
+                          class: [
+                            { "bg-belowten": index > 9 },
+                            { "bg-highlight": index <= 9 }
+                          ]
+                        },
+                        [
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(index + 1))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(employee.agent))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(
+                              "$" +
+                                _vm._s(Number(employee.total).toLocaleString())
+                            )
+                          ])
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c(
                       "tr",
                       {
-                        key: index,
-                        staticClass: "border-black",
-                        class: [
-                          { "bg-belowten": index > 9 },
-                          { "bg-highlight": index <= 9 }
-                        ]
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
                       },
                       [
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(index + 1))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(employee.agent))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
+                        _c("td", [
                           _vm._v(
-                            "$" +
-                              _vm._s(Number(employee.total).toLocaleString())
+                            "$" + _vm._s(Number(_vm.q2_total).toLocaleString())
                           )
                         ])
                       ]
                     )
-                  }),
-                  0
+                  ],
+                  2
                 )
               ]
             )
@@ -45832,36 +45948,59 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.sortedQ3, function(employee, index) {
-                    return _c(
+                  [
+                    _vm._l(_vm.sortedQ3, function(employee, index) {
+                      return _c(
+                        "tr",
+                        {
+                          key: index,
+                          staticClass: "border-black",
+                          class: [
+                            { "bg-belowten": index > 9 },
+                            { "bg-highlight": index <= 9 }
+                          ]
+                        },
+                        [
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(index + 1))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(employee.agent))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(
+                              "$" +
+                                _vm._s(Number(employee.total).toLocaleString())
+                            )
+                          ])
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c(
                       "tr",
                       {
-                        key: index,
-                        staticClass: "border-black",
-                        class: [
-                          { "bg-belowten": index > 9 },
-                          { "bg-highlight": index <= 9 }
-                        ]
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
                       },
                       [
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(index + 1))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(employee.agent))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
+                        _c("td", [
                           _vm._v(
-                            "$" +
-                              _vm._s(Number(employee.total).toLocaleString())
+                            "$" + _vm._s(Number(_vm.q3_total).toLocaleString())
                           )
                         ])
                       ]
                     )
-                  }),
-                  0
+                  ],
+                  2
                 )
               ]
             )
@@ -45893,36 +46032,59 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.sortedQ4, function(employee, index) {
-                    return _c(
+                  [
+                    _vm._l(_vm.sortedQ4, function(employee, index) {
+                      return _c(
+                        "tr",
+                        {
+                          key: index,
+                          staticClass: "border-black",
+                          class: [
+                            { "bg-belowten": index > 9 },
+                            { "bg-highlight": index <= 9 }
+                          ]
+                        },
+                        [
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(index + 1))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(employee.agent))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(
+                              "$" +
+                                _vm._s(Number(employee.total).toLocaleString())
+                            )
+                          ])
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c(
                       "tr",
                       {
-                        key: index,
-                        staticClass: "border-black",
-                        class: [
-                          { "bg-belowten": index > 9 },
-                          { "bg-highlight": index <= 9 }
-                        ]
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
                       },
                       [
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(index + 1))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(employee.agent))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
+                        _c("td", [
                           _vm._v(
-                            "$" +
-                              _vm._s(Number(employee.total).toLocaleString())
+                            "$" + _vm._s(Number(_vm.q4_total).toLocaleString())
                           )
                         ])
                       ]
                     )
-                  }),
-                  0
+                  ],
+                  2
                 )
               ]
             )
@@ -45954,36 +46116,59 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.sorted_ytd, function(employee, index) {
-                    return _c(
+                  [
+                    _vm._l(_vm.sorted_ytd, function(employee, index) {
+                      return _c(
+                        "tr",
+                        {
+                          key: index,
+                          staticClass: "border-black",
+                          class: [
+                            { "bg-belowten": index > 9 },
+                            { "bg-highlight": index <= 9 }
+                          ]
+                        },
+                        [
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(index + 1))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(_vm._s(employee.agent))
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "border-black" }, [
+                            _vm._v(
+                              "$" +
+                                _vm._s(Number(employee.total).toLocaleString())
+                            )
+                          ])
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c(
                       "tr",
                       {
-                        key: index,
-                        staticClass: "border-black",
-                        class: [
-                          { "bg-belowten": index > 9 },
-                          { "bg-highlight": index <= 9 }
-                        ]
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
                       },
                       [
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(index + 1))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
-                          _vm._v(_vm._s(employee.agent))
-                        ]),
+                        _c("td"),
                         _vm._v(" "),
-                        _c("td", { staticClass: "border-black" }, [
+                        _c("td", [
                           _vm._v(
-                            "$" +
-                              _vm._s(Number(employee.total).toLocaleString())
+                            "$" + _vm._s(Number(_vm.ytd_total).toLocaleString())
                           )
                         ])
                       ]
                     )
-                  }),
-                  0
+                  ],
+                  2
                 )
               ]
             )
@@ -50344,35 +50529,58 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.sortedQ1, function(employee, index) {
-                return _c(
+              [
+                _vm._l(_vm.sortedQ1, function(employee, index) {
+                  return _c(
+                    "tr",
+                    {
+                      key: index,
+                      staticClass: "border-black",
+                      class: [
+                        { "bg-belowten": index > 9 },
+                        { "bg-highlight": index <= 9 }
+                      ]
+                    },
+                    [
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(employee.agent))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(
+                          "$" + _vm._s(Number(employee.total).toLocaleString())
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
                   "tr",
                   {
-                    key: index,
-                    staticClass: "border-black",
-                    class: [
-                      { "bg-belowten": index > 9 },
-                      { "bg-highlight": index <= 9 }
-                    ]
+                    staticStyle: {
+                      "border-top": "black solid 2px",
+                      "font-weight": "bolder"
+                    }
                   },
                   [
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(index + 1))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(employee.agent))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
+                    _c("td", [
                       _vm._v(
-                        "$" + _vm._s(Number(employee.total).toLocaleString())
+                        "$" + _vm._s(Number(_vm.q1_total).toLocaleString())
                       )
                     ])
                   ]
                 )
-              }),
-              0
+              ],
+              2
             )
           ]
         )
@@ -50391,35 +50599,58 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.sortedQ2, function(employee, index) {
-                return _c(
+              [
+                _vm._l(_vm.sortedQ2, function(employee, index) {
+                  return _c(
+                    "tr",
+                    {
+                      key: index,
+                      staticClass: "border-black",
+                      class: [
+                        { "bg-belowten": index > 9 },
+                        { "bg-highlight": index <= 9 }
+                      ]
+                    },
+                    [
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(employee.agent))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(
+                          "$" + _vm._s(Number(employee.total).toLocaleString())
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
                   "tr",
                   {
-                    key: index,
-                    staticClass: "border-black",
-                    class: [
-                      { "bg-belowten": index > 9 },
-                      { "bg-highlight": index <= 9 }
-                    ]
+                    staticStyle: {
+                      "border-top": "black solid 2px",
+                      "font-weight": "bolder"
+                    }
                   },
                   [
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(index + 1))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(employee.agent))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
+                    _c("td", [
                       _vm._v(
-                        "$" + _vm._s(Number(employee.total).toLocaleString())
+                        "$" + _vm._s(Number(_vm.q2_total).toLocaleString())
                       )
                     ])
                   ]
                 )
-              }),
-              0
+              ],
+              2
             )
           ]
         )
@@ -50451,35 +50682,58 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.sortedQ3, function(employee, index) {
-                return _c(
+              [
+                _vm._l(_vm.sortedQ3, function(employee, index) {
+                  return _c(
+                    "tr",
+                    {
+                      key: index,
+                      staticClass: "border-black",
+                      class: [
+                        { "bg-belowten": index > 9 },
+                        { "bg-highlight": index <= 9 }
+                      ]
+                    },
+                    [
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(employee.agent))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(
+                          "$" + _vm._s(Number(employee.total).toLocaleString())
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
                   "tr",
                   {
-                    key: index,
-                    staticClass: "border-black",
-                    class: [
-                      { "bg-belowten": index > 9 },
-                      { "bg-highlight": index <= 9 }
-                    ]
+                    staticStyle: {
+                      "border-top": "black solid 2px",
+                      "font-weight": "bolder"
+                    }
                   },
                   [
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(index + 1))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(employee.agent))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
+                    _c("td", [
                       _vm._v(
-                        "$" + _vm._s(Number(employee.total).toLocaleString())
+                        "$" + _vm._s(Number(_vm.q3_total).toLocaleString())
                       )
                     ])
                   ]
                 )
-              }),
-              0
+              ],
+              2
             )
           ]
         )
@@ -50511,35 +50765,58 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.sortedQ4, function(employee, index) {
-                return _c(
+              [
+                _vm._l(_vm.sortedQ4, function(employee, index) {
+                  return _c(
+                    "tr",
+                    {
+                      key: index,
+                      staticClass: "border-black",
+                      class: [
+                        { "bg-belowten": index > 9 },
+                        { "bg-highlight": index <= 9 }
+                      ]
+                    },
+                    [
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(employee.agent))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(
+                          "$" + _vm._s(Number(employee.total).toLocaleString())
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
                   "tr",
                   {
-                    key: index,
-                    staticClass: "border-black",
-                    class: [
-                      { "bg-belowten": index > 9 },
-                      { "bg-highlight": index <= 9 }
-                    ]
+                    staticStyle: {
+                      "border-top": "black solid 2px",
+                      "font-weight": "bolder"
+                    }
                   },
                   [
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(index + 1))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(employee.agent))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
+                    _c("td", [
                       _vm._v(
-                        "$" + _vm._s(Number(employee.total).toLocaleString())
+                        "$" + _vm._s(Number(_vm.q4_total).toLocaleString())
                       )
                     ])
                   ]
                 )
-              }),
-              0
+              ],
+              2
             )
           ]
         )
@@ -50569,35 +50846,58 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.sorted_ytd, function(employee, index) {
-                return _c(
+              [
+                _vm._l(_vm.sorted_ytd, function(employee, index) {
+                  return _c(
+                    "tr",
+                    {
+                      key: index,
+                      staticClass: "border-black",
+                      class: [
+                        { "bg-belowten": index > 9 },
+                        { "bg-highlight": index <= 9 }
+                      ]
+                    },
+                    [
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(_vm._s(employee.agent))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "border-black" }, [
+                        _vm._v(
+                          "$" + _vm._s(Number(employee.total).toLocaleString())
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
                   "tr",
                   {
-                    key: index,
-                    staticClass: "border-black",
-                    class: [
-                      { "bg-belowten": index > 9 },
-                      { "bg-highlight": index <= 9 }
-                    ]
+                    staticStyle: {
+                      "border-top": "black solid 2px",
+                      "font-weight": "bolder"
+                    }
                   },
                   [
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(index + 1))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
-                      _vm._v(_vm._s(employee.agent))
-                    ]),
+                    _c("td"),
                     _vm._v(" "),
-                    _c("td", { staticClass: "border-black" }, [
+                    _c("td", [
                       _vm._v(
-                        "$" + _vm._s(Number(employee.total).toLocaleString())
+                        "$" + _vm._s(Number(_vm.ytd_total).toLocaleString())
                       )
                     ])
                   ]
                 )
-              }),
-              0
+              ],
+              2
             )
           ]
         )
