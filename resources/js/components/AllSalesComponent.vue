@@ -75,7 +75,7 @@
                 <th>CLOSING DATE</th>
                 <th>AGENT NAME</th>
                 <th>CLIENT NAME</th>
-                  <th>ADDRESS</th>
+                <th>ADDRESS</th>
                 <th>SALE PRICE</th>
                 <th>TYPE</th>
                 <th>COMMISSION</th>
@@ -88,12 +88,21 @@
                 <td>{{sale.closing_date}}</td>
                 <td>{{sale.agent_name}}</td>
                 <td>{{sale.client_name}}</td>
-                  <td>{{sale.address}}</td>
+                <td>{{sale.address}}</td>
                 <td>{{sale.sale_price}}</td>
                 <td>{{sale.type}}</td>
                 <td>{{sale.total_commission}}</td>
                 <td>{{sale.mortgage_choice}}</td>
                 <td>{{sale.title_choice}}</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="border-top: black solid 2px; font-weight: bolder">{{ total_sale_price }}</td>
+                <td></td>
+                <td style="border-top: black solid 2px; font-weight: bolder">{{ total_commission }}</td>
               </tr>
             </tbody>
           </table>
@@ -134,6 +143,8 @@ export default {
             type: ""
         }
     ],
+    total_sale_price: 0,
+    total_commission: 0,
       user: {
         isAdmin: false
       },
@@ -202,6 +213,8 @@ export default {
 
       axios(req).then(resp => {
         this.sales = resp.data.sales;
+        this.total_sale_price = resp.data.total_sale_price;
+        this.total_commission = resp.data.total_commission;
         this.user.isAdmin = resp.data.req.isAdmin;
         this.$loading(false);
       });
@@ -247,6 +260,14 @@ export default {
       };
         axios(req).then(resp => {
           this.sales = resp.data.sales;
+          this.total_sale_price = Number(resp.data.total_sale_price).toLocaleString(
+		        "en-US",
+		        this.numberFormat
+		      );
+          this.total_commission = Number(resp.data.total_commission).toLocaleString(
+		        "en-US",
+		        this.numberFormat
+		      );
           this.user.isAdmin = resp.data.req.isAdmin;
           this.$loading(false);
         });

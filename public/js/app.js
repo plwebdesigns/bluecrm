@@ -2551,6 +2551,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2574,6 +2583,8 @@ __webpack_require__.r(__webpack_exports__);
         sale_price: "",
         type: ""
       }],
+      total_sale_price: 0,
+      total_commission: 0,
       user: {
         isAdmin: false
       },
@@ -2641,6 +2652,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios(req).then(function (resp) {
         _this.sales = resp.data.sales;
+        _this.total_sale_price = resp.data.total_sale_price;
+        _this.total_commission = resp.data.total_commission;
         _this.user.isAdmin = resp.data.req.isAdmin;
 
         _this.$loading(false);
@@ -2683,6 +2696,8 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios(req).then(function (resp) {
         _this2.sales = resp.data.sales;
+        _this2.total_sale_price = Number(resp.data.total_sale_price).toLocaleString("en-US", _this2.numberFormat);
+        _this2.total_commission = Number(resp.data.total_commission).toLocaleString("en-US", _this2.numberFormat);
         _this2.user.isAdmin = resp.data.req.isAdmin;
 
         _this2.$loading(false);
@@ -45341,39 +45356,75 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.formattedSales, function(sale) {
-                  return _c(
-                    "tr",
-                    {
-                      key: sale.id,
-                      on: {
-                        click: function($event) {
-                          return _vm.show(sale)
+                [
+                  _vm._l(_vm.formattedSales, function(sale) {
+                    return _c(
+                      "tr",
+                      {
+                        key: sale.id,
+                        on: {
+                          click: function($event) {
+                            return _vm.show(sale)
+                          }
                         }
-                      }
-                    },
-                    [
-                      _c("td", [_vm._v(_vm._s(sale.closing_date))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.agent_name))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.client_name))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.address))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.sale_price))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.type))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.total_commission))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.mortgage_choice))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sale.title_choice))])
-                    ]
-                  )
-                }),
-                0
+                      },
+                      [
+                        _c("td", [_vm._v(_vm._s(sale.closing_date))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.agent_name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.client_name))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.address))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.sale_price))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.type))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.total_commission))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.mortgage_choice))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(sale.title_choice))])
+                      ]
+                    )
+                  }),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td"),
+                    _vm._v(" "),
+                    _c("td"),
+                    _vm._v(" "),
+                    _c("td"),
+                    _vm._v(" "),
+                    _c("td"),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      {
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
+                      },
+                      [_vm._v(_vm._s(_vm.total_sale_price))]
+                    ),
+                    _vm._v(" "),
+                    _c("td"),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      {
+                        staticStyle: {
+                          "border-top": "black solid 2px",
+                          "font-weight": "bolder"
+                        }
+                      },
+                      [_vm._v(_vm._s(_vm.total_commission))]
+                    )
+                  ])
+                ],
+                2
               )
             ]),
             _vm._v(" "),

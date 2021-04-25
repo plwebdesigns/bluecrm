@@ -342,14 +342,22 @@ class AdminController extends Controller {
             //Get current year
             $year = date('Y');
             // CHeck to see if there is a date range
-            $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : "2020-01-01";
-            $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : "2020-12-31";
+            $bdate = ($request->input('beginDate') !== null) ? $request->input('beginDate') : "{$year}-01-01";
+            $edate = ($request->input('endDate') !== null) ? $request->input('endDate') : "{$year}-12-31";
             $sales = $sales->whereBetween('closing_date', [$bdate, $edate]);
 
             // Get totals for filtered sales
+			$total_sale_price = $sales->sum('sale_price');
+			$total_commission = $sales->sum('total_commission');
 
-
-            return response()->json(['sales' => $sales, 'req' => $user]);
+            return response()->json(
+				[
+					'sales' => $sales, 
+					'req' => $user, 
+					'total_sale_price' => $total_sale_price, 
+					'total_commission' => $total_commission
+				]
+			);
         endif;
 	}
 
