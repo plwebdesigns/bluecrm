@@ -30,7 +30,8 @@ class AdminController extends Controller {
 			$quarter_one_referrals = $quarter_one->where('type', 'Referral')->count();
 			$quarter_one_trans_fees = $quarter_one->sum('transaction_fee');
 			$quarter_one_blue_profit = $quarter_one->sum('blue_profit');
-			$quarter_one_total_profit = $quarter_one_blue_profit + $quarter_one_trans_fees;
+			$quarter_one_membership_dues = $quarter_one->sum('membership_dues_paid');
+			$quarter_one_total_profit = $quarter_one_blue_profit + $quarter_one_trans_fees + $quarter_one_membership_dues;
 
 			$quarter_one_summary = [
 				'total_sales_volume' => $quarter_one_volume,
@@ -41,6 +42,7 @@ class AdminController extends Controller {
 				'total_referrals' => $quarter_one_referrals,
 				'total_trans_fees' => $quarter_one_trans_fees,
 				'total_blue_profit' => $quarter_one_blue_profit,
+				'total_membership_dues' => $quarter_one_membership_dues,
 				'total_profit' => $quarter_one_total_profit,
 			];
 
@@ -53,7 +55,8 @@ class AdminController extends Controller {
 			$quarter_two_referrals = $quarter_two->where('type', 'Referral')->count();
 			$quarter_two_trans_fees = $quarter_two->sum('transaction_fee');
 			$quarter_two_blue_profit = $quarter_two->sum('blue_profit');
-			$quarter_two_total_profit = $quarter_two_blue_profit + $quarter_two_trans_fees;
+			$quarter_two_membership_dues = $quarter_two->sum('membership_dues_paid');
+			$quarter_two_total_profit = $quarter_two_blue_profit + $quarter_two_trans_fees + $quarter_two_membership_dues;
 
 			$quarter_two_summary = [
 				'total_sales_volume' => $quarter_two_volume,
@@ -64,6 +67,7 @@ class AdminController extends Controller {
 				'total_referrals' => $quarter_two_referrals,
 				'total_trans_fees' => $quarter_two_trans_fees,
 				'total_blue_profit' => $quarter_two_blue_profit,
+				'total_membership_dues' => $quarter_two_membership_dues,
 				'total_profit' => $quarter_two_total_profit,
 			];
 
@@ -76,7 +80,8 @@ class AdminController extends Controller {
 			$quarter_three_referrals = $quarter_three->where('type', 'Referral')->count();
 			$quarter_three_trans_fees = $quarter_three->sum('transaction_fee');
 			$quarter_three_blue_profit = $quarter_three->sum('blue_profit');
-			$quarter_three_total_profit = $quarter_three_blue_profit + $quarter_three_trans_fees;
+			$quarter_three_membership_dues = $quarter_three->sum('membership_dues_paid');
+			$quarter_three_total_profit = $quarter_three_blue_profit + $quarter_three_trans_fees + $quarter_three_membership_dues;
 
 			$quarter_three_summary = [
 				'total_sales_volume' => $quarter_three_volume,
@@ -87,6 +92,7 @@ class AdminController extends Controller {
 				'total_referrals' => $quarter_three_referrals,
 				'total_trans_fees' => $quarter_three_trans_fees,
 				'total_blue_profit' => $quarter_three_blue_profit,
+				'total_membership_dues' => $quarter_three_membership_dues,
 				'total_profit' => $quarter_three_total_profit,
 			];
 
@@ -99,7 +105,8 @@ class AdminController extends Controller {
 			$quarter_four_referrals = $quarter_four->where('type', 'Referral')->count();
 			$quarter_four_trans_fees = $quarter_four->sum('transaction_fee');
 			$quarter_four_blue_profit = $quarter_four->sum('blue_profit');
-			$quarter_four_total_profit = $quarter_four_blue_profit + $quarter_four_trans_fees;
+			$quarter_four_membership_dues = $quarter_four->sum('membership_dues_paid');
+			$quarter_four_total_profit = $quarter_four_blue_profit + $quarter_four_trans_fees + $quarter_four_membership_dues;
 
 			$quarter_four_summary = [
 				'total_sales_volume' => $quarter_four_volume,
@@ -110,6 +117,7 @@ class AdminController extends Controller {
 				'total_referrals' => $quarter_four_referrals,
 				'total_trans_fees' => $quarter_four_trans_fees,
 				'total_blue_profit' => $quarter_four_blue_profit,
+				'total_membership_dues' => $quarter_four_membership_dues,
 				'total_profit' => $quarter_four_total_profit,
 			];
 

@@ -5790,6 +5790,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -5812,6 +5820,7 @@ __webpack_require__.r(__webpack_exports__);
         total_referrals: 0,
         total_trans_fees: 0,
         total_blue_profit: 0,
+        total_membership_dues: 0,
         total_profit: 0
       }],
       ytd: {
@@ -5823,6 +5832,7 @@ __webpack_require__.r(__webpack_exports__);
         total_referrals: 0,
         total_trans_fees: 0,
         total_blue_profit: 0,
+        total_membership_dues: 0,
         total_profit: 0
       },
       numberFormat: {
@@ -5886,6 +5896,7 @@ __webpack_require__.r(__webpack_exports__);
       var total_units_sold = 0;
       var total_rentals = 0;
       var total_trans = 0;
+      var total_membership_dues = 0;
       this.summary.forEach(function (obj) {
         total_sales_volume += obj.total_sales_volume;
         total_blue_profit += obj.total_blue_profit;
@@ -5895,6 +5906,7 @@ __webpack_require__.r(__webpack_exports__);
         total_trans += obj.total_trans_fees;
         total_buyers += obj.total_buyers;
         total_sellers += obj.total_sellers;
+        total_membership_dues += obj.total_membership_dues;
       });
       this.ytd.total_blue_profit = total_blue_profit;
       this.ytd.total_sales_volume = total_sales_volume;
@@ -5904,6 +5916,7 @@ __webpack_require__.r(__webpack_exports__);
       this.ytd.total_trans_fees = total_trans;
       this.ytd.total_units_sold = total_units_sold;
       this.ytd.total_rentals = total_rentals;
+      this.ytd.total_membership_dues = total_membership_dues;
     }
   }
 });
@@ -49996,6 +50009,21 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
+              _c("tr", [
+                _c("td", [_vm._v("MEMBERSHIP DUES")]),
+                _vm._v(" "),
+                _c("td", [
+                  _vm._v(
+                    _vm._s(
+                      qrt.total_membership_dues.toLocaleString(
+                        "en-US",
+                        _vm.numberFormat
+                      )
+                    )
+                  )
+                ])
+              ]),
+              _vm._v(" "),
               _c(
                 "tr",
                 {
@@ -50102,6 +50130,21 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
+            _c("tr", [
+              _c("td", [_vm._v("MEMBERSHIP DUES")]),
+              _vm._v(" "),
+              _c("td", [
+                _vm._v(
+                  _vm._s(
+                    Number(_vm.ytd.total_membership_dues).toLocaleString(
+                      "en-us",
+                      _vm.numberFormat
+                    )
+                  )
+                )
+              ])
+            ]),
+            _vm._v(" "),
             _c(
               "tr",
               {
@@ -50117,7 +50160,9 @@ var render = function() {
                   _vm._v(
                     _vm._s(
                       Number(
-                        _vm.ytd.total_trans_fees + _vm.ytd.total_blue_profit
+                        _vm.ytd.total_trans_fees +
+                          _vm.ytd.total_blue_profit +
+                          _vm.ytd.total_membership_dues
                       ).toLocaleString("en-US", _vm.numberFormat)
                     )
                   )

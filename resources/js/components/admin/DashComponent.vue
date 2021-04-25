@@ -41,6 +41,10 @@
             <td>BLUE PROFIT</td>
             <td>{{qrt.total_blue_profit.toLocaleString('en-US', numberFormat)}}</td>
           </tr>
+          <tr>
+            <td>MEMBERSHIP DUES</td>
+            <td>{{qrt.total_membership_dues.toLocaleString('en-US', numberFormat)}}</td>
+          </tr>
           <tr style="border-top: black solid 2px; font-weight: bolder">
             <td>TOTAL PROFIT</td>
             <td>{{qrt.total_profit.toLocaleString('en-US', numberFormat)}}</td>
@@ -82,9 +86,13 @@
             <td>BLUE PROFIT</td>
             <td>{{Number(ytd.total_blue_profit).toLocaleString('en-us', numberFormat)}}</td>
           </tr>
+          <tr>
+            <td>MEMBERSHIP DUES</td>
+            <td>{{Number(ytd.total_membership_dues).toLocaleString('en-us', numberFormat)}}</td>
+          </tr>
           <tr style="border-top: black solid 2px; font-weight: bolder">
             <td>TOTAL PROFIT</td>
-            <td>{{Number(ytd.total_trans_fees + ytd.total_blue_profit).toLocaleString('en-US', numberFormat)}}</td>
+            <td>{{Number(ytd.total_trans_fees + ytd.total_blue_profit + ytd.total_membership_dues).toLocaleString('en-US', numberFormat)}}</td>
           </tr>
         </table>
       </div>
@@ -117,6 +125,7 @@ export default {
           total_referrals: 0,
           total_trans_fees: 0,
           total_blue_profit: 0,
+          total_membership_dues: 0,
           total_profit: 0
         }
       ],
@@ -129,6 +138,7 @@ export default {
         total_referrals: 0,
         total_trans_fees: 0,
         total_blue_profit: 0,
+        total_membership_dues: 0,
         total_profit: 0
       },
       numberFormat: {
@@ -185,6 +195,7 @@ export default {
       let total_units_sold = 0;
       let total_rentals = 0;
       let total_trans = 0;
+      let total_membership_dues = 0;
 
       this.summary.forEach(function(obj) {
         total_sales_volume += obj.total_sales_volume;
@@ -195,6 +206,7 @@ export default {
         total_trans += obj.total_trans_fees;
         total_buyers += obj.total_buyers;
         total_sellers += obj.total_sellers;
+        total_membership_dues += obj.total_membership_dues;
       });
       this.ytd.total_blue_profit = total_blue_profit;
       this.ytd.total_sales_volume = total_sales_volume;
@@ -204,6 +216,7 @@ export default {
       this.ytd.total_trans_fees = total_trans;
       this.ytd.total_units_sold = total_units_sold;
       this.ytd.total_rentals = total_rentals;
+      this.ytd.total_membership_dues = total_membership_dues;
     }
   }
 };
