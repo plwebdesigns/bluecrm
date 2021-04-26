@@ -7762,7 +7762,7 @@ Vue.use(vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
   data: function data() {
     return {
       currentTab: "Quarterly",
-      tabs: ["Quarterly", "Agent Production", "Add Agent", "All Sales", "Leaderboard", "Reporting", "Agent Roster", "Options", "Membership Dues"],
+      tabs: ["Quarterly", "Agent Production", "All Sales", "Leaderboard", "Reporting", "Agent Roster", "Options", "Add Agent"],
       token: ''
     };
   },
@@ -71194,8 +71194,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/dev-bluecrm/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/dev-bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /workspace/bluecrm/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /workspace/bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

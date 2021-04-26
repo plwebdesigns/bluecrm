@@ -41,13 +41,12 @@ export default {
       tabs: [
         "Quarterly",
         "Agent Production",
-        "Add Agent",
         "All Sales",
         "Leaderboard",
         "Reporting",
         "Agent Roster",
         "Options",
-        "Membership Dues"
+        "Add Agent"
       ],
       token: ''
     };
