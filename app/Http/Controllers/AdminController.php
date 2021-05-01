@@ -40,6 +40,7 @@ class AdminController extends Controller {
 			];
 
 			$all_sales = Sale::all();
+			$all_sales = $all_sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
 			$split_sales = [
 				0 => $all_sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]),
 				1 => $all_sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]),
