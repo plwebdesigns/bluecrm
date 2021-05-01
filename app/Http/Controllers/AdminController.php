@@ -14,118 +14,79 @@ use Illuminate\Validation\Rule;
 use NumberFormatter;
 
 class AdminController extends Controller {
-	// Quarter Breakdown for admin page
+	/*
+	*
+	* This function will get the quarter breakdown
+	* and the YTD for the current year
+	*
+	*/
 	public function quarterBreakDown(Request $request) {
 		$user = $request->user();
 		$year = $request->input('production_year');
 		if ($user->isAdmin && Gate::allows('create-sale', Sale::class)):
 
-			$sales = DB::table('sales')->get();
-			$quarter_one = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]);
-			$quarter_one_volume = $quarter_one->sum('sale_price');
-			$quarter_one_units = $quarter_one->count();
-			$quarter_one_sellers = $quarter_one->where('type', 'Seller')->count();
-			$quarter_one_buyers = $quarter_one->where('type', 'Buyer')->count();
-			$quarter_one_rentals = $quarter_one->where('type', 'Rental')->count();
-			$quarter_one_referrals = $quarter_one->where('type', 'Referral')->count();
-			$quarter_one_trans_fees = $quarter_one->sum('transaction_fee');
-			$quarter_one_blue_profit = $quarter_one->sum('blue_profit');
-			$quarter_one_membership_dues = $quarter_one->sum('membership_dues_paid');
-			$quarter_one_total_profit = $quarter_one_blue_profit + $quarter_one_trans_fees + $quarter_one_membership_dues;
-
-			$quarter_one_summary = [
-				'total_sales_volume' => $quarter_one_volume,
-				'total_sellers' => $quarter_one_sellers,
-				'total_buyers' => $quarter_one_buyers,
-				'total_units_sold' => $quarter_one_units,
-				'total_rentals' => $quarter_one_rentals,
-				'total_referrals' => $quarter_one_referrals,
-				'total_trans_fees' => $quarter_one_trans_fees,
-				'total_blue_profit' => $quarter_one_blue_profit,
-				'total_membership_dues' => $quarter_one_membership_dues,
-				'total_profit' => $quarter_one_total_profit,
+			// Intialize array of variables
+			$sales_by_quarter[] = [
+				'volume' => 0,
+				'units' => 0,
+				'sellers' => 0,
+				'buyers' => 0,
+				'rentals' => 0,
+				'referrals' => 0,
+				'trans_fees' => 0,
+				'blue_profit' => 0,
+				'membership_dues' => 0,
+				'total_profit' => 0
 			];
 
-			$quarter_two = $sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]);
-			$quarter_two_volume = $quarter_two->sum('sale_price');
-			$quarter_two_units = $quarter_two->count();
-			$quarter_two_sellers = $quarter_two->where('type', 'Seller')->count();
-			$quarter_two_buyers = $quarter_two->where('type', 'Buyer')->count();
-			$quarter_two_rentals = $quarter_two->where('type', 'Rental')->count();
-			$quarter_two_referrals = $quarter_two->where('type', 'Referral')->count();
-			$quarter_two_trans_fees = $quarter_two->sum('transaction_fee');
-			$quarter_two_blue_profit = $quarter_two->sum('blue_profit');
-			$quarter_two_membership_dues = $quarter_two->sum('membership_dues_paid');
-			$quarter_two_total_profit = $quarter_two_blue_profit + $quarter_two_trans_fees + $quarter_two_membership_dues;
-
-			$quarter_two_summary = [
-				'total_sales_volume' => $quarter_two_volume,
-				'total_sellers' => $quarter_two_sellers,
-				'total_buyers' => $quarter_two_buyers,
-				'total_units_sold' => $quarter_two_units,
-				'total_rentals' => $quarter_two_rentals,
-				'total_referrals' => $quarter_two_referrals,
-				'total_trans_fees' => $quarter_two_trans_fees,
-				'total_blue_profit' => $quarter_two_blue_profit,
-				'total_membership_dues' => $quarter_two_membership_dues,
-				'total_profit' => $quarter_two_total_profit,
+			$all_sales = Sale::all();
+			$split_sales = [
+				0 => $all_sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]),
+				1 => $all_sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]),
+				2 => $all_sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"]),
+				3 => $all_sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"])
 			];
 
-			$quarter_three = $sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"]);
-			$quarter_three_volume = $quarter_three->sum('sale_price');
-			$quarter_three_units = $quarter_three->count();
-			$quarter_three_sellers = $quarter_three->where('type', 'Seller')->count();
-			$quarter_three_buyers = $quarter_three->where('type', 'Buyer')->count();
-			$quarter_three_rentals = $quarter_three->where('type', 'Rental')->count();
-			$quarter_three_referrals = $quarter_three->where('type', 'Referral')->count();
-			$quarter_three_trans_fees = $quarter_three->sum('transaction_fee');
-			$quarter_three_blue_profit = $quarter_three->sum('blue_profit');
-			$quarter_three_membership_dues = $quarter_three->sum('membership_dues_paid');
-			$quarter_three_total_profit = $quarter_three_blue_profit + $quarter_three_trans_fees + $quarter_three_membership_dues;
-
-			$quarter_three_summary = [
-				'total_sales_volume' => $quarter_three_volume,
-				'total_sellers' => $quarter_three_sellers,
-				'total_buyers' => $quarter_three_buyers,
-				'total_units_sold' => $quarter_three_units,
-				'total_rentals' => $quarter_three_rentals,
-				'total_referrals' => $quarter_three_referrals,
-				'total_trans_fees' => $quarter_three_trans_fees,
-				'total_blue_profit' => $quarter_three_blue_profit,
-				'total_membership_dues' => $quarter_three_membership_dues,
-				'total_profit' => $quarter_three_total_profit,
+			foreach ($split_sales as $no => $quarter) {
+				$sales_by_quarter[$no] = [
+					'volume' => $quarter->sum('sale_price'),
+					'units' => $quarter->count(),
+					'sellers' => $quarter->where('type', 'Seller')->count(),
+					'buyers' => $quarter->where('type', 'Buyer')->count(),
+					'rentals' => $quarter->where('type', 'Rental')->count(),
+					'referrals' => $quarter->where('type', 'Referral')->count(),
+					'trans_fees' => $quarter->sum('transaction_fee'),
+					'blue_profit' => $quarter->sum('blue_profit'),
+					'membership_dues' => $quarter->sum('membership_dues_paid'),
+					'total_profit' => 0
+				];
+				$sales_by_quarter[$no]['total_profit'] = $sales_by_quarter[$no]['trans_fees'] +
+				$sales_by_quarter[$no]['blue_profit'] +
+				$sales_by_quarter[$no]['membership_dues'];
+			}
+			// Get YTD numbers
+			$sales_by_quarter[4] = [
+				'volume' => $all_sales->sum('sale_price'),
+				'units' => $all_sales->count(),
+				'sellers' => $all_sales->where('type', 'Seller')->count(),
+				'buyers' => $all_sales->where('type', 'Buyer')->count(),
+				'rentals' => $all_sales->where('type', 'Rental')->count(),
+				'referrals' => $all_sales->where('type', 'Referral')->count(),
+				'trans_fees' => $all_sales->sum('transaction_fee'),
+				'blue_profit' => $all_sales->sum('blue_profit'),
+				'membership_dues' => $all_sales->sum('membership_dues_paid'),
+				'total_profit' => 0
 			];
-
-			$quarter_four = $sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"]);
-			$quarter_four_volume = $quarter_four->sum('sale_price');
-			$quarter_four_units = $quarter_four->count();
-			$quarter_four_sellers = $quarter_four->where('type', 'Seller')->count();
-			$quarter_four_buyers = $quarter_four->where('type', 'Buyer')->count();
-			$quarter_four_rentals = $quarter_four->where('type', 'Rental')->count();
-			$quarter_four_referrals = $quarter_four->where('type', 'Referral')->count();
-			$quarter_four_trans_fees = $quarter_four->sum('transaction_fee');
-			$quarter_four_blue_profit = $quarter_four->sum('blue_profit');
-			$quarter_four_membership_dues = $quarter_four->sum('membership_dues_paid');
-			$quarter_four_total_profit = $quarter_four_blue_profit + $quarter_four_trans_fees + $quarter_four_membership_dues;
-
-			$quarter_four_summary = [
-				'total_sales_volume' => $quarter_four_volume,
-				'total_sellers' => $quarter_four_sellers,
-				'total_buyers' => $quarter_four_buyers,
-				'total_units_sold' => $quarter_four_units,
-				'total_rentals' => $quarter_four_rentals,
-				'total_referrals' => $quarter_four_referrals,
-				'total_trans_fees' => $quarter_four_trans_fees,
-				'total_blue_profit' => $quarter_four_blue_profit,
-				'total_membership_dues' => $quarter_four_membership_dues,
-				'total_profit' => $quarter_four_total_profit,
-			];
+			$sales_by_quarter[4]['total_profit'] = $sales_by_quarter[4]['trans_fees'] +
+			$sales_by_quarter[4]['blue_profit'] +
+			$sales_by_quarter[4]['membership_dues'];
 
 			$summary = [
-				$quarter_one_summary,
-				$quarter_two_summary,
-				$quarter_three_summary,
-				$quarter_four_summary,
+				$sales_by_quarter[0],
+				$sales_by_quarter[1],
+				$sales_by_quarter[2],
+				$sales_by_quarter[3],
+				$sales_by_quarter[4]
 			];
 
 			return response()->json(['summary' => $summary]);

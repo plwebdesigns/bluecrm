@@ -5804,50 +5804,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -5862,29 +5818,17 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       summary: [{
-        total_sales_volume: 0,
-        total_sellers: 0,
-        total_buyers: 0,
-        total_units_sold: 0,
-        total_rentals: 0,
-        total_referrals: 0,
-        total_trans_fees: 0,
-        total_blue_profit: 0,
-        total_membership_dues: 0,
+        volume: 0,
+        sellers: 0,
+        buyers: 0,
+        units: 0,
+        rentals: 0,
+        referrals: 0,
+        trans_fees: 0,
+        blue_profit: 0,
+        membership_dues: 0,
         total_profit: 0
       }],
-      ytd: {
-        total_sales_volume: 0,
-        total_units_sold: 0,
-        total_buyers: 0,
-        total_sellers: 0,
-        total_rentals: 0,
-        total_referrals: 0,
-        total_trans_fees: 0,
-        total_blue_profit: 0,
-        total_membership_dues: 0,
-        total_profit: 0
-      },
       numberFormat: {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
@@ -5913,8 +5857,6 @@ __webpack_require__.r(__webpack_exports__);
       axios(req).then(function (resp) {
         _this.summary = resp.data.summary;
 
-        _this.getTotals();
-
         _this.$loading(false);
       });
     },
@@ -5936,37 +5878,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return "";
-    },
-    getTotals: function getTotals() {
-      var total_blue_profit = 0;
-      var total_sales_volume = 0;
-      var total_sellers = 0;
-      var total_buyers = 0;
-      var total_referrals = 0;
-      var total_units_sold = 0;
-      var total_rentals = 0;
-      var total_trans = 0;
-      var total_membership_dues = 0;
-      this.summary.forEach(function (obj) {
-        total_sales_volume += obj.total_sales_volume;
-        total_blue_profit += obj.total_blue_profit;
-        total_rentals += obj.total_rentals;
-        total_referrals += obj.total_referrals;
-        total_units_sold += obj.total_units_sold;
-        total_trans += obj.total_trans_fees;
-        total_buyers += obj.total_buyers;
-        total_sellers += obj.total_sellers;
-        total_membership_dues += obj.total_membership_dues;
-      });
-      this.ytd.total_blue_profit = total_blue_profit;
-      this.ytd.total_sales_volume = total_sales_volume;
-      this.ytd.total_buyers = total_buyers;
-      this.ytd.total_sellers = total_sellers;
-      this.ytd.total_referrals = total_referrals;
-      this.ytd.total_trans_fees = total_trans;
-      this.ytd.total_units_sold = total_units_sold;
-      this.ytd.total_rentals = total_rentals;
-      this.ytd.total_membership_dues = total_membership_dues;
     }
   }
 });
@@ -50160,135 +50071,15 @@ var render = function() {
     _c(
       "div",
       { staticClass: "row" },
-      [
-        _vm._l(_vm.summary, function(qrt, index) {
-          return _c("div", { key: index, staticClass: "col" }, [
-            _c("h4", { staticClass: "font-fredricka" }, [
-              _vm._v("Quarter " + _vm._s(Number(index) + 1))
-            ]),
-            _vm._v(" "),
-            _c("table", { staticClass: "table table-sm" }, [
-              _c("tr", [
-                _c("td", [_vm._v("SALES VOLUME")]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(
-                      qrt.total_sales_volume.toLocaleString(
-                        "en-us",
-                        _vm.numberFormat
-                      )
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("SELLERS")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(qrt.total_sellers))])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("BUYERS")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(qrt.total_buyers))])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("RENTALS")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(qrt.total_rentals.toLocaleString()))])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("REFERRALS")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(qrt.total_referrals))])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("UNITS SOLD")]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(_vm._s(qrt.total_units_sold.toLocaleString()))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("TRANS FEES")]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(
-                      qrt.total_trans_fees.toLocaleString(
-                        "en-us",
-                        _vm.numberFormat
-                      )
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("BLUE PROFIT")]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(
-                      qrt.total_blue_profit.toLocaleString(
-                        "en-US",
-                        _vm.numberFormat
-                      )
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [_vm._v("MEMBERSHIP DUES")]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    _vm._s(
-                      qrt.total_membership_dues.toLocaleString(
-                        "en-US",
-                        _vm.numberFormat
-                      )
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "tr",
-                {
-                  staticStyle: {
-                    "border-top": "black solid 2px",
-                    "font-weight": "bolder"
-                  }
-                },
-                [
-                  _c("td", [_vm._v("TOTAL PROFIT")]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(
-                        qrt.total_profit.toLocaleString(
-                          "en-US",
-                          _vm.numberFormat
-                        )
-                      )
-                    )
-                  ])
-                ]
-              )
-            ])
-          ])
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c("h4", { staticClass: "font-fredricka" }, [_vm._v("YTD Totals")]),
+      _vm._l(_vm.summary, function(qrt, index) {
+        return _c("div", { key: index, staticClass: "col" }, [
+          index < 4
+            ? _c("h4", { staticClass: "font-fredricka" }, [
+                _vm._v("Quarter " + _vm._s(Number(index) + 1))
+              ])
+            : index === 4
+            ? _c("h4", { staticClass: "font-fredricka" }, [_vm._v("YTD")])
+            : _vm._e(),
           _vm._v(" "),
           _c("table", { staticClass: "table table-sm" }, [
             _c("tr", [
@@ -50296,12 +50087,7 @@ var render = function() {
               _vm._v(" "),
               _c("td", [
                 _vm._v(
-                  _vm._s(
-                    _vm.ytd.total_sales_volume.toLocaleString(
-                      "en-US",
-                      _vm.numberFormat
-                    )
-                  )
+                  _vm._s(qrt.volume.toLocaleString("en-us", _vm.numberFormat))
                 )
               ])
             ]),
@@ -50309,31 +50095,31 @@ var render = function() {
             _c("tr", [
               _c("td", [_vm._v("SELLERS")]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(_vm.ytd.total_sellers))])
+              _c("td", [_vm._v(_vm._s(qrt.sellers))])
             ]),
             _vm._v(" "),
             _c("tr", [
               _c("td", [_vm._v("BUYERS")]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(_vm.ytd.total_buyers))])
+              _c("td", [_vm._v(_vm._s(qrt.buyers))])
             ]),
             _vm._v(" "),
             _c("tr", [
               _c("td", [_vm._v("RENTALS")]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(_vm.ytd.total_rentals))])
+              _c("td", [_vm._v(_vm._s(qrt.rentals.toLocaleString()))])
             ]),
             _vm._v(" "),
             _c("tr", [
               _c("td", [_vm._v("REFERRALS")]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(_vm.ytd.total_referrals))])
+              _c("td", [_vm._v(_vm._s(qrt.referrals))])
             ]),
             _vm._v(" "),
             _c("tr", [
               _c("td", [_vm._v("UNITS SOLD")]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(_vm.ytd.total_units_sold))])
+              _c("td", [_vm._v(_vm._s(qrt.units.toLocaleString()))])
             ]),
             _vm._v(" "),
             _c("tr", [
@@ -50342,10 +50128,7 @@ var render = function() {
               _c("td", [
                 _vm._v(
                   _vm._s(
-                    Number(_vm.ytd.total_trans_fees).toLocaleString(
-                      "en-us",
-                      _vm.numberFormat
-                    )
+                    qrt.trans_fees.toLocaleString("en-us", _vm.numberFormat)
                   )
                 )
               ])
@@ -50357,10 +50140,7 @@ var render = function() {
               _c("td", [
                 _vm._v(
                   _vm._s(
-                    Number(_vm.ytd.total_blue_profit).toLocaleString(
-                      "en-us",
-                      _vm.numberFormat
-                    )
+                    qrt.blue_profit.toLocaleString("en-US", _vm.numberFormat)
                   )
                 )
               ])
@@ -50372,8 +50152,8 @@ var render = function() {
               _c("td", [
                 _vm._v(
                   _vm._s(
-                    Number(_vm.ytd.total_membership_dues).toLocaleString(
-                      "en-us",
+                    qrt.membership_dues.toLocaleString(
+                      "en-US",
                       _vm.numberFormat
                     )
                   )
@@ -50395,11 +50175,7 @@ var render = function() {
                 _c("td", [
                   _vm._v(
                     _vm._s(
-                      Number(
-                        _vm.ytd.total_trans_fees +
-                          _vm.ytd.total_blue_profit +
-                          _vm.ytd.total_membership_dues
-                      ).toLocaleString("en-US", _vm.numberFormat)
+                      qrt.total_profit.toLocaleString("en-US", _vm.numberFormat)
                     )
                   )
                 ])
@@ -50407,8 +50183,8 @@ var render = function() {
             )
           ])
         ])
-      ],
-      2
+      }),
+      0
     )
   ])
 }
