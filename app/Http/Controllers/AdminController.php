@@ -452,11 +452,8 @@ class AdminController extends Controller {
     {
 		$sale = $request->input('sale');
 		$agents = $request->input('agent');
-		$types = DB::table('type_of_sale')->get('type');
-		$type_arr = [];
-		foreach ($types as $key => $value) {
-			array_push($type_arr, $value->type);
-		}
+		$type_arr = DB::table('type_of_sale')->pluck('type')->toArray();
+
 		$validator_sale = Validator::make($sale, [
 			'type' => [
 				'required',
@@ -477,12 +474,14 @@ class AdminController extends Controller {
 			return response()->json(['errors' => $validator_sale->errors()->all()], 412);
 		};
 
-		$orig = (array) DB::table('sales')->where('id', $sale['id'])->first();
+		$orig = Sale::findOrFail($sale['id']);
 		$new_data = collect($sale)->diffAssoc($orig);
+		
 		if ($new_data->count() > 0):
-			DB::table('sales')
-				->where('id', $sale['id'])
-				->update($new_data->toArray());
+			foreach ($new_data as $key => $value) {
+				$orig->$key = $value;
+			}
+			$orig->save();
 		endif;
 
 		// Attach sale_users
@@ -524,7 +523,6 @@ class AdminController extends Controller {
 			}
 
 			Sale::find($sale['id'])->users()->updateExistingPivot($agent['id'], $agent_sale);
-			//            $sale_validated->users()->updateExistingPivot($agent['id'], $agent_sale);
 		}
 
 		return response()->json(['success' => "Success"], 201);
