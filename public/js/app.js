@@ -4702,8 +4702,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      production_year: "2021",
-      current_year: new Date().getFullYear(),
+      production_year: new Date().getFullYear().toString(),
       all_dates: []
     };
   },
@@ -48154,8 +48153,8 @@ var render = function() {
           ]
         }
       },
-      _vm._l(_vm.all_dates, function(date) {
-        return _c("option", { domProps: { value: date } }, [
+      _vm._l(_vm.all_dates, function(date, index) {
+        return _c("option", { key: index, domProps: { value: date } }, [
           _vm._v(_vm._s(date))
         ])
       }),
