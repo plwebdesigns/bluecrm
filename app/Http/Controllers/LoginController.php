@@ -10,28 +10,28 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller {
-	/**
-	 * Handle an authentication attempt.
-	 *
-	 * @param Request $request
-	 *
-	 * @return RedirectResponse
+    /**
+     * Handle an authentication attempt.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
      */
-	public function authenticate(Request $request)
+	public function authenticate(Request $request): RedirectResponse
     {
 		$credentials = $request->only('email', 'password');
 
 		if (Auth::attempt($credentials)) {
 			$user = Auth::user();
-			$token = $user->api_token;
+            $token = $user->api_token;
 
 			// Authentication passed...
-            return redirect()->intended()->withCookie(cookie('token', $token, null, null, null, null, false));
-//			return redirect('/')->withCookie(cookie('token', $token, null, null, null, null, false));
+            return Redirect::intended()->withCookie(cookie('token', $token, null, null, null, null, false));
 		} else {
-			return redirect('/login');
+			return response()->redirectToRoute('login', ['error' => 'Password or username not correct']);
 		}
 	}
 }

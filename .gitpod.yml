@@ -10,5 +10,8 @@ ports:
 tasks:
   - init: echo 'init script' # runs during prebuild
     command: echo 'start script'
+  - init: cp .env.example .env
+  - init: composer install
+  - init: npm install
   - name: serve
     command: php artisan serve --host=0.0.0.0
