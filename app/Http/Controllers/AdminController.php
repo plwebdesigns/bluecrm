@@ -477,7 +477,7 @@ class AdminController extends Controller {
 
 		$orig = Sale::findOrFail($sale['id']);
 		$new_data = collect($sale)->diffAssoc($orig);
-
+    
 		if ($new_data->count() > 0):
 			foreach ($new_data as $key => $value) {
 				$orig->$key = $value;

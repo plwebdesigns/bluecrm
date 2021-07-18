@@ -9,7 +9,7 @@
       v-model="production_year"
       v-on:change="$emit('production_year', production_year)"
     >
-        <option v-for="date in all_dates" :value="date">{{date}}</option>
+        <option v-for="(date, index) in all_dates" :value="date" :key="index">{{date}}</option>
     </select>
   </div>
 </template>
@@ -21,9 +21,8 @@ export default {
     },
     data() {
     return {
-      production_year: "2021",
-      current_year: new Date().getFullYear(),
-        all_dates: []
+      production_year: new Date().getFullYear().toString(),
+      all_dates: []
     };
   },
     methods:{
