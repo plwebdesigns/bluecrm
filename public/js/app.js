@@ -5736,6 +5736,91 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "ChangePasswordForAgent",
+  data: function data() {
+    return {
+      email: '',
+      password: '',
+      message: '',
+      errors: ''
+    };
+  },
+  methods: {
+    changePassword: function changePassword() {
+      var _this = this;
+
+      var el = document.getElementById("subBtn");
+      el.setAttribute('disabled', '');
+      var spinner = document.getElementById("spinner");
+      spinner.removeAttribute('hidden');
+      var token = this.getCookie("token");
+      this.errors = '';
+      this.message = '';
+      axios({
+        method: 'post',
+        url: 'api/admin/changeAgentPassword',
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + token
+        },
+        data: {
+          email: this.email,
+          password: this.password
+        }
+      }).then(function (resp) {
+        if (resp.data.errors) {
+          _this.errors = resp.data.errors;
+        } else {
+          _this.message = resp.data.message;
+        }
+
+        spinner.setAttribute('hidden', '');
+        el.removeAttribute('disabled');
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/DashComponent.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/DashComponent.vue?vue&type=script&lang=js& ***!
@@ -7636,7 +7721,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _OptionsComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./OptionsComponent */ "./resources/js/components/admin/OptionsComponent.vue");
 /* harmony import */ var _AgentControlComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AgentControlComponent */ "./resources/js/components/admin/AgentControlComponent.vue");
 /* harmony import */ var _MembershipComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MembershipComponent */ "./resources/js/components/admin/MembershipComponent.vue");
-/* harmony import */ var vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuejs-loading-plugin */ "./node_modules/vuejs-loading-plugin/index.js");
+/* harmony import */ var _ChangePasswordForAgent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ChangePasswordForAgent */ "./resources/js/components/admin/ChangePasswordForAgent.vue");
+/* harmony import */ var vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuejs-loading-plugin */ "./node_modules/vuejs-loading-plugin/index.js");
 //
 //
 //
@@ -7660,12 +7746,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-Vue.use(vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
+
+Vue.use(vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     TabOptions: _OptionsComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
     TabAgentRoster: _AgentControlComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
-    TabMembershipDues: _MembershipComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
+    TabMembershipDues: _MembershipComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    TabChangePasswordForAgent: _ChangePasswordForAgent__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   mounted: function mounted() {
     this.token = this.getCookie('token');
@@ -7673,13 +7761,13 @@ Vue.use(vuejs_loading_plugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
   data: function data() {
     return {
       currentTab: "Quarterly",
-      tabs: ["Quarterly", "Agent Production", "All Sales", "Leaderboard", "Reporting", "Agent Roster", "Options", "Add Agent"],
+      tabs: ["Quarterly", "Agent Production", "All Sales", "Leaderboard", "Reporting", "Agent Roster", "Options", "Add Agent", "Change Password For Agent"],
       token: ''
     };
   },
   computed: {
     currentTabComponent: function currentTabComponent() {
-      return "tab-" + this.currentTab.replace(" ", "-").toLocaleLowerCase();
+      return "tab-" + this.currentTab.replace(/\s/g, "-").toLocaleLowerCase();
     }
   }
 });
@@ -12203,6 +12291,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, "\ninput[data-v-127b1cea] {\n    height: 25px;\n}\nselect[data-v-127b1cea] {\n    font-size: 11px;\n}\nbutton[data-v-127b1cea]{\n    height: 25px;\n    font-size: 9px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card[data-v-05622872] {\n    width: 25rem;\n    margin: 0 auto;\n}\n", ""]);
 
 // exports
 
@@ -43575,6 +43682,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/MembershipComponent.vue?vue&type=style&index=0&id=3a1578a8&scoped=true&lang=css&":
 /*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/MembershipComponent.vue?vue&type=style&index=0&id=3a1578a8&scoped=true&lang=css& ***!
@@ -50029,6 +50166,140 @@ var staticRenderFns = [
     )
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mt-5" }, [
+    _c("div", { staticClass: "card" }, [
+      _c(
+        "form",
+        { staticClass: "card-body" },
+        [
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Email:")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.email,
+                  expression: "email"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "email", placeholder: "Email" },
+              domProps: { value: _vm.email },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.email = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("small", { staticClass: "form-text text-muted" }, [
+              _vm._v("Enter email for Agent whose password you need to change")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", [_vm._v("Password:")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.password,
+                  expression: "password"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "password", placeholder: "New Password" },
+              domProps: { value: _vm.password },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.password = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("span", {
+              staticClass: "spinner-border spinner-border-sm",
+              attrs: { id: "spinner", role: "status", hidden: "" }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-sm btn-primary",
+                attrs: { id: "subBtn", type: "button" },
+                on: { click: _vm.changePassword }
+              },
+              [_vm._v("Submit")]
+            )
+          ]),
+          _vm._v(" "),
+          _vm.message === "Successfully changed"
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-success",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.message) +
+                      "!!\n            "
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.errors, function(e) {
+            return _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              _vm._l(e, function(x) {
+                return _c("div", [_vm._v(_vm._s(x))])
+              }),
+              0
+            )
+          })
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -70134,6 +70405,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgentControlComponent_vue_vue_type_template_id_127b1cea_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AgentControlComponent_vue_vue_type_template_id_127b1cea_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/ChangePasswordForAgent.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/admin/ChangePasswordForAgent.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ChangePasswordForAgent_vue_vue_type_template_id_05622872_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true& */ "./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true&");
+/* harmony import */ var _ChangePasswordForAgent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ChangePasswordForAgent.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _ChangePasswordForAgent_vue_vue_type_style_index_0_id_05622872_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css& */ "./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _ChangePasswordForAgent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ChangePasswordForAgent_vue_vue_type_template_id_05622872_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ChangePasswordForAgent_vue_vue_type_template_id_05622872_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "05622872",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/admin/ChangePasswordForAgent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePasswordForAgent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css&":
+/*!***************************************************************************************************************************!*\
+  !*** ./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_style_index_0_id_05622872_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=style&index=0&id=05622872&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_style_index_0_id_05622872_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_style_index_0_id_05622872_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_style_index_0_id_05622872_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_style_index_0_id_05622872_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true& ***!
+  \*************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_template_id_05622872_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/admin/ChangePasswordForAgent.vue?vue&type=template&id=05622872&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_template_id_05622872_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ChangePasswordForAgent_vue_vue_type_template_id_05622872_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

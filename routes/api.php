@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,8 @@ Route::middleware('auth:api')->get('quarter-breakdown', 'SaleController@quarterB
 Route::middleware('auth:api')->post('sales', 'AdminController@searchSales');
 Route::middleware('auth:api')->post('search_production', 'SaleController@searchProduction');
 
-
+// AGENT CONTROLLER
+Route::middleware('auth:api')->get('agents', 'AgentController@listAgents');
 
 // REPORTING CONTROL
 Route::middleware('auth:api')->post('commission', 'ReportController@getSaleUser');
@@ -41,6 +43,7 @@ Route::middleware('auth:api')->get('agent_control', 'AdminController@getAgents')
 Route::middleware('auth:api')->post('update_agent', 'AdminController@updateAgent');
 Route::middleware('auth:api')->get('membership_details', 'AdminController@membershipDetails');
 Route::middleware('auth:api')->post('membership_details', 'AdminController@membershipUpdate');
+Route::middleware('auth:api')->post('admin/changeAgentPassword', 'AdminController@updateUserPassword');
 // LOGIN CONTROL
 Route::post('login', 'LoginController@authenticate');
 Route::get('logout', 'LogoutController@logout');
