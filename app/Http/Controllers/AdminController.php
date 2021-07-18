@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use NumberFormatter;
@@ -326,9 +327,9 @@ class AdminController extends Controller {
 
             return response()->json(
 				[
-					'sales' => $sales, 
-					'req' => $user, 
-					'total_sale_price' => $total_sale_price, 
+					'sales' => $sales,
+					'req' => $user,
+					'total_sale_price' => $total_sale_price,
 					'total_commission' => $total_commission
 				]
 			);
@@ -476,7 +477,7 @@ class AdminController extends Controller {
 
 		$orig = Sale::findOrFail($sale['id']);
 		$new_data = collect($sale)->diffAssoc($orig);
-		
+    
 		if ($new_data->count() > 0):
 			foreach ($new_data as $key => $value) {
 				$orig->$key = $value;
@@ -583,7 +584,7 @@ class AdminController extends Controller {
 		foreach ($users as $user) {
 			$sales = $user->sales;
 			$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
-			
+
 			//Initialize Variables
 			$buyers = 0;
 			$sellers = 0;
@@ -648,6 +649,43 @@ class AdminController extends Controller {
 
 		return response()->json(['agents' => $agents]);
 	}
+
+    /***
+     * @param Request $request
+     * @return JsonResponse
+     *
+     *
+     * Allows admin user to change password for any agent
+     */
+    public function updateUserPassword(Request $request): JsonResponse
+    {
+        if ($request->user()->isAdmin) {
+            $data = $request->input();
+            $user = User::where('email', $data['email'])->first();
+
+            $validator = Validator::make($data, [
+                'email' => 'required|email',
+                'password' => 'required|min:8'
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                $errors = $errors->toArray();
+                return response()->json(['errors' => $errors]);
+            }
+
+            $user->password = Hash::make($data['password']);
+            try {
+                $user->save();
+            }
+            catch (\Exception $exception) {
+                return response()->json(['errors' => ['SaveError' => [0 => $exception->getMessage()]]]);
+            }
+
+            $data['message'] = 'Successfully changed';
+            return response()->json(['message' => $data['message']]);
+        }
+    }
 
 	/*** Update an agent's info on Agent Control Tab
 		     * @param Request $request

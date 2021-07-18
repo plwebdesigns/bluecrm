@@ -21,6 +21,7 @@
 import TabOptions from "./OptionsComponent";
 import TabAgentRoster from "./AgentControlComponent";
 import TabMembershipDues from "./MembershipComponent";
+import TabChangePasswordForAgent from "./ChangePasswordForAgent";
 
 import VueLoading from "vuejs-loading-plugin";
 
@@ -30,7 +31,8 @@ export default {
   components: {
     TabOptions,
       TabAgentRoster,
-      TabMembershipDues
+      TabMembershipDues,
+      TabChangePasswordForAgent
   },
   mounted: function () {
     this.token = this.getCookie('token');
@@ -46,14 +48,15 @@ export default {
         "Reporting",
         "Agent Roster",
         "Options",
-        "Add Agent"
+        "Add Agent",
+        "Change Password For Agent"
       ],
       token: ''
     };
   },
   computed: {
     currentTabComponent: function() {
-      return "tab-" + this.currentTab.replace(" ", "-").toLocaleLowerCase();
+      return "tab-" + this.currentTab.replace(/\s/g, "-").toLocaleLowerCase();
     }
   }
 };
