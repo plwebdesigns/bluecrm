@@ -692,7 +692,7 @@ class AdminController extends Controller {
 		     * @return JsonResponse
 	*/
 	public function updateAgent(Request $request) {
-		$agent = $request->input('agent');
+		$agent = collect($request->input('agent'));
 		$orig_agent = User::find($agent['id']);
 		$employee_titles = DB::table('employee_titles')->get('title');
 		$employee_titles->transform(function ($item) {
@@ -701,7 +701,7 @@ class AdminController extends Controller {
 
 		$data = [];
 		$rules = [];
-
+		dd($orig_agent);
 		if ($agent['agent_name'] !== $orig_agent->agent_name):
 			$data['agent_name'] = $agent['agent_name'];
 			$rules['agent_name'] = 'string|max:255|unique:users';

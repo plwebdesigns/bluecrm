@@ -49800,7 +49800,7 @@ var render = function() {
           _c(
             "tbody",
             _vm._l(_vm.formattedAgents, function(agent, index) {
-              return _c("tr", [
+              return _c("tr", { key: index }, [
                 _c("td", [
                   _c("input", {
                     staticClass: "form-check-input",
@@ -49888,8 +49888,10 @@ var render = function() {
                         _vm._v(_vm._s(agent.title))
                       ]),
                       _vm._v(" "),
-                      _vm._l(_vm.titles, function(item) {
-                        return _c("option", [_vm._v(_vm._s(item.title))])
+                      _vm._l(_vm.titles, function(item, index) {
+                        return _c("option", { key: index }, [
+                          _vm._v(_vm._s(item.title))
+                        ])
                       })
                     ],
                     2
@@ -50103,8 +50105,8 @@ var render = function() {
       _c("div", { staticClass: "col text-danger mt-5" }, [
         _c(
           "ul",
-          _vm._l(_vm.errors, function(error) {
-            return _c("li", [_vm._v(_vm._s(error))])
+          _vm._l(_vm.errors, function(error, index) {
+            return _c("li", { key: index }, [_vm._v(_vm._s(error))])
           }),
           0
         )

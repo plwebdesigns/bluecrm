@@ -19,7 +19,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(agent, index) in formattedAgents">
+                    <tr v-for="(agent, index) in formattedAgents" :key="index">
                         <td>
                             <input
                                 class="form-check-input"
@@ -41,7 +41,7 @@
                                 :id="'title-' + index"
                                 disabled>
                                 <option selected>{{agent.title}}</option>
-                                <option v-for="item in titles">{{item.title}}</option>
+                                <option v-for="(item, index) in titles" :key="index">{{item.title}}</option>
                             </select>
                         </td>
                         <td>
@@ -118,7 +118,7 @@
             </div>
             <div class="col text-danger mt-5">
                 <ul>
-                    <li v-for="error in errors">{{error}}</li>
+                    <li v-for="(error, index) in errors" :key="index">{{error}}</li>
                 </ul>
             </div>
         </div>
