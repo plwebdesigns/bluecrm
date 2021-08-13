@@ -5580,13 +5580,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AgentControlComponent",
   data: function data() {
     return {
       agents: {},
       titles: [],
-      errors: []
+      errors: [],
+      message: []
     };
   },
   mounted: function mounted() {
@@ -5657,6 +5661,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).done(function (resp) {
         alert(resp.msg);
+        _this3.message[i] = resp.msg;
         $('button#savebtn-' + i).attr('hidden', false);
         $('button#deletebtn-' + i).attr('hidden', false);
         $('span#spinner-' + i).attr('hidden', true);
@@ -50092,6 +50097,17 @@ var render = function() {
                       }
                     },
                     [_vm._v("Delete")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "aleart alert-success",
+                      attrs: { id: this.message[index] }
+                    },
+                    [_vm._v(_vm._s(_vm.message[index]))]
                   )
                 ])
               ])

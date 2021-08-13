@@ -704,8 +704,11 @@ class AdminController extends Controller {
 		}
 
 		$diff = collect($agent)->diff($orig_agent);
+		foreach ($diff as $key => $value) {
+			$orig_agent->$key = $value;
+		}
 
-		return response()->json(['diff' => $diff]);
+		return response()->json(['msg' => 'Successfully Saved!']);
 	}
 
 	public function membershipDetails() {

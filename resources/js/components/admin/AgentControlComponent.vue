@@ -112,6 +112,9 @@
                                 @click="deleteAgent(index)"
                                 hidden>Delete</button>
                         </td>
+                        <td>
+                            <div :id="this.message[index]" class="aleart alert-success">{{ message[index] }}</div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -132,7 +135,8 @@
             return {
                 agents: {},
                 titles: [],
-                errors:[]
+                errors:[],
+                message: []
             }
         },
         mounted() {
@@ -200,6 +204,7 @@
                     }
                 }).done(resp => {
                     alert(resp.msg);
+                    this.message[i] = resp.msg;
                     $('button#savebtn-' + i).attr('hidden', false);
                     $('button#deletebtn-' + i).attr('hidden', false);
                     $('span#spinner-' + i).attr('hidden', true);
