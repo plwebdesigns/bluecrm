@@ -3,6 +3,12 @@
         <div class="row">
             <div class="col-9">
                 <h1 class="font-fredricka text-center">Current Agents</h1>
+                <div v-if="message !== ''" class="col-3 alert alert-success">
+                    {{ message }}
+                    <button class="btn btn-sm btn-outline-dark ml-1" type="button" @click="message = ''">
+                        Close
+                    </button>
+                </div>
                 <table class="table table-sm table-borderless">
                     <thead>
                     <tr class="bg-blue-realty text-white">
@@ -112,17 +118,9 @@
                                 @click="deleteAgent(index)"
                                 hidden>Delete</button>
                         </td>
-                        <td>
-                            <div :id="this.message[index]" class="aleart alert-success">{{ message[index] }}</div>
-                        </td>
                     </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="col text-danger mt-5">
-                <ul>
-                    <li v-for="(error, index) in errors" :key="index">{{error}}</li>
-                </ul>
             </div>
         </div>
     </div>
@@ -135,8 +133,7 @@
             return {
                 agents: {},
                 titles: [],
-                errors:[],
-                message: []
+                message: ''
             }
         },
         mounted() {
@@ -191,7 +188,7 @@
                 $('span#spinner-' + i).attr('hidden', false);
                 let agent = this.agents[i];
                 let token = this.getCookie('token');
-                this.errors = [];
+                this.message = '';
 
                 $.ajax({
                     type: 'post',
@@ -203,8 +200,7 @@
                         agent: agent
                     }
                 }).done(resp => {
-                    alert(resp.msg);
-                    this.message[i] = resp.msg;
+                    this.message = resp.msg;
                     $('button#savebtn-' + i).attr('hidden', false);
                     $('button#deletebtn-' + i).attr('hidden', false);
                     $('span#spinner-' + i).attr('hidden', true);

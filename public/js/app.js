@@ -5581,16 +5581,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AgentControlComponent",
   data: function data() {
     return {
       agents: {},
       titles: [],
-      errors: [],
-      message: []
+      message: ''
     };
   },
   mounted: function mounted() {
@@ -5649,7 +5646,7 @@ __webpack_require__.r(__webpack_exports__);
       $('span#spinner-' + i).attr('hidden', false);
       var agent = this.agents[i];
       var token = this.getCookie('token');
-      this.errors = [];
+      this.message = '';
       $.ajax({
         type: 'post',
         url: '/api/update_agent',
@@ -5660,8 +5657,7 @@ __webpack_require__.r(__webpack_exports__);
           agent: agent
         }
       }).done(function (resp) {
-        alert(resp.msg);
-        _this3.message[i] = resp.msg;
+        _this3.message = resp.msg;
         $('button#savebtn-' + i).attr('hidden', false);
         $('button#deletebtn-' + i).attr('hidden', false);
         $('span#spinner-' + i).attr('hidden', true);
@@ -49798,6 +49794,29 @@ var render = function() {
           _vm._v("Current Agents")
         ]),
         _vm._v(" "),
+        _vm.message !== ""
+          ? _c("div", { staticClass: "col-3 alert alert-success" }, [
+              _vm._v(
+                "\n                " +
+                  _vm._s(_vm.message) +
+                  "\n                "
+              ),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-outline-dark ml-1",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.message = ""
+                    }
+                  }
+                },
+                [_vm._v("\n                    Close\n                ")]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _c("table", { staticClass: "table table-sm table-borderless" }, [
           _vm._m(0),
           _vm._v(" "),
@@ -50098,33 +50117,12 @@ var render = function() {
                     },
                     [_vm._v("Delete")]
                   )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "div",
-                    {
-                      staticClass: "aleart alert-success",
-                      attrs: { id: this.message[index] }
-                    },
-                    [_vm._v(_vm._s(_vm.message[index]))]
-                  )
                 ])
               ])
             }),
             0
           )
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col text-danger mt-5" }, [
-        _c(
-          "ul",
-          _vm._l(_vm.errors, function(error, index) {
-            return _c("li", { key: index }, [_vm._v(_vm._s(error))])
-          }),
-          0
-        )
       ])
     ])
   ])

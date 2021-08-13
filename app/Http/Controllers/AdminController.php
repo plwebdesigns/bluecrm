@@ -704,9 +704,13 @@ class AdminController extends Controller {
 		}
 
 		$diff = collect($agent)->diff($orig_agent);
+		if (empty($diff)) {
+			return response()->json(['msg' => 'No changes were made']);
+		}
 		foreach ($diff as $key => $value) {
 			$orig_agent->$key = $value;
 		}
+		$orig_agent->save();
 
 		return response()->json(['msg' => 'Successfully Saved!']);
 	}
