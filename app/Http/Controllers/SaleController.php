@@ -26,6 +26,7 @@ class SaleController extends Controller
     {
         // Quarter 1 sale_credit sum per user
         $users = User::has('sales')->get();
+        $users = $users->whereNotIn('title', 'Inactive');
         $quarter1Ten = [];
         $quarter2Ten = [];
         $quarter3Ten = [];
