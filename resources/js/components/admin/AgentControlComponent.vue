@@ -9,6 +9,12 @@
                         Close
                     </button>
                 </div>
+                <div v-if="error !== ''" class="col-3 alert alert-danger">
+                    {{ error }}
+                    <button class="btn btn-sm btn-outline-danger ml-1" type="button" @click="error = ''">
+                        Close
+                    </button>
+                </div>
                 <table class="table table-sm table-borderless">
                     <thead>
                     <tr class="bg-blue-realty text-white">
@@ -133,7 +139,8 @@
             return {
                 agents: {},
                 titles: [],
-                message: ''
+                message: '',
+                error: ''
             }
         },
         mounted() {
@@ -189,6 +196,7 @@
                 let agent = this.agents[i];
                 let token = this.getCookie('token');
                 this.message = '';
+                this.error = '';
 
                 $.ajax({
                     type: 'post',
@@ -200,7 +208,12 @@
                         agent: agent
                     }
                 }).done(resp => {
-                    this.message = resp.msg;
+                    if (typeof resp.msg !== 'undefined') {
+                        this.message = resp.msg;
+                    }
+                    if (typeof resp.err !== 'undefined') {
+                        this.error = resp.err;
+                    }
                     $('button#savebtn-' + i).attr('hidden', false);
                     $('button#deletebtn-' + i).attr('hidden', false);
                     $('span#spinner-' + i).attr('hidden', true);

@@ -5581,13 +5581,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AgentControlComponent",
   data: function data() {
     return {
       agents: {},
       titles: [],
-      message: ''
+      message: '',
+      error: ''
     };
   },
   mounted: function mounted() {
@@ -5647,6 +5654,7 @@ __webpack_require__.r(__webpack_exports__);
       var agent = this.agents[i];
       var token = this.getCookie('token');
       this.message = '';
+      this.error = '';
       $.ajax({
         type: 'post',
         url: '/api/update_agent',
@@ -5657,7 +5665,14 @@ __webpack_require__.r(__webpack_exports__);
           agent: agent
         }
       }).done(function (resp) {
-        _this3.message = resp.msg;
+        if (typeof resp.msg !== 'undefined') {
+          _this3.message = resp.msg;
+        }
+
+        if (typeof resp.err !== 'undefined') {
+          _this3.error = resp.err;
+        }
+
         $('button#savebtn-' + i).attr('hidden', false);
         $('button#deletebtn-' + i).attr('hidden', false);
         $('span#spinner-' + i).attr('hidden', true);
@@ -49809,6 +49824,27 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.message = ""
+                    }
+                  }
+                },
+                [_vm._v("\n                    Close\n                ")]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.error !== ""
+          ? _c("div", { staticClass: "col-3 alert alert-danger" }, [
+              _vm._v(
+                "\n                " + _vm._s(_vm.error) + "\n                "
+              ),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-outline-danger ml-1",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.error = ""
                     }
                   }
                 },

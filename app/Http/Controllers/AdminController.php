@@ -696,11 +696,18 @@ class AdminController extends Controller {
 		$orig_agent = User::find($agent['id']);
 
 		if (isset($agent['current_split'])) {
-			$agent['current_split'] = ($agent['current_split'] > 1) ? 
-			$agent['current_split']/100 : $agent['current_split'];
+			$split = $agent['current_split'];
+			if ($split > 100 || $split < 0) {
+				return response()->json(['err' => 'Split should be 0-100']);
+			}
+			$split = ($split > 1) ? $split/100 : $split;
 		}
 		if (isset($agent['membership_fee'])) {
-			$agent['membership_fee'] = floatval($agent['membership_fee']);
+			try {
+				$agent['membership_fee'] = floatval($agent['membership_fee']);
+			} catch (\Exception $e) {
+				return response()->json(['err' => 'Could not parse membership']);
+			}
 		}
 
 		$diff = collect($agent)->diff($orig_agent);
