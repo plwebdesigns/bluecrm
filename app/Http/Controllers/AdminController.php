@@ -700,14 +700,13 @@ class AdminController extends Controller {
 			if ($split > 100 || $split < 0) {
 				return response()->json(['err' => 'Split should be 0-100']);
 			}
-			$split = ($split > 1) ? $split/100 : $split;
+			$agent['current_split'] = ($split > 1) ? $split/100 : $split;
 		}
-		if (isset($agent['membership_fee'])) {
-			try {
+		if (isset($agent['membership_fee']) && is_numeric($agent['membership_fee'])) {
 				$agent['membership_fee'] = floatval($agent['membership_fee']);
-			} catch (\Exception $e) {
-				return response()->json(['err' => 'Could not parse membership']);
-			}
+		}
+		elseif (isset($agent['membership_fee'])) {
+			return response()->json(['err' => 'Membership must be numeric']);
 		}
 
 		$diff = collect($agent)->diff($orig_agent);
