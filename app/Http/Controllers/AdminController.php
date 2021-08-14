@@ -694,89 +694,31 @@ class AdminController extends Controller {
 	public function updateAgent(Request $request) {
 		$agent = $request->input('agent');
 		$orig_agent = User::find($agent['id']);
-		$employee_titles = DB::table('employee_titles')->get('title');
-		$employee_titles->transform(function ($item) {
-			return $item->title;
-		});
 
-		$data = [];
-		$rules = [];
-
-		if ($agent['agent_name'] !== $orig_agent->agent_name):
-			$data['agent_name'] = $agent['agent_name'];
-			$rules['agent_name'] = 'string|max:255|unique:users';
-		endif;
-		if ($agent['title'] !== $orig_agent->title):
-			$data['title'] = $agent['title'];
-			$rules['title'] = ['string', 'max:255', Rule::in($employee_titles)];
-		endif;
-		if ($agent['email'] !== $orig_agent->email):
-			$data['email'] = $agent['email'];
-			$rules['email'] = 'string|email|max:255|unique:users';
-		endif;
-		if (
-			$agent['phone'] !== '5555555555' and
-			$agent['phone'] !== '' and
-			$agent['phone'] !== $orig_agent->phone
-		):
-
-			if (strlen($agent['phone']) > 10):
-				$data['phone'] = str_replace('-', '', $agent['phone']);
-				$rules['phone'] = 'string|size:10';
-			elseif (strlen($agent['phone']) === 10):
-				$data['phone'] = $agent['phone'];
-				$rules['phone'] = 'string|size:10';
-			endif;
-		endif;
-		if (floatval($agent['current_split']) !== $orig_agent->current_split):
-			$data['current_split'] =
-			($agent['current_split'] <= 1) ? $agent['current_split'] :
-			floatval($agent['current_split'] / 100);
-			$rules['current_split'] = 'max:1|numeric';
-		endif;
-		if (floatval($agent['membership_fee']) !== $orig_agent->membership_fee):
-			$data['membership_fee'] = floatval($agent['membership_fee']);
-			$rules['membership_fee'] = 'numeric';
-		endif;
-
-		$messages = [
-			'phone.size' => 'Phone format - 555-555-5555',
-			'email.unique' => 'That email is already in use',
-			'title.in' => 'Please select a title from the dropdown',
-		];
-		$validator = Validator::make($data, $rules, $messages);
-		if ($validator->fails()):
-			return response()->json(['errors' => $validator->errors()->all()], 412);
-		endif;
-		// Make final adjustments to data before
-		// entered into the DB
-		if ($agent['phone'] !== null and $agent['phone'] !== ''):
-			$data['phone'] = substr($agent['phone'], 0, 3) . '-' .
-			substr($agent['phone'], 3, 3) . '-' .
-			substr($agent['phone'], 6);
-		else:
-			$data['phone'] = $agent['phone'];
-		endif;
-		if (
-			$agent['dob'] !== $orig_agent->dob and
-			$agent['dob'] !== null and
-			$agent['dob'] !== '' and
-			$agent['dob'] !== 'N/A'
-		):
-			$agent['dob'] = str_replace('-', '/', $agent['dob']);
-			$data['dob'] = \date('m-d', strtotime($agent['dob']));
-		else:
-			$data['dob'] = $agent['dob'];
-		endif;
-
-		try {
-			DB::table('users')
-				->where('id', $agent['id'])
-				->update($data);
-		} catch (\Exception $exception) {
-			return response()->json(['msg' => 'There was an error']);
+		if (isset($agent['current_split'])) {
+			$split = $agent['current_split'];
+			if ($split > 100 || $split < 0) {
+				return response()->json(['err' => 'Split should be 0-100']);
+			}
+			$agent['current_split'] = ($split > 1) ? $split/100 : $split;
 		}
-		return response()->json(['msg' => 'Successfully Updated!']);
+		if (isset($agent['membership_fee']) && is_numeric($agent['membership_fee'])) {
+				$agent['membership_fee'] = floatval($agent['membership_fee']);
+		}
+		elseif (isset($agent['membership_fee'])) {
+			return response()->json(['err' => 'Membership must be numeric']);
+		}
+
+		$diff = collect($agent)->diff($orig_agent);
+		if (empty($diff)) {
+			return response()->json(['msg' => 'No changes were made']);
+		}
+		foreach ($diff as $key => $value) {
+			$orig_agent->$key = $value;
+		}
+		$orig_agent->save();
+
+		return response()->json(['msg' => 'Successfully Saved!']);
 	}
 
 	public function membershipDetails() {

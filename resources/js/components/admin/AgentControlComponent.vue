@@ -3,6 +3,18 @@
         <div class="row">
             <div class="col-9">
                 <h1 class="font-fredricka text-center">Current Agents</h1>
+                <div v-if="message !== ''" class="col-3 alert alert-success">
+                    {{ message }}
+                    <button class="btn btn-sm btn-outline-dark ml-1" type="button" @click="message = ''">
+                        Close
+                    </button>
+                </div>
+                <div v-if="error !== ''" class="col-3 alert alert-danger">
+                    {{ error }}
+                    <button class="btn btn-sm btn-outline-danger ml-1" type="button" @click="error = ''">
+                        Close
+                    </button>
+                </div>
                 <table class="table table-sm table-borderless">
                     <thead>
                     <tr class="bg-blue-realty text-white">
@@ -19,7 +31,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(agent, index) in formattedAgents">
+                    <tr v-for="(agent, index) in formattedAgents" :key="index">
                         <td>
                             <input
                                 class="form-check-input"
@@ -41,7 +53,7 @@
                                 :id="'title-' + index"
                                 disabled>
                                 <option selected>{{agent.title}}</option>
-                                <option v-for="item in titles">{{item.title}}</option>
+                                <option v-for="(item, index) in titles" :key="index">{{item.title}}</option>
                             </select>
                         </td>
                         <td>
@@ -116,11 +128,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col text-danger mt-5">
-                <ul>
-                    <li v-for="error in errors">{{error}}</li>
-                </ul>
-            </div>
         </div>
     </div>
 </template>
@@ -132,7 +139,8 @@
             return {
                 agents: {},
                 titles: [],
-                errors:[]
+                message: '',
+                error: ''
             }
         },
         mounted() {
@@ -187,7 +195,8 @@
                 $('span#spinner-' + i).attr('hidden', false);
                 let agent = this.agents[i];
                 let token = this.getCookie('token');
-                this.errors = [];
+                this.message = '';
+                this.error = '';
 
                 $.ajax({
                     type: 'post',
@@ -199,7 +208,12 @@
                         agent: agent
                     }
                 }).done(resp => {
-                    alert(resp.msg);
+                    if (typeof resp.msg !== 'undefined') {
+                        this.message = resp.msg;
+                    }
+                    if (typeof resp.err !== 'undefined') {
+                        this.error = resp.err;
+                    }
                     $('button#savebtn-' + i).attr('hidden', false);
                     $('button#deletebtn-' + i).attr('hidden', false);
                     $('span#spinner-' + i).attr('hidden', true);
