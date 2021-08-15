@@ -25,19 +25,15 @@ class SaleController extends Controller
     public function dash(Request $request)
     {
         $users = User::has('sales')->get();
-        $users = $users->whereNotIn('title', 'Inactive');
+        // Get ignored agents from DB
+        $ignored_agents = DB::table('ignored_agents')->pluck('agent_name')->toArray();
+        $users = $users->whereNotIn('title', 'Inactive')->whereNotIn('agent_name', $ignored_agents);
         $quarter1Ten = [];
         $quarter2Ten = [];
         $quarter3Ten = [];
         $quarter4Ten = [];
         $ytd_sales = [];
         $year = date('Y');
-
-        // Get ignored agents from DB
-        $ignored_agents = DB::table('ignored_agents')->pluck('agent_name')->toArray();
-        $users = $users->filter(function($user) use ($ignored_agents) {
-            return !in_array($user->agent_name, $ignored_agents);
-        });
 
         //Get quarter 1
         foreach ($users as $user) :

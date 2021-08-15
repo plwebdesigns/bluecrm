@@ -98,103 +98,6 @@ class AdminController extends Controller {
 		endif;
 	}
 
-	// LEADERBOARD DATA
-	public function leaderboard(Request $request) {
-		$year = $request->input('production_year');
-
-		// Quarter 1 sale_credit sum per user
-		$users = User::has('sales')->get();
-		$quarter1Ten = [];
-		$quarter2Ten = [];
-		$quarter3Ten = [];
-		$quarter4Ten = [];
-		$ytd_sales = [];
-
-		$ignored_agents = DB::table('ignored_agents')->get('agent_name');
-		$ignored_agents->transform(function ($item) {
-			return $item->agent_name;
-		});
-
-		//Get quarter 1
-		foreach ($users as $user):
-			$sales = $user->sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]);
-			if ($sales->isNotEmpty() && !collect($ignored_agents)->contains($user->agent_name)) {
-				$quarter1Ten[] = [
-					'agent' => $user->agent_name,
-					'total' => collect($sales->all())->sum('pivot.sale_credit'),
-				];
-			}
-		endforeach;
-		//Get quarter 2
-		foreach ($users as $user):
-			$sales = $user->sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]);
-			if ($sales->isNotEmpty() && !collect($ignored_agents)->contains($user->agent_name)) {
-				$quarter2Ten[] = [
-					'agent' => $user->agent_name,
-					'total' => collect($sales->all())->sum('pivot.sale_credit'),
-				];
-			}
-		endforeach;
-
-		//Get quarter 3
-		foreach ($users as $user):
-			$sales = $user->sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"]);
-			if ($sales->isNotEmpty() && !collect($ignored_agents)->contains($user->agent_name)) {
-				$quarter3Ten[] = [
-					'agent' => $user->agent_name,
-					'total' => collect($sales->all())->sum('pivot.sale_credit'),
-				];
-			}
-		endforeach;
-
-		//Get quarter 4
-		foreach ($users as $user):
-			$sales = $user->sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"]);
-			if ($sales->isNotEmpty() && !collect($ignored_agents)->contains($user->agent_name)) {
-				$quarter4Ten[] = [
-					'agent' => $user->agent_name,
-					'total' => collect($sales->all())->sum('pivot.sale_credit'),
-				];
-			}
-		endforeach;
-		foreach ($users as $user):
-			$sales = $user->sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
-			if ($sales->isNotEmpty() && !collect($ignored_agents)->contains($user->agent_name)) {
-				$ytd_sales[] = [
-					'agent' => $user->agent_name,
-					'total' => collect($sales->all())->sum('pivot.sale_credit'),
-				];
-			}
-		endforeach;
-
-		$quarter1Ten = collect($quarter1Ten)->sortByDesc('total');
-		$quarter2Ten = collect($quarter2Ten)->sortByDesc('total');
-		$quarter3Ten = collect($quarter3Ten)->sortByDesc('total');
-		$quarter4Ten = collect($quarter4Ten)->sortByDesc('total');
-		$ytd_sales = collect($ytd_sales)->sortByDesc('total');
-
-		// Calc totals
-		$q1Total = $quarter1Ten->sum('total');
-		$q2Total = $quarter2Ten->sum('total');
-		$q3Total = $quarter3Ten->sum('total');
-		$q4Total = $quarter4Ten->sum('total');
-		$ytdTotal = $ytd_sales->sum('total');
-
-		return response()->json([
-			'quarter1Ten' => $quarter1Ten,
-			'quarter2Ten' => $quarter2Ten,
-			'quarter3Ten' => $quarter3Ten,
-			'quarter4Ten' => $quarter4Ten,
-			'ytd_sales' => $ytd_sales,
-			'req' => $request->user(),
-			'q1Total' => $q1Total,
-			'q2Total' => $q2Total,
-			'q3Total' => $q3Total,
-			'q4Total' => $q4Total,
-			'ytdTotal' => $ytdTotal
-		]);
-	}
-
 	// REPORT FOR A SPECIFIC USER
 	public function getReport(Request $request): JsonResponse
     {
@@ -569,17 +472,18 @@ class AdminController extends Controller {
 		return response()->json(['msg' => 'success']);
 	}
 
-	// PROFIT PER AGENT
+	/* 
+	* Profit Per Agent
+	*
+	*
+	*/
 	public function profit(Request $request): JsonResponse
     {
 		$user = $request->user();
 		$year = $request->input('production_year');
 
-		$ignored_agents = DB::table('ignored_agents')->get('agent_name');
-		$ignored_agents->transform(function ($item) {
-			return $item->agent_name;
-		});
-		$users = User::all()->whereNotIn('agent_name', $ignored_agents);
+		$ignored_agents = DB::table('ignored_agents')->pluck('agent_name')->toArray();
+		$users = User::all()->whereNotIn('agent_name', $ignored_agents)->whereNotIn('agent_name', $ignored_agents);
 
 		foreach ($users as $user) {
 			$sales = $user->sales;
@@ -633,10 +537,7 @@ class AdminController extends Controller {
 	/*** Get all agents for Agent Control */
 	public function getAgents() {
 		$agents = User::all();
-		$ignored_agents = DB::table('ignored_agents')->get('agent_name');
-		$ignored_agents->transform(function ($item) {
-			return $item->agent_name;
-		});
+		$ignored_agents = DB::table('ignored_agents')->pluck('agent_name');
 
 		$agents->each(function ($item) {
 			$item->current_split = floatval($item->current_split) * 100;
@@ -721,42 +622,4 @@ class AdminController extends Controller {
 		return response()->json(['msg' => 'Successfully Saved!']);
 	}
 
-	public function membershipDetails() {
-		$details = DB::table('membership_dues')
-			->get();
-
-		$details->each(function ($item) {
-			$tmp = 0;
-			$num = date('m');
-			$arr = (array) $item;
-			$month = array_splice($arr, 1, $num);
-			foreach ($month as $key => $value) {
-				$tmp = ($value !== 1) ? $tmp + 1 : $tmp + 0;
-			}
-			$fee = DB::table('users')
-				->where('agent_name', $item->agent_name)
-				->first('membership_fee');
-
-			$item->bal = number_format(floatval($fee->membership_fee * $tmp), 2);
-		});
-
-		return response()->json(['agents' => $details]);
-	}
-
-	public function membershipUpdate(Request $request) {
-		$agent_membership = $request->input('agent_membership');
-		foreach ($agent_membership as $key => $value) {
-			if ($value === 'true') {
-				$agent_membership[$key] = '1';
-			} elseif ($value === 'false') {
-				$agent_membership[$key] = '0';
-			}
-		}
-
-		DB::table('membership_dues')
-			->where('agent_name', $agent_membership['agent_name'])
-			->update($agent_membership);
-
-		return response()->json(['msg' => 'Successfully Saved']);
-	}
 }

@@ -30,7 +30,7 @@ Route::middleware('auth:api')->post('commission', 'ReportController@getSaleUser'
 
 // ADMIN SECTION
 Route::middleware('auth:api')->get('admin', 'AdminController@quarterBreakDown');
-Route::middleware('auth:api')->get('leaderboard', 'AdminController@leaderboard');
+Route::middleware('auth:api')->get('leaderboard', 'SaleController@dash');
 Route::post('report', 'AdminController@getReport');
 Route::post('detail', 'AdminController@getSale');
 Route::middleware('auth:api')->get('all-sales', 'AdminController@getAllSales');
