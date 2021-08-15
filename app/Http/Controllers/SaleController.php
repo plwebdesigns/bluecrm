@@ -24,8 +24,8 @@ class SaleController extends Controller
     /**** DASHBOARD DATA ****/
     public function dash(Request $request)
     {
-        // Quarter 1 sale_credit sum per user
         $users = User::has('sales')->get();
+        $users = $users->whereNotIn('title', 'Inactive');
         $quarter1Ten = [];
         $quarter2Ten = [];
         $quarter3Ten = [];
@@ -34,12 +34,15 @@ class SaleController extends Controller
         $year = date('Y');
 
         // Get ignored agents from DB
-        $ignored_agents = DB::table('ignored_agents')->get('agent_name');
+        $ignored_agents = DB::table('ignored_agents')->pluck('agent_name')->toArray();
+        $users = $users->filter(function($user) use ($ignored_agents) {
+            return !in_array($user->agent_name, $ignored_agents);
+        });
 
         //Get quarter 1
         foreach ($users as $user) :
             $sales = $user->sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]);
-            if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
+            if ($sales->isNotEmpty()) {
                 $quarter1Ten[] = [
                     'agent' => $user->agent_name,
                     'total' => collect($sales->all())->sum('pivot.sale_credit'),
@@ -49,7 +52,7 @@ class SaleController extends Controller
         //Get quarter 2
         foreach ($users as $user) :
             $sales = $user->sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]);
-            if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
+            if ($sales->isNotEmpty()) {
                 $quarter2Ten[] = [
                     'agent' => $user->agent_name,
                     'total' => collect($sales->all())->sum('pivot.sale_credit'),
@@ -60,7 +63,7 @@ class SaleController extends Controller
         //Get quarter 3
         foreach ($users as $user) :
             $sales = $user->sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"]);
-            if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
+            if ($sales->isNotEmpty()) {
                 $quarter3Ten[] = [
                     'agent' => $user->agent_name,
                     'total' => collect($sales->all())->sum('pivot.sale_credit'),
@@ -71,7 +74,7 @@ class SaleController extends Controller
         //Get quarter 4
         foreach ($users as $user) :
             $sales = $user->sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"]);
-            if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
+            if ($sales->isNotEmpty()) {
                 $quarter4Ten[] = [
                     'agent' => $user->agent_name,
                     'total' => collect($sales->all())->sum('pivot.sale_credit'),
@@ -81,7 +84,7 @@ class SaleController extends Controller
         foreach ($users as $user) :
             $sales = $user->sales;
             $sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
-            if ($sales->isNotEmpty() && !$ignored_agents->contains($user->agent_name)) {
+            if ($sales->isNotEmpty()) {
                 $ytd_sales[] = [
                     'agent' => $user->agent_name,
                     'total' => collect($sales->all())->sum('pivot.sale_credit'),

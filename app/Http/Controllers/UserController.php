@@ -97,14 +97,12 @@ class UserController extends Controller
 
     // Delete an agent
     public function deleteAgent(Request $request){
-        $agent = User::find($request->id);
+        $agent = User::findOrFail($request->id);
+        $agent->title = 'Inactive';
 
-        try {
-            $agent->delete();
-        } catch (\Exception $exception){
-            return response()->json(['errors' => $exception->getMessage()]);
-        }
-        return response()->json(['msg' => "Successfully deleted"]);
+        $agent->save();
+
+        return response()->json(['msg' => 'Successfully removed agent']);
     }
 
     /*** Allow the user to change their login password
