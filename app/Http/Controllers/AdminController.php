@@ -536,19 +536,26 @@ class AdminController extends Controller {
 
 	/*** Get all agents for Agent Control */
 	public function getAgents() {
-		$agents = User::all();
+		$t_agents = User::all();
 		$ignored_agents = DB::table('ignored_agents')->pluck('agent_name');
 
-		$agents->each(function ($item) {
+		$t_agents->each(function ($item) {
 			$item->current_split = floatval($item->current_split) * 100;
 			$item->membership_fee = number_format(
 				floatval($item->membership_fee),
 				2
 			);
 		});
-		$agents = $agents->whereNotIn('agent_name', $ignored_agents->toArray());
 
-		return response()->json(['agents' => $agents]);
+		$agents = $t_agents
+		->whereNotIn('agent_name', $ignored_agents->toArray())
+		->whereNotIn('title', 'Inactive');
+
+		$inactive_agents = $t_agents
+		->whereNotIn('agent_name', $ignored_agents->toArray())
+		->where('title', 'Inactive');
+
+		return response()->json(['agents' => $agents, 'inactive_agents' => $inactive_agents]);
 	}
 
     /***
@@ -594,7 +601,7 @@ class AdminController extends Controller {
 	*/
 	public function updateAgent(Request $request) {
 		$agent = $request->input('agent');
-		$orig_agent = User::find($agent['id']);
+		$orig_agent = User::findOrFail($agent['id']);
 
 		if (isset($agent['current_split'])) {
 			$split = $agent['current_split'];

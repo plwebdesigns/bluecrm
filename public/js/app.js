@@ -5587,14 +5587,212 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AgentControlComponent",
   data: function data() {
     return {
       agents: {},
+      inactive_agents: {},
       titles: [],
-      message: '',
-      error: ''
+      message: "",
+      error: ""
     };
   },
   mounted: function mounted() {
@@ -5605,12 +5803,12 @@ __webpack_require__.r(__webpack_exports__);
     getAgentTitles: function getAgentTitles() {
       var _this = this;
 
-      var token = this.getCookie('token');
+      var token = this.getCookie("token");
       $.ajax({
-        type: 'get',
-        url: '/api/agent_titles',
+        type: "get",
+        url: "/api/agent_titles",
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: "Bearer " + token
         }
       }).done(function (resp) {
         _this.titles = resp.agent_titles;
@@ -5619,91 +5817,93 @@ __webpack_require__.r(__webpack_exports__);
     getAgents: function getAgents() {
       var _this2 = this;
 
-      var token = this.getCookie('token');
+      var token = this.getCookie("token");
       $.ajax({
-        type: 'GET',
-        url: '/api/agent_control',
+        type: "GET",
+        url: "/api/agent_control",
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: "Bearer " + token
         }
       }).done(function (resp) {
         _this2.agents = resp.agents;
+        _this2.inactive_agents = resp.inactive_agents;
+        _this2.number_pages = _this2.agents.length;
       });
     },
     radioSelected: function radioSelected(event) {
-      $('input[type!=radio]').attr('readonly', true);
-      $('select').attr('disabled', true);
-      $('button').attr('hidden', true);
+      $("input[type!=radio]").attr("readonly", true);
+      $("select").attr("disabled", true);
+      $("button").attr("hidden", true);
       var index = event.target.id.substr(4);
-      $('input#agent_name-' + index).attr('readonly', false);
-      $('input#phone-' + index).attr('readonly', false);
-      $('input#email-' + index).attr('readonly', false);
-      $('select#title-' + index).attr('disabled', false);
-      $('input#current_split-' + index).attr('readonly', false);
-      $('input#membership-' + index).attr('readonly', false);
-      $('input#dob-' + index).attr('readonly', false);
-      $('button#savebtn-' + index).attr('hidden', false);
-      $('button#deletebtn-' + index).attr('hidden', false);
+      $("input#agent_name-" + index).attr("readonly", false);
+      $("input#phone-" + index).attr("readonly", false);
+      $("input#email-" + index).attr("readonly", false);
+      $("select#title-" + index).attr("disabled", false);
+      $("input#current_split-" + index).attr("readonly", false);
+      $("input#membership-" + index).attr("readonly", false);
+      $("input#dob-" + index).attr("readonly", false);
+      $("button#savebtn-" + index).attr("hidden", false);
+      $("button#deletebtn-" + index).attr("hidden", false);
     },
-    save: function save(i) {
+    save: function save(cur_agent, i) {
       var _this3 = this;
 
-      $('button#savebtn-' + i).attr('hidden', true);
-      $('button#deletebtn-' + i).attr('hidden', true);
-      $('span#spinner-' + i).attr('hidden', false);
-      var agent = this.agents[i];
-      var token = this.getCookie('token');
-      this.message = '';
-      this.error = '';
+      $("button#savebtn-" + i).attr("hidden", true);
+      $("button#deletebtn-" + i).attr("hidden", true);
+      $("span#spinner-" + i).attr("hidden", false);
+      var agent = cur_agent;
+      var token = this.getCookie("token");
+      this.message = "";
+      this.error = "";
       $.ajax({
-        type: 'post',
-        url: '/api/update_agent',
+        type: "post",
+        url: "/api/update_agent",
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: "Bearer " + token
         },
         data: {
           agent: agent
         }
       }).done(function (resp) {
-        if (typeof resp.msg !== 'undefined') {
+        if (typeof resp.msg !== "undefined") {
           _this3.message = resp.msg;
         }
 
-        if (typeof resp.err !== 'undefined') {
+        if (typeof resp.err !== "undefined") {
           _this3.error = resp.err;
         }
 
-        $('button#savebtn-' + i).attr('hidden', false);
-        $('button#deletebtn-' + i).attr('hidden', false);
-        $('span#spinner-' + i).attr('hidden', true);
+        $("button#savebtn-" + i).attr("hidden", false);
+        $("button#deletebtn-" + i).attr("hidden", false);
+        $("span#spinner-" + i).attr("hidden", true);
       }).fail(function (err) {
         _this3.errors = err.responseJSON.errors;
-        $('button#savebtn-' + i).attr('hidden', false);
-        $('button#deletebtn-' + i).attr('hidden', false);
-        $('span#spinner-' + i).attr('hidden', true);
+        $("button#savebtn-" + i).attr("hidden", false);
+        $("button#deletebtn-" + i).attr("hidden", false);
+        $("span#spinner-" + i).attr("hidden", true);
       });
     },
     deleteAgent: function deleteAgent(i) {
       var _this4 = this;
 
-      var token = this.getCookie('token');
-      $('button#savebtn-' + i).attr('hidden', true);
-      $('button#deletebtn-' + i).attr('hidden', true);
-      $('span#spinner-' + i).attr('hidden', false);
+      var token = this.getCookie("token");
+      $("button#savebtn-" + i).attr("hidden", true);
+      $("button#deletebtn-" + i).attr("hidden", true);
+      $("span#spinner-" + i).attr("hidden", false);
       $.ajax({
-        type: 'post',
-        url: '/api/delete_agent',
+        type: "post",
+        url: "/api/delete_agent",
         headers: {
-          Authorization: 'Bearer ' + token
+          Authorization: "Bearer " + token
         },
         data: {
           id: this.agents[i].id
         }
       }).done(function (resp) {
         alert(resp.msg);
-        $('button#savebtn-' + i).attr('hidden', false);
-        $('button#deletebtn-' + i).attr('hidden', false);
-        $('span#spinner-' + i).attr('hidden', true);
+        $("button#savebtn-" + i).attr("hidden", false);
+        $("button#deletebtn-" + i).attr("hidden", false);
+        $("span#spinner-" + i).attr("hidden", true);
 
         _this4.getAgents();
       });
@@ -5714,10 +5914,10 @@ __webpack_require__.r(__webpack_exports__);
         this.errors = [];
 
         if (x.value.length === 2) {
-          this.agents[i].dob = x.value + '/';
+          this.agents[i].dob = x.value + "/";
         } else if (x.value.length > 5) {
           this.errors.push("Just the month and day mm/dd");
-          $('#errorRow').attr('hidden', false);
+          $("#errorRow").attr("hidden", false);
           this.agents[i].dob = this.agents[i].dob.substr(0, 5);
         }
       } else if (event.inputType === "deleteContentBackward" && event.target.value.length === 2) {
@@ -12305,7 +12505,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\ninput[data-v-127b1cea] {\n    height: 25px;\n}\nselect[data-v-127b1cea] {\n    font-size: 11px;\n}\nbutton[data-v-127b1cea]{\n    height: 25px;\n    font-size: 9px;\n}\n", ""]);
+exports.push([module.i, "\ninput[data-v-127b1cea] {\n  height: 25px;\n}\nselect[data-v-127b1cea] {\n  font-size: 11px;\n}\nbutton[data-v-127b1cea] {\n  height: 25px;\n  font-size: 9px;\n}\n", ""]);
 
 // exports
 
@@ -49811,11 +50011,7 @@ var render = function() {
         _vm._v(" "),
         _vm.message !== ""
           ? _c("div", { staticClass: "col-3 alert alert-success" }, [
-              _vm._v(
-                "\n                " +
-                  _vm._s(_vm.message) +
-                  "\n                "
-              ),
+              _vm._v("\n        " + _vm._s(_vm.message) + "\n        "),
               _c(
                 "button",
                 {
@@ -49827,16 +50023,14 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Close\n                ")]
+                [_vm._v("\n          Close\n        ")]
               )
             ])
           : _vm._e(),
         _vm._v(" "),
         _vm.error !== ""
           ? _c("div", { staticClass: "col-3 alert alert-danger" }, [
-              _vm._v(
-                "\n                " + _vm._s(_vm.error) + "\n                "
-              ),
+              _vm._v("\n        " + _vm._s(_vm.error) + "\n        "),
               _c(
                 "button",
                 {
@@ -49848,7 +50042,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n                    Close\n                ")]
+                [_vm._v("\n          Close\n        ")]
               )
             ])
           : _vm._e(),
@@ -49949,7 +50143,11 @@ var render = function() {
                       _vm._v(" "),
                       _vm._l(_vm.titles, function(item, index) {
                         return _c("option", { key: index }, [
-                          _vm._v(_vm._s(item.title))
+                          _vm._v(
+                            "\n                  " +
+                              _vm._s(item.title) +
+                              "\n                "
+                          )
                         ])
                       })
                     ],
@@ -50127,11 +50325,11 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.save(index)
+                          return _vm.save(agent, index)
                         }
                       }
                     },
-                    [_vm._v("Save")]
+                    [_vm._v("\n                Save\n              ")]
                   )
                 ]),
                 _vm._v(" "),
@@ -50151,7 +50349,376 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Delete")]
+                    [_vm._v("\n                Delete\n              ")]
+                  )
+                ])
+              ])
+            }),
+            0
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-9" }, [
+        _c("h1", { staticClass: "font-fredricka text-center" }, [
+          _vm._v("Inactive Agents")
+        ]),
+        _vm._v(" "),
+        _vm.message !== ""
+          ? _c("div", { staticClass: "col-3 alert alert-success" }, [
+              _vm._v("\n        " + _vm._s(_vm.message) + "\n        "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-outline-dark ml-1",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.message = ""
+                    }
+                  }
+                },
+                [_vm._v("\n          Close\n        ")]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.error !== ""
+          ? _c("div", { staticClass: "col-3 alert alert-danger" }, [
+              _vm._v("\n        " + _vm._s(_vm.error) + "\n        "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-outline-danger ml-1",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.error = ""
+                    }
+                  }
+                },
+                [_vm._v("\n          Close\n        ")]
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("table", { staticClass: "table table-sm table-borderless" }, [
+          _vm._m(3),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.inactive_agents, function(inactive_agent, index) {
+              return _c("tr", { key: index }, [
+                _c("td", [
+                  _c("input", {
+                    staticClass: "form-check-input",
+                    attrs: {
+                      type: "radio",
+                      name: "exampleRadios",
+                      id: "row-" + index
+                    },
+                    on: {
+                      input: function($event) {
+                        return _vm.radioSelected($event)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "form-check p-0" }, [
+                    _vm._v(_vm._s(inactive_agent.id))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: inactive_agent.agent_name,
+                        expression: "inactive_agent.agent_name"
+                      }
+                    ],
+                    staticClass: "form-control form-control-sm",
+                    attrs: {
+                      id: "agent_name-" + index,
+                      type: "text",
+                      readonly: ""
+                    },
+                    domProps: { value: inactive_agent.agent_name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          inactive_agent,
+                          "agent_name",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: inactive_agent.title,
+                          expression: "inactive_agent.title"
+                        }
+                      ],
+                      staticClass: "custom-select custom-select-sm",
+                      attrs: { id: "title-" + index, disabled: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            inactive_agent,
+                            "title",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", { attrs: { selected: "" } }, [
+                        _vm._v(_vm._s(inactive_agent.title))
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.titles, function(item, index) {
+                        return _c("option", { key: index }, [
+                          _vm._v(
+                            "\n                  " +
+                              _vm._s(item.title) +
+                              "\n                "
+                          )
+                        ])
+                      })
+                    ],
+                    2
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: inactive_agent.email,
+                        expression: "inactive_agent.email"
+                      }
+                    ],
+                    staticClass: "form-control form-control-sm",
+                    attrs: { id: "email-" + index, type: "text", readonly: "" },
+                    domProps: { value: inactive_agent.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(inactive_agent, "email", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: inactive_agent.phone,
+                        expression: "inactive_agent.phone"
+                      }
+                    ],
+                    staticClass: "form-control form-control-sm",
+                    attrs: { id: "phone-" + index, type: "text", readonly: "" },
+                    domProps: { value: inactive_agent.phone },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(inactive_agent, "phone", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("div", { staticClass: "input-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: inactive_agent.current_split,
+                          expression: "inactive_agent.current_split"
+                        }
+                      ],
+                      staticClass: "form-control form-control-sm",
+                      staticStyle: { "max-width": "60px" },
+                      attrs: {
+                        id: "current_split-" + index,
+                        type: "text",
+                        readonly: ""
+                      },
+                      domProps: { value: inactive_agent.current_split },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            inactive_agent,
+                            "current_split",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(4, true)
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("div", { staticClass: "input-group" }, [
+                    _vm._m(5, true),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: inactive_agent.membership_fee,
+                          expression: "inactive_agent.membership_fee"
+                        }
+                      ],
+                      staticClass: "form-control form-control-sm",
+                      staticStyle: { "max-width": "80px" },
+                      attrs: {
+                        id: "membership-" + index,
+                        type: "text",
+                        readonly: ""
+                      },
+                      domProps: { value: inactive_agent.membership_fee },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            inactive_agent,
+                            "membership_fee",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: inactive_agent.dob,
+                        expression: "inactive_agent.dob"
+                      }
+                    ],
+                    staticClass: "form-control form-control-sm",
+                    attrs: {
+                      id: "dob-" + index,
+                      type: "text",
+                      placeholder: "MM/DD",
+                      readonly: ""
+                    },
+                    domProps: { value: inactive_agent.dob },
+                    on: {
+                      input: [
+                        function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(inactive_agent, "dob", $event.target.value)
+                        },
+                        function($event) {
+                          return _vm.bdayField($event, index)
+                        }
+                      ]
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "pr-0" }, [
+                  _c("span", {
+                    staticClass: "spinner-border spinner-border-sm",
+                    attrs: {
+                      id: "spinner-" + index,
+                      role: "status",
+                      "aria-hidden": "true",
+                      hidden: ""
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-primary",
+                      attrs: {
+                        type: "button",
+                        id: "savebtn-" + index,
+                        hidden: ""
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.save(inactive_agent, index)
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Save\n              ")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-danger",
+                      attrs: {
+                        type: "button",
+                        id: "deletebtn-" + index,
+                        hidden: ""
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteAgent(index)
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Delete\n              ")]
                   )
                 ])
               ])
@@ -50182,9 +50749,57 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("SPLIT")]),
         _vm._v(" "),
-        _c("th", [
-          _vm._v("\n                        MEMBERSHIP\n                    ")
-        ]),
+        _c("th", [_vm._v("MEMBERSHIP")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("BIRTHDAY")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "input-group-append",
+        staticStyle: { "max-height": "25px" }
+      },
+      [_c("span", { staticClass: "input-group-text" }, [_vm._v("%")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "input-group-prepend",
+        staticStyle: { "max-height": "25px" }
+      },
+      [_c("span", { staticClass: "input-group-text" }, [_vm._v("$")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "bg-blue-realty text-white" }, [
+        _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("NAME")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("TITLE")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("EMAIL")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("PHONE")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("SPLIT")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("MEMBERSHIP")]),
         _vm._v(" "),
         _c("th", [_vm._v("BIRTHDAY")])
       ])
