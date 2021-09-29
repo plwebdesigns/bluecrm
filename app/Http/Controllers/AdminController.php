@@ -167,7 +167,8 @@ class AdminController extends Controller {
 		$year = date('Y');
 
 		$sales = Sale::all();
-		$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
+		$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"])->unique('id');
+		
 
 		return response()->json(['sales' => $sales, 'req' => $user]);
 	}
@@ -185,6 +186,7 @@ class AdminController extends Controller {
                 ->select('sales.*', 'sale_user.*')
                 ->where('sales.client_name', 'LIKE', "%{$search_term}%")
                 ->get();
+			$sales = collect($sales)->unique('sale_id');
 
             return response()->json(['sales' => $sales, 'req' => $user]);
         elseif ($search_by === 'address'):
@@ -193,6 +195,7 @@ class AdminController extends Controller {
                 ->select('sales.*', 'sale_user.*')
                 ->where('sales.address', 'LIKE', "%{$search_term}%")
                 ->get();
+			$sales = collect($sales)->unique('sale_id');
             return response()->json(['sales' => $sales, 'req' => $user]);
         else:
             $x = count($search_by);
@@ -202,7 +205,7 @@ class AdminController extends Controller {
                 ->get();
 
             //Remove duplicates
-            $sales = $sales->unique('sale_id');
+            $sales = collect($sales)->unique('sale_id');
 
             if ($search_term[0] !== null):
                 $agent = User::where('agent_name', $search_term[0])->first('id')->id;
