@@ -259,9 +259,6 @@
             <div class="col-1">
               <button type="button" class="btn btn-sm btn-dark" @click="generatePdf()">Print</button>
             </div>
-            <div class="col-2">
-              <button id="deleteSale" type="button" class="btn btn-sm btn-danger" @click="deleteSale()">Delete Sale</button>
-            </div>
           </div>
           <h4 v-if="isAddingRow">New Commission Row:</h4>
           <div class="form-row pb-3" v-if="isAddingRow">
@@ -592,25 +589,6 @@ export default {
     },
     generatePdf() {
       window.open("/detail_pdf/" + this.sale.id);
-    },
-    deleteSale() {
-      $('#deleteSale').attr('disabled', true);
-      let token = this.getCookie("token");
-      $.ajax({
-        type: "POST",
-        url: "/api/delete-sale",
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + token
-        },
-        data: {
-          id: this.sale.id
-        }
-      }).done(resp => {
-        console.log(resp.msg);
-        this.$emit('deletedSale');
-        this.$modal.hide("detailSale");
-      });
     }
   }
 };

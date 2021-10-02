@@ -112,14 +112,13 @@
         </div>
       </div>
     </div>
-    <detail-sale :deletedSale="getSales(null)"></detail-sale>
+    <detail-sale></detail-sale>
   </div>
 </template>
 
 <script>
-import SearchComponent from "./SearchComponent.vue";
-import SearchComponent2 from "./SearchComponent2.vue";
-import DetailSale from "./DetailSalesComponent.vue";
+import SearchComponent from "./SearchComponent";
+import SearchComponent2 from "./SearchComponent2";
 
 export default {
   mounted() {
@@ -131,8 +130,7 @@ export default {
   },
   components: {
     SearchComponent,
-      SearchComponent2,
-      DetailSale
+      SearchComponent2
   },
   data() {
     return {
