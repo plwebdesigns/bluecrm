@@ -351,6 +351,24 @@ class AdminController extends Controller {
 		return response()->json(['data' => 'success'], 201);
 	}
 
+	/**
+	 * Delete sale and associated sale_user entries
+	 * 
+	 */
+	public function deleteSale(Request $request): JsonResponse
+	{
+		$sale = Sale::findOrFail($request->id);
+
+		try {
+			DB::table('sale_user')->where('sale_id', $request->id)->delete();
+			$sale->delete();
+		} catch (\Throwable $th) {
+			return response()->json(['msg' => $th->getMessage()]);
+		}
+
+		return response()->json(['msg' => 'Successfully deleted sale']);
+	}
+
     /**** Update sale on admin side ***
      * @param Request $request
      * @return JsonResponse
