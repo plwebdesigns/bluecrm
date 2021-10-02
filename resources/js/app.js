@@ -42,6 +42,10 @@ Vue.component(
     require('./components/AdminSaleComponent.vue').default
 );
 Vue.component(
+    'detail-sale',
+    require('./components/DetailSalesComponent.vue').default
+);
+Vue.component(
     'error-modal',
     require('./components/admin/ErrorModalComponent.vue').default
 );
