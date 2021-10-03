@@ -118,15 +118,13 @@
 </template>
 
 <script>
-import SelectYearComponent from "../SelectYearComponent.vue";
-import ProfileComponent from "./ProfileComponent.vue";
-import DetailSale from "../DetailSalesComponent.vue"
+import SelectYearComponent from "../SelectYearComponent";
+import ProfileComponent from "./ProfileComponent";
 
 export default {
   components: {
     SelectYearComponent,
-      ProfileComponent,
-      DetailSale
+      ProfileComponent
   },
   mounted() {
     this.getAllDropdowns();
