@@ -31,19 +31,19 @@ Route::middleware('auth:api')->post('commission', 'ReportController@getSaleUser'
 // ADMIN SECTION
 Route::middleware('auth:api')->get('admin', 'AdminController@quarterBreakDown');
 Route::middleware('auth:api')->get('leaderboard', 'SaleController@dash');
-Route::post('report', 'AdminController@getReport');
-Route::post('detail', 'AdminController@getSale');
+Route::middleware('auth:api')->post('report', 'AdminController@getReport');
+Route::middleware('auth:api')->post('detail', 'AdminController@getSale');
+Route::middleware('auth:api')->post('delete-sale', 'AdminController@deleteSale');
 Route::middleware('auth:api')->get('all-sales', 'AdminController@getAllSales');
 Route::middleware('auth:api')->post('add-sale', 'AdminController@store');
 Route::middleware('auth:api')->get('profits', 'AdminController@profit');
-Route::middleware('auth:api')->post('deleteSaleUser', 'AdminController@deleteSaleUser');
-Route::middleware('auth:api')->post('addCommission', 'AdminController@addCommission');
+Route::middleware('auth:api')->post('deleteSaleUser', 'AdminController@deleteSaleUser'); // Deletes agent from specific sale
+Route::middleware('auth:api')->post('addCommission', 'AdminController@addCommission'); // Add commission row to existing sale
 Route::middleware('auth:api')->post('updatesale', 'AdminController@updateRecord');
 Route::middleware('auth:api')->get('agent_control', 'AdminController@getAgents');
 Route::middleware('auth:api')->post('update_agent', 'AdminController@updateAgent');
-Route::middleware('auth:api')->get('membership_details', 'AdminController@membershipDetails');
-Route::middleware('auth:api')->post('membership_details', 'AdminController@membershipUpdate');
 Route::middleware('auth:api')->post('admin/changeAgentPassword', 'AdminController@updateUserPassword');
+
 // LOGIN CONTROL
 Route::post('login', 'LoginController@authenticate');
 Route::get('logout', 'LogoutController@logout');

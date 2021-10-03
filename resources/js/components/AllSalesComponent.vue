@@ -112,7 +112,7 @@
         </div>
       </div>
     </div>
-    <detail-sale></detail-sale>
+    <detail-sale v-on:deletedSale="getSales(null)"></detail-sale>
   </div>
 </template>
 
