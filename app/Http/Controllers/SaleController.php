@@ -33,7 +33,7 @@ class SaleController extends Controller
         $quarter3Ten = [];
         $quarter4Ten = [];
         $ytd_sales = [];
-        $year = date('Y');
+	$year = date('Y');
 
         //Get quarter 1
         foreach ($users as $user) :
