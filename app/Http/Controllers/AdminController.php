@@ -168,7 +168,7 @@ class AdminController extends Controller {
 
 		$sales = Sale::all();
 		$sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"])->unique('id');
-		
+
 
 		return response()->json(['sales' => $sales, 'req' => $user]);
 	}
@@ -353,22 +353,22 @@ class AdminController extends Controller {
 
 	/**
  	 * Delete sale and associated sale_user entries
- 	 * 
+ 	 *
  	 */
 	  public function deleteSale(Request $request): JsonResponse
 	  {
 		  $sale = Sale::findOrFail($request->id);
- 
+
 		  try {
 			  DB::table('sale_user')->where('sale_id', $request->id)->delete();
 			  $sale->delete();
 		  } catch (\Throwable $th) {
 			  return response()->json(['msg' => $th->getMessage()]);
 		  }
- 
+
 		  return response()->json(['msg' => 'Successfully deleted sale']);
 	  }
- 
+
 
     /**** Update sale on admin side ***
      * @param Request $request
@@ -402,7 +402,7 @@ class AdminController extends Controller {
 
 		$orig = Sale::findOrFail($sale['id']);
 		$new_data = collect($sale)->diffAssoc($orig);
-    
+
 		if ($new_data->count() > 0):
 			foreach ($new_data as $key => $value) {
 				$orig->$key = $value;
@@ -494,7 +494,7 @@ class AdminController extends Controller {
 		return response()->json(['msg' => 'success']);
 	}
 
-	/* 
+	/*
 	* Profit Per Agent
 	*
 	*

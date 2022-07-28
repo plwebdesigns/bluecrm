@@ -114,6 +114,9 @@ class AddSaleController extends Controller
         });
         // Remove commission segments from sale, create sale then save sale to DB
         unset($sale['segment']);
+        // set correct name lender -> mortgage_choice
+        $sale['mortgage_choice'] = $sale['lender'];
+        unset($sale['lender']);
         $new_sale = new Sale($sale);
         $new_sale->save();
         // Add each commission segment to the sale
