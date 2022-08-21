@@ -107,6 +107,41 @@
           </div>
         </div>
       </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">Office Locations</div>
+          <div class="card-body">
+            <select
+              class="custom-select mb-3"
+              id="officeSelect"
+              multiple
+              style="padding-bottom: 100px"
+              v-model="selected_offices"
+            >
+              <option v-for="(office,index) in offices" :key="index">{{office}}</option>
+            </select>
+            <div class="form-group">
+              <input
+                id="addOfficeText"
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="New Location"
+                @keyup.enter="add(offices, 'addOfficeText')"
+              />
+            </div>
+            <button
+              class="btn btn-outline-info btn-sm"
+              type="button"
+              @click="add(offices, 'addOfficeText')"
+            >Add</button>
+            <button
+              class="btn btn-outline-danger btn-sm"
+              type="button"
+              @click="remove(selected_offices, offices)"
+            >Remove</button>
+          </div>
+        </div>
+      </div>
       <div class="col-3" v-if="selected_cities.length >= 1">
         <h4 class="font-fugaz">Selected:</h4>
         <table>
@@ -257,12 +292,14 @@ export default {
       mortgages: [],
       titles: [],
       emp_titles: [],
+      offices: [],
       selected_cities: [],
       selected_agents: [],
       selected_types: [],
       selected_mortgages: [],
       selected_titles: [],
-      selected_emp_titles: []
+      selected_emp_titles: [],
+      selected_offices: []
     };
   },
   methods: {
@@ -297,6 +334,7 @@ export default {
         this.mortgages = resp.mortgages;
         this.titles = resp.titles;
         this.emp_titles = resp.emp_titles;
+        this.offices = resp.office_locations;
         this.$loading(false);
       });
     },
@@ -331,7 +369,8 @@ export default {
           cities: this.cities,
           mortgages: this.mortgages,
           titles: this.titles,
-          emp_titles: this.emp_titles
+          emp_titles: this.emp_titles,
+          offices: this.offices
         }
       })
         .done(resp => {

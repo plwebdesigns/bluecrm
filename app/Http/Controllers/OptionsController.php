@@ -41,6 +41,7 @@ class OptionsController extends Controller
         foreach ($emp_titles as $value) {
             array_push($emp_titles_arr, $value->title);
         }
+        $office_locations = DB::table('office_names')->pluck('office_name');
 
         return response()->json([
             'ignored_agents' => $agents_arr,
@@ -48,7 +49,8 @@ class OptionsController extends Controller
             'cities' => $cities_arr,
             'mortgages' => $mortgages_arr,
             'titles' => $titles_arr,
-            'emp_titles' => $emp_titles_arr
+            'emp_titles' => $emp_titles_arr,
+            'office_locations' => $office_locations
         ]);
     }
 
@@ -62,6 +64,9 @@ class OptionsController extends Controller
         $mortgages = $request->input('mortgages');
         $titles = $request->input('titles');
         $emp_titles = $request->input('emp_titles');
+        $office_locations = $request->input('offices');
+
+        
 
         //Get original data from DB
         $orig_agents = DB::table('ignored_agents')->get('agent_name');
@@ -95,6 +100,9 @@ class OptionsController extends Controller
             array_push($orig_emp_titles_arr, $value->title);
         }
 
+        $orig_offices = DB::table('office_names')->pluck('office_name');
+
+
         //Get diff from originals and data sent via request
         $diff_agents = array_diff($orig_agents_arr, $ignored_agents);
         $new_agents = array_diff($ignored_agents, $orig_agents_arr);
@@ -108,6 +116,8 @@ class OptionsController extends Controller
         $new_titles = array_diff($titles, $orig_titles_arr);
         $diff_emp_titles = array_diff($orig_emp_titles_arr, $emp_titles);
         $new_emp_titles = array_diff($emp_titles, $orig_emp_titles_arr);
+        $diff_offices = array_diff($orig_offices->toArray(), $office_locations);
+        $new_offices = array_diff($office_locations, $orig_offices->toArray());
 
         // Insert or delete only if array is not empty
         if (count($diff_agents) > 0) {
@@ -171,6 +181,15 @@ class OptionsController extends Controller
         } elseif (count($new_emp_titles) > 0) {
             foreach ($new_emp_titles as $value) {
                 DB::table('employee_titles')->insert(['title' => $value]);
+            }
+        }
+        if (count($diff_offices) > 0) {
+            foreach ($diff_offices as  $value) {
+                DB::table('office_names')->where('office_name', $value)->delete();
+            }
+        } elseif (count($new_offices) > 0) {
+            foreach ($new_offices as $value) {
+                DB::table('office_names')->insert(['office_name' => $value]);
             }
         }
 

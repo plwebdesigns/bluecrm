@@ -29,6 +29,10 @@
     </div>
 
 
-    <script src="{{secure_asset('js/app.js')}}"></script>
+    @if (config('app.env') === 'development')
+        <script src="{{asset('js/app.js')}}"></script>    
+    @else
+        <script src="{{secure_asset('js/app.js')}}"></script>
+    @endif
 </body>
 </html>

@@ -22,8 +22,10 @@ class AddSaleController extends Controller
         $mortgages = DB::table('mortgage_names')->pluck('mortgage_names');
         $titles = DB::table('title_names')->pluck('title_names');
         $agents = User::all()->pluck('agent_name')->sort();
+        $office_locations = DB::table('office_names')->pluck('office_name')->sort();
 
         $fields = [
+            ['name' => 'office_location', 'type' => 'select', 'options' => $office_locations],
             ['name' => 'type', 'type' => 'select', 'options' => $types],
             ['name' => 'client_name', 'type' => 'text', 'placeholder' => 'John Smith'],
             ['name' => 'address', 'type' => 'text', 'placeholder' => '123 Main Street'],
@@ -61,8 +63,8 @@ class AddSaleController extends Controller
     public function store(Request $request)
     {
         $sale = $request->input();
-
         $rules = [
+            'office_location' => 'required',
             'type' => 'required',
             'client_name' => 'required|max:200',
             'address' => 'required|max:200',

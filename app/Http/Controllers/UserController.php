@@ -29,6 +29,7 @@ class UserController extends Controller
         $type_of_sales = DB::table('type_of_sale')->get('type');
         $mortgage_names = DB::table('mortgage_names')->get('mortgage_names');
         $title_names = DB::table('title_names')->get('title_names');
+        $office_locations = DB::table('office_names')->pluck('office_name');
 
         return response()
             ->json([
@@ -36,7 +37,8 @@ class UserController extends Controller
                 'cities' => $cities,
                 'type_of_sales' => $type_of_sales,
                 'mortgage_names' => $mortgage_names,
-                'title_names' => $title_names
+                'title_names' => $title_names,
+                'office_locations' => $office_locations
             ]);
     }
 

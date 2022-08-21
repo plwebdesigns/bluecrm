@@ -3721,6 +3721,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3745,7 +3762,8 @@ __webpack_require__.r(__webpack_exports__);
         blue_profit: 0,
         total_commission: 0,
         title_choice: "",
-        mortgage_choice: ""
+        mortgage_choice: "",
+        office_location: ""
       },
       agents: [{
         agent_name: "",
@@ -3770,7 +3788,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: [],
       all_types: [],
-      all_agents: []
+      all_agents: [],
+      all_office_locations: []
     };
   },
   methods: {
@@ -3963,10 +3982,34 @@ __webpack_require__.r(__webpack_exports__);
       }).done(function (resp) {
         _this5.all_types = resp.type_of_sales;
         _this5.all_agents = resp.agents;
+        _this5.all_office_locations = resp.office_locations;
       });
     },
     generatePdf: function generatePdf() {
       window.open("/detail_pdf/" + this.sale.id);
+    },
+    deleteSale: function deleteSale() {
+      var _this6 = this;
+
+      $('#deleteSale').attr('disabled', true);
+      var token = this.getCookie("token");
+      $.ajax({
+        type: "POST",
+        url: "/api/delete-sale",
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + token
+        },
+        data: {
+          id: this.sale.id
+        }
+      }).done(function (resp) {
+        console.log(resp.msg);
+
+        _this6.$emit('deletedSale');
+
+        _this6.$modal.hide("detailSale");
+      });
     }
   }
 });
@@ -7084,6 +7127,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getAllLists();
@@ -7099,12 +7177,14 @@ __webpack_require__.r(__webpack_exports__);
       mortgages: [],
       titles: [],
       emp_titles: [],
+      offices: [],
       selected_cities: [],
       selected_agents: [],
       selected_types: [],
       selected_mortgages: [],
       selected_titles: [],
-      selected_emp_titles: []
+      selected_emp_titles: [],
+      selected_offices: []
     };
   },
   methods: {
@@ -7145,6 +7225,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.mortgages = resp.mortgages;
         _this.titles = resp.titles;
         _this.emp_titles = resp.emp_titles;
+        _this.offices = resp.office_locations;
 
         _this.$loading(false);
       });
@@ -7180,7 +7261,8 @@ __webpack_require__.r(__webpack_exports__);
           cities: this.cities,
           mortgages: this.mortgages,
           titles: this.titles,
-          emp_titles: this.emp_titles
+          emp_titles: this.emp_titles,
+          offices: this.offices
         }
       }).done(function (resp) {
         if (resp.msg === "success") {
@@ -45770,7 +45852,13 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("detail-sale")
+      _c("detail-sale", {
+        on: {
+          deletedSale: function($event) {
+            return _vm.getSales(null)
+          }
+        }
+      })
     ],
     1
   )
@@ -46947,6 +47035,63 @@ var render = function() {
                     ])
                   ]),
                   _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col" }, [
+                      _c("label", [_vm._v("Office Location")]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.sale.office_location,
+                              expression: "sale.office_location"
+                            }
+                          ],
+                          staticClass:
+                            "custom-select custom-select-sm editable",
+                          attrs: { id: "office_select", disabled: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.sale,
+                                "office_location",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { selected: "" } }, [
+                            _vm._v(_vm._s(_vm.sale.office_location))
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.all_office_locations, function(
+                            item,
+                            index
+                          ) {
+                            return _c("option", { key: index }, [
+                              _vm._v(_vm._s(item))
+                            ])
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c("hr", { staticClass: "my-4" }),
                   _vm._v(" "),
                   _c("h4", { staticClass: "font-fredricka" }, [
@@ -47338,6 +47483,22 @@ var render = function() {
                           }
                         },
                         [_vm._v("Print")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-danger",
+                          attrs: { id: "deleteSale", type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteSale()
+                            }
+                          }
+                        },
+                        [_vm._v("Delete Sale")]
                       )
                     ])
                   ]),
@@ -52773,6 +52934,102 @@ var render = function() {
                   on: {
                     click: function($event) {
                       return _vm.remove(_vm.selected_cities, _vm.cities)
+                    }
+                  }
+                },
+                [_vm._v("Remove")]
+              )
+            ])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-3" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Office Locations")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selected_offices,
+                      expression: "selected_offices"
+                    }
+                  ],
+                  staticClass: "custom-select mb-3",
+                  staticStyle: { "padding-bottom": "100px" },
+                  attrs: { id: "officeSelect", multiple: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selected_offices = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.offices, function(office, index) {
+                  return _c("option", { key: index }, [_vm._v(_vm._s(office))])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  staticClass: "form-control form-control-sm",
+                  attrs: {
+                    id: "addOfficeText",
+                    type: "text",
+                    placeholder: "New Location"
+                  },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.add(_vm.offices, "addOfficeText")
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-info btn-sm",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.add(_vm.offices, "addOfficeText")
+                    }
+                  }
+                },
+                [_vm._v("Add")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-danger btn-sm",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.remove(_vm.selected_offices, _vm.offices)
                     }
                   }
                 },
@@ -71994,8 +72251,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /workspace/bluecrm/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /workspace/bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/parallels/projects/bluecrm/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/parallels/projects/bluecrm/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

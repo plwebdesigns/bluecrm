@@ -127,6 +127,20 @@
               />
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <label>Office Location</label>
+              <select
+                id="office_select"
+                v-model="sale.office_location"
+                class="custom-select custom-select-sm editable"
+                disabled
+              >
+                <option selected>{{sale.office_location}}</option>
+                <option v-for="(item, index) in all_office_locations" :key="index">{{item}}</option>
+              </select>
+            </div>
+          </div>
           <hr class="my-4" />
           <h4 class="font-fredricka">Commission</h4>
           <div class="form-row p-1" v-for="(a, index) in agents" :key="index">
@@ -381,7 +395,8 @@ export default {
         blue_profit: 0,
         total_commission: 0,
         title_choice: "",
-        mortgage_choice: ""
+        mortgage_choice: "",
+        office_location: ""
       },
       agents: [
         {
@@ -408,7 +423,8 @@ export default {
       },
       errors: [],
       all_types: [],
-      all_agents: []
+      all_agents: [],
+      all_office_locations: []
     };
   },
   methods: {
@@ -588,6 +604,7 @@ export default {
       }).done(resp => {
         this.all_types = resp.type_of_sales;
         this.all_agents = resp.agents;
+        this.all_office_locations = resp.office_locations;
       });
     },
     generatePdf() {

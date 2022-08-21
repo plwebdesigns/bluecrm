@@ -24,7 +24,8 @@ class Sale extends Model
         'notes',
         'created_at',
         'updated_at',
-        'user'
+        'user',
+        'office_location'
     ];
 
     public function users()
