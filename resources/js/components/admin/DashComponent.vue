@@ -2,7 +2,17 @@
   <div class="pt-3">
     <div class="row pb-4">
       <div class="col-3">
-        <SelectYearComponent v-on:production_year="getBreakdowns($event)"></SelectYearComponent>
+        <SelectYearComponent v-on:production_year="getBreakdowns(production_year = $event)"></SelectYearComponent>
+      </div>
+      <div class="col-3">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text bg-blue-realty text-white">Office Location</label>
+        </div>
+        <select id="office_location" class="custom-select" v-on:change="getBreakdowns(production_year)" v-model="office_location">
+          <option v-for="(location) in office_locations">{{ location }}</option>
+        </select>
+      </div>
       </div>
     </div>
     <div class="row">
@@ -91,7 +101,9 @@ export default {
         style: "currency",
         currency: "USD"
       },
-      production_year: new Date().getFullYear()
+      production_year: new Date().getFullYear(),
+      office_locations: [],
+      office_location: ""
     };
   },
   methods: {
@@ -105,12 +117,15 @@ export default {
           Authorization: "Bearer " + token
         },
         params: {
-          production_year: prod_year
+          production_year: prod_year,
+          office_location: this.office_location
         }
       };
 
       axios(req).then(resp => {
         this.summary = resp.data.summary;
+        this.office_locations = resp.data.office_locations;
+        this.office_location = resp.data.office_location;
         this.$loading(false);
       });
     },

@@ -6147,6 +6147,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -6178,7 +6188,9 @@ __webpack_require__.r(__webpack_exports__);
         style: "currency",
         currency: "USD"
       },
-      production_year: new Date().getFullYear()
+      production_year: new Date().getFullYear(),
+      office_locations: [],
+      office_location: ""
     };
   },
   methods: {
@@ -6194,11 +6206,14 @@ __webpack_require__.r(__webpack_exports__);
           Authorization: "Bearer " + token
         },
         params: {
-          production_year: prod_year
+          production_year: prod_year,
+          office_location: this.office_location
         }
       };
       axios(req).then(function (resp) {
         _this.summary = resp.data.summary;
+        _this.office_locations = resp.data.office_locations;
+        _this.office_location = resp.data.office_location;
 
         _this.$loading(false);
       });
@@ -6441,6 +6456,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -6485,7 +6510,9 @@ __webpack_require__.r(__webpack_exports__);
       style: {
         background_color: "yellow"
       },
-      production_year: new Date().getFullYear()
+      production_year: new Date().getFullYear(),
+      office_locations: [],
+      office_location: ""
     };
   },
   methods: {
@@ -6501,7 +6528,8 @@ __webpack_require__.r(__webpack_exports__);
           Authorization: "Bearer " + token
         },
         params: {
-          production_year: prod_year
+          production_year: prod_year,
+          office_location: this.office_location
         }
       }).then(function (resp) {
         _this.quarter1Ten = resp.data.quarter1Ten;
@@ -6515,6 +6543,8 @@ __webpack_require__.r(__webpack_exports__);
         _this.q4_total = resp.data.q4Total;
         _this.ytd_total = resp.data.ytdTotal;
         _this.user.isAdmin = resp.data.req.isAdmin;
+        _this.office_locations = resp.data.office_locations;
+        _this.office_location = resp.data.office_location;
 
         _this.$loading(false);
       })["catch"](function (error) {
@@ -51157,13 +51187,59 @@ var render = function() {
           _c("SelectYearComponent", {
             on: {
               production_year: function($event) {
-                return _vm.getBreakdowns($event)
+                return _vm.getBreakdowns((_vm.production_year = $event))
               }
             }
           })
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c("div", { staticClass: "input-group mb-3" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.office_location,
+                  expression: "office_location"
+                }
+              ],
+              staticClass: "custom-select",
+              attrs: { id: "office_location" },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.office_location = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.getBreakdowns(_vm.production_year)
+                  }
+                ]
+              }
+            },
+            _vm._l(_vm.office_locations, function(location) {
+              return _c("option", [_vm._v(_vm._s(location))])
+            }),
+            0
+          )
+        ])
+      ])
     ]),
     _vm._v(" "),
     _c(
@@ -51286,7 +51362,20 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "label",
+        { staticClass: "input-group-text bg-blue-realty text-white" },
+        [_vm._v("Office Location")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -51372,21 +51461,67 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "row mt-3" }, [
+    _c("div", { staticClass: "row pb-4 mt-4" }, [
       _c(
         "div",
-        { staticClass: "col-2" },
+        { staticClass: "col-3" },
         [
           _c("SelectYearComponent", {
             on: {
               production_year: function($event) {
-                return _vm.getEmployees($event)
+                return _vm.getEmployees((_vm.production_year = $event))
               }
             }
           })
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c("div", { staticClass: "input-group mb-3" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.office_location,
+                  expression: "office_location"
+                }
+              ],
+              staticClass: "custom-select",
+              attrs: { id: "office_location" },
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.office_location = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.getEmployees(_vm.production_year)
+                  }
+                ]
+              }
+            },
+            _vm._l(_vm.office_locations, function(location) {
+              return _c("option", [_vm._v(_vm._s(location))])
+            }),
+            0
+          )
+        ])
+      ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
@@ -51399,7 +51534,7 @@ var render = function() {
           "table",
           { staticClass: "table table-sm border-black table-striped" },
           [
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _c(
               "tbody",
@@ -51469,7 +51604,7 @@ var render = function() {
           "table",
           { staticClass: "table table-sm border-black table-striped" },
           [
-            _vm._m(1),
+            _vm._m(2),
             _vm._v(" "),
             _c(
               "tbody",
@@ -51780,6 +51915,18 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "label",
+        { staticClass: "input-group-text bg-blue-realty text-white" },
+        [_vm._v("Office Location")]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

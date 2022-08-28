@@ -22,8 +22,12 @@ class AdminController extends Controller {
 	*
 	*/
 	public function quarterBreakDown(Request $request) {
+		// Get all the office locations
+		$locations = DB::table('office_names')->pluck('office_name')->toArray();
+		// Initialize variable default
+		$office_location = $request->input('office_location') ?: $locations[0];
 		$user = $request->user();
-		$year = $request->input('production_year');
+		$year = $request->input('production_year') ?: Date('Y');
 		if ($user->isAdmin && Gate::allows('create-sale', Sale::class)):
 
 			// Intialize array of variables
@@ -41,7 +45,9 @@ class AdminController extends Controller {
 			];
 
 			$all_sales = Sale::all();
-			$all_sales = $all_sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
+			$all_sales = $all_sales
+			->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"])
+			->where('office_location', $office_location);
 			$split_sales = [
 				0 => $all_sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]),
 				1 => $all_sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]),
@@ -91,7 +97,7 @@ class AdminController extends Controller {
 				$sales_by_quarter[4]
 			];
 
-			return response()->json(['summary' => $summary]);
+			return response()->json(['summary' => $summary, 'office_locations' => $locations, 'office_location' => $office_location]);
 
 		else:
 			return response()->json(['error' => 'You are not authorized to view this content']);

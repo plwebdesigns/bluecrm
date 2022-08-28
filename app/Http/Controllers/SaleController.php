@@ -24,6 +24,10 @@ class SaleController extends Controller
     /**** DASHBOARD DATA ****/
     public function dash(Request $request)
     {
+        // Get all the office locations
+		$locations = DB::table('office_names')->pluck('office_name')->toArray();
+		// Initialize variable default
+		$office_location = $request->input('office_location') ?: $locations[0];
         $users = User::has('sales')->get();
         // Get ignored agents from DB
         $ignored_agents = DB::table('ignored_agents')->pluck('agent_name')->toArray();
@@ -37,7 +41,9 @@ class SaleController extends Controller
 
         //Get quarter 1
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"]);
+            $sales = $user->sales
+            ->whereBetween('closing_date', ["{$year}-01-01", "{$year}-03-31"])
+            ->where('office_location', $office_location);
             if ($sales->isNotEmpty()) {
                 $quarter1Ten[] = [
                     'agent' => $user->agent_name,
@@ -47,7 +53,7 @@ class SaleController extends Controller
         endforeach;
         //Get quarter 2
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"]);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-04-01", "{$year}-06-31"])->where('office_location', $office_location);
             if ($sales->isNotEmpty()) {
                 $quarter2Ten[] = [
                     'agent' => $user->agent_name,
@@ -58,7 +64,7 @@ class SaleController extends Controller
 
         //Get quarter 3
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"]);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-07-01", "{$year}-09-31"])->where('office_location', $office_location);
             if ($sales->isNotEmpty()) {
                 $quarter3Ten[] = [
                     'agent' => $user->agent_name,
@@ -69,7 +75,7 @@ class SaleController extends Controller
 
         //Get quarter 4
         foreach ($users as $user) :
-            $sales = $user->sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"]);
+            $sales = $user->sales->whereBetween('closing_date', ["{$year}-10-01", "{$year}-12-31"])->where('office_location', $office_location);
             if ($sales->isNotEmpty()) {
                 $quarter4Ten[] = [
                     'agent' => $user->agent_name,
@@ -79,7 +85,7 @@ class SaleController extends Controller
         endforeach;
         foreach ($users as $user) :
             $sales = $user->sales;
-            $sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"]);
+            $sales = $sales->whereBetween('closing_date', ["{$year}-01-01", "{$year}-12-31"])->where('office_location', $office_location);
             if ($sales->isNotEmpty()) {
                 $ytd_sales[] = [
                     'agent' => $user->agent_name,
@@ -112,7 +118,9 @@ class SaleController extends Controller
 			'q2Total' => $q2Total,
 			'q3Total' => $q3Total,
 			'q4Total' => $q4Total,
-			'ytdTotal' => $ytdTotal
+			'ytdTotal' => $ytdTotal,
+            'office_locations' => $locations,
+            'office_location' => $office_location
         ]);
     }
 

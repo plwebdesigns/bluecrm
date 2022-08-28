@@ -1,8 +1,18 @@
 <template>
   <div>
-    <div class="row mt-3">
-      <div class="col-2">
-        <SelectYearComponent v-on:production_year="getEmployees($event)"></SelectYearComponent>
+    <div class="row pb-4 mt-4">
+      <div class="col-3">
+        <SelectYearComponent v-on:production_year="getEmployees(production_year = $event)"></SelectYearComponent>
+      </div>
+      <div class="col-3">
+        <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text bg-blue-realty text-white">Office Location</label>
+        </div>
+        <select id="office_location" class="custom-select" v-on:change="getEmployees(production_year)" v-model="office_location">
+          <option v-for="(location) in office_locations">{{ location }}</option>
+        </select>
+      </div>
       </div>
     </div>
     <div class="row">
@@ -201,7 +211,9 @@ export default {
       style: {
         background_color: "yellow"
       },
-      production_year: new Date().getFullYear()
+      production_year: new Date().getFullYear(),
+      office_locations: [],
+      office_location: ""
     };
   },
   methods: {
@@ -215,7 +227,8 @@ export default {
           Authorization: "Bearer " + token
         },
         params: {
-          production_year: prod_year
+          production_year: prod_year,
+          office_location: this.office_location
         }
       })
         .then(resp => {
@@ -230,6 +243,8 @@ export default {
           this.q4_total = resp.data.q4Total;
           this.ytd_total = resp.data.ytdTotal;
           this.user.isAdmin = resp.data.req.isAdmin;
+          this.office_locations = resp.data.office_locations;
+          this.office_location = resp.data.office_location;
           this.$loading(false);
         })
         .catch(function(error) {
